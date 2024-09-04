@@ -28,12 +28,16 @@ Summary Stats
 
 ```{r}
 #Height and Diameter means
-HeightMeans <- colMeans(BRAP1row)
+BeasleyMeans <- colMeans(BRAP1row)
 ChildsMeans <-colMeans(Childs1row)
 ```
 
 Change over time
 
 ```{R}
-BRAP1row[,2]-BRAP1row[,4]
+#Diameter
+BeasleyMeans[1]-BeasleyMeans[3]
+Beas[2]-Brap1
+
+
 ```
