@@ -1,14 +1,5 @@
-"0","colMeans(Childs1row)
-"
-"1","DiameterCHD2023 "
-"1"," HeightCHD.2023 "
-"1","DiameterCHD2024 "
-"1","  HeightCHD2024 "
-"1","
-"
-"1","       2.885714 "
-"1","      32.252857 "
-"1","       4.502857 "
-"1","      41.334286 "
-"1","
+"0","BRAPMeans <- colMeans(BRAP1row)
+ChildsMeans <-colMeans(Childs1row)"
+"2","'""r}#Height""' is not recognized as an internal or external command,
+operable program or batch file.
 "

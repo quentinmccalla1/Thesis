@@ -26,12 +26,14 @@ Childs1row <- na.omit(Childs1row)
 
 Summary Stats
 
-```{r}#Height and Diameter means}
-BRAPMeans <- colMeans(BRAP1row)
-colMeans(Childs1row)
+```{r}
+#Height and Diameter means
+HeightMeans <- colMeans(BRAP1row)
+ChildsMeans <-colMeans(Childs1row)
 ```
 
 Change over time
 
-```{}
+```{R}
+BRAP1row[,2]-BRAP1row[,4]
 ```
