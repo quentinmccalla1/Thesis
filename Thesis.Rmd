@@ -1,0 +1,37 @@
+---
+title: "Seedling Statistics"
+output: html_document
+date: "2024-09-04"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+remove(Childs1RoW)
+```
+
+All seedling
+
+```{r}
+BRAP1row <- read_csv("BRAP1ROW.csv")
+Childs1row <- read_csv("Childs1ROW.csv")
+
+
+BRAP1row <- na.omit(BRAP1row)
+Childs1row <- na.omit(Childs1row)
+```
+
+Summary Stats
+
+```{r}#Height and Diameter means}
+BRAPMeans <- colMeans(BRAP1row)
+colMeans(Childs1row)
+```
+
+Change over time
+
+```{}
+```
