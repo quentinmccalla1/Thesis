@@ -88,8 +88,7 @@ HDR2024BRAP <- function(BRAP1row){
 BRAP1row <- BRAP1row %>%
   mutate(HDR2024 = HDR2023BRAP(HeightBRAP2024, DiameterBRAP2024))
 
-#Means
-colMeans(HDR2023BRAP(BRAP1row))
+
 ```
 
 Childs HDR
@@ -101,11 +100,8 @@ HDR2023Childs <- function(height, diameter) {
   return(result)
 }
 
-# Use mutate to create the new HDR2023 column by passing the correct columns as arguments
 Childs1row <- Childs1row %>%
   mutate(HDR2023 = HDR2023Childs(HeightCHD.2023, DiameterCHD2022))
-
-
 
 #Childs 2024 HDR
 HDR2024Childs <- function(height, diameter) {
@@ -113,7 +109,6 @@ HDR2024Childs <- function(height, diameter) {
   return(result)
 }
 
-# Use mutate to create the new HDR2023 column by passing the correct columns as arguments
 Childs1row <- Childs1row %>%
   mutate(HDR2024 = HDR2023Childs(HeightCHD2024, DiameterCHD2023))
 
