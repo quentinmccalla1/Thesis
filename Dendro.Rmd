@@ -1,0 +1,53 @@
+---
+title: "Dendro"
+output: html_document
+date: "2024-09-06"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+Library
+```{r}
+#install.packages("dplR")
+#library(dplR)
+```
+
+Read collections
+```{r}
+Childs <- read.tucson("ChildsCol1.rwl")
+Sheep <- read.tucson("SheepCol1.rwl")
+UB <- read.tucson("UBCol1.rwl")
+LB <- read.tucson("LBCol1.rwl")
+```
+
+Detrend
+```{r}
+ChildsRWI <- detrend( rwl = Childs, method = "AgeDepSpline")
+```
+
+Mean Value Chronologies
+```{r}
+#Childs
+Chron.crn <- chron(ChildsRWI)
+plot(Chron.crn, add.spline = TRUE, nyrs = 5)
+```
+
+
+Basal Area Index
+
+```{r}
+BAI <- bai.in(Childs, d2pith= NULL)
+BAI.rwi <- detrend(rwl= BAI, method = "AgeDepSpline")
+BAIChron <- chron(BAI.rwi)
+plot.crn(BAIChron, add.spline=TRUE, nyrs = 5, window(x=1980))
+```
+
+
+
+
+
+
+

@@ -1,0 +1,24 @@
+"0","BAI <- bai.in(Childs, d2pith= NULL)"
+"0","BAI.rwi <- detrend(rwl= BAI, method = ""AgeDepSpline"")"
+"2","Warning: In raw series C44: Fits from method=='AgeDepSpline' are not all positive. 
+  This is extremely rare. Series will be detrended with method=='Mean'. 
+  This might not be what you want. 
+  ARSTAN would tell you to plot that dirty dog at this point. 
+  Proceed with caution."
+"2","Warning: In raw series C63: Fits from method=='AgeDepSpline' are not all positive. 
+  This is extremely rare. Series will be detrended with method=='Mean'. 
+  This might not be what you want. 
+  ARSTAN would tell you to plot that dirty dog at this point. 
+  Proceed with caution."
+"2","Warning: In raw series C65: Fits from method=='AgeDepSpline' are not all positive. 
+  This is extremely rare. Series will be detrended with method=='Mean'. 
+  This might not be what you want. 
+  ARSTAN would tell you to plot that dirty dog at this point. 
+  Proceed with caution."
+"2","Warning: In raw series C96: Fits from method=='AgeDepSpline' are not all positive. 
+  This is extremely rare. Series will be detrended with method=='Mean'. 
+  This might not be what you want. 
+  ARSTAN would tell you to plot that dirty dog at this point. 
+  Proceed with caution."
+"0","BAIChron <- chron(BAI.rwi)"
+"0","plot.crn(BAIChron, add.spline=TRUE, nyrs = 5, window(x=1980))"
