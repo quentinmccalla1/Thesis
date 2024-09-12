@@ -1,11 +1,11 @@
 {
     "id": "B5498B61",
-    "path": "C:/Users/qm43/Documents/GitHub/Thesis1/DendroMinAge.Rmd",
+    "path": "~/GitHub/Thesis1/DendroMinAge.Rmd",
     "project_path": "DendroMinAge.Rmd",
     "type": "r_markdown",
-    "hash": "2912682558",
+    "hash": "213062688",
     "contents": "",
-    "dirty": false,
+    "dirty": true,
     "created": 1726171886160.0,
     "source_on_save": false,
     "relative_order": 3,
@@ -13,15 +13,15 @@
         "tempName": "Untitled1",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "13,0",
-        "scrollLine": "0"
+        "cursorPosition": "42,0",
+        "scrollLine": "10"
     },
     "folds": "",
-    "lastKnownWriteTime": 1726173750,
+    "lastKnownWriteTime": 1726175287,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1726173750509,
+    "last_content_update": 1726175546168,
     "read_only": false,
     "read_only_alternatives": []
 }
