@@ -1,0 +1,7 @@
+"0",""
+"0","# Create the second histogram"
+"0","hist(BRAPHDR2024, "
+"0","     main = ""Histogram of BRAPHDR2024"", "
+"0","     xlab = ""Values"", "
+"0","     col = ""lightgreen"", "
+"0","     breaks = ""Sturges"")"

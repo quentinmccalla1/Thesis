@@ -140,15 +140,56 @@ BRAPHDR2024 <- unlist(BRAPHDR2024)
 
 ```
 
+Hist
+
+Hist BRAP
+
 ```{r}
+# Set up the plotting area to have 1 row and 2 columns
+par(mfrow = c(1, 2)),
 
-# If it's a list, extract the numeric vector
+# Create the first histogram
+hist(BRAPHDR2023, 
+     main = "Histogram of BRAPHDR2023", 
+     xlab = "Values", 
+     col = "lightblue", 
+     breaks = "Sturges"),
 
-# Create the histogram
+# Create the second histogram
+hist(BRAPHDR2024, 
+     main = "Histogram of BRAPHDR2024", 
+     xlab = "Values", 
+     col = "lightgreen", 
+     breaks = "Sturges"),
+
+# Reset plotting area to default
+par(mfrow = c(1, 1))
+```
+
+Hist Childs
+
+```{r}
+# Set up the plotting area to have 1 row and 2 columns
+par(mfrow = c(1, 2))
+
+# Create the first histogram
 hist(ChildsHDR2023, 
      main = "Histogram of Childs HDR 2023", 
      xlab = "Values", 
      col = "lightblue", 
      breaks = "Sturges")
+
+# Create the second histogram
+hist(ChildsHDR2024, 
+     main = "Histogram of Childs HDR 2024",
+     xlab = "Values", 
+     col = "lightgreen", 
+     breaks = "Sturges")
+
+# Reset plotting area to default
+par(mfrow = c(1, 1))
+
+
+
 
 ```
