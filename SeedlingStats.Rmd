@@ -117,17 +117,38 @@ Childs1row <- Childs1row %>%
 
 # Plots
 
-HDR BRAP
+Clean data
 
 ```{r}
-hist(BRAP1row$HDR2024)
+# Extract the columns you need
+ChildsHDR2023 <- Childs1row[, 5]
+ChildsHDR2024 <- Childs1row[, 6]
+BRAPHDR2023 <- BRAP1row[,5]
+BRAPHDR2024 <- BRAP1row[,6]
 
+#Clean Data Childs
+ChildsHDR2024 <- unlist(ChildsHDR2024)
+ChildsHDR2024 <- na.omit(ChildsHDR2024)
+ChildsHDR2023 <- unlist(ChildsHDR2023)
+ChildsHDR2023<- na.omit(ChildsHDR2023
+
+BRAPHDR2023 <- na.omit(BRAPHDR2023)
+BRAPHDR2023 <- unlist(BRAPHDR2023)
+BRAPHDR2024 <- na.omit(BRAPHDR2024)
+BRAPHDR2024 <- unlist(BRAPHDR2024)
 
 
 ```
 
-HDR Childs
-
 ```{r}
+
+# If it's a list, extract the numeric vector
+
+# Create the histogram
+hist(ChildsHDR2023, 
+     main = "Histogram of Childs HDR 2023", 
+     xlab = "Values", 
+     col = "lightblue", 
+     breaks = "Sturges")
 
 ```
