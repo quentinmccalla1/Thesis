@@ -3,7 +3,7 @@
     "path": "~/GitHub/Thesis1/SeedlingStats.Rmd",
     "project_path": "SeedlingStats.Rmd",
     "type": "r_markdown",
-    "hash": "0",
+    "hash": "1734462759",
     "contents": "",
     "dirty": false,
     "created": 1725484820794.0,
@@ -19,15 +19,15 @@
         "rmdVisualWrapConfigured": "true",
         "docOutlineVisible": "1",
         "rmdVisualCollapsedChunks": "",
-        "rmdVisualModeLocation": "3434:0",
+        "rmdVisualModeLocation": "3718:3413",
         "last_setup_crc32": "b067a28cbb338d19"
     },
     "folds": "",
-    "lastKnownWriteTime": 1726171856,
+    "lastKnownWriteTime": 1726177653,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1726171856194,
+    "last_content_update": 1726177653703,
     "read_only": false,
     "read_only_alternatives": []
 }
