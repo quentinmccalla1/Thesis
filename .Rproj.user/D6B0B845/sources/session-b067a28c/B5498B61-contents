@@ -1,0 +1,15 @@
+---
+title: "Min age"
+output: html_document
+date: "2024-09-12"
+---
+
+
+```{r}
+DendroMerge <- read_csv("DendroMergeforR.csv")
+
+DendroMerge <- DendroMerge[,-8]
+
+
+```
+
