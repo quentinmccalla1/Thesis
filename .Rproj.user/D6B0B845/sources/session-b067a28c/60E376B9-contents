@@ -113,6 +113,8 @@ Childs1row <- Childs1row %>%
   mutate(HDR2024 = HDR2023Childs(HeightCHD2024, DiameterCHD2023))
 
 
+
+
 ```
 
 # Plots
@@ -137,6 +139,7 @@ BRAPHDR2023 <- unlist(BRAPHDR2023)
 BRAPHDR2024 <- na.omit(BRAPHDR2024)
 BRAPHDR2024 <- unlist(BRAPHDR2024)
 
+summary(BRAPHDR2023)
 
 ```
 
@@ -176,14 +179,14 @@ par(mfrow = c(2, 2))
 hist(ChildsHDR2023, 
      main = "Histogram of Childs HDR 2023", 
      xlab = "Height to Diameter Ratio", 
-     col = "lightblue", 
+     col = "grey", 
      breaks = "Sturges")
 
 # Create the second histogram
 hist(ChildsHDR2024, 
      main = "Histogram of Childs HDR 2024",
      xlab = "Height to Diameter Ratio", 
-     col = "lightgreen", 
+     col = "grey", 
      breaks = "Sturges")
 
 
@@ -191,14 +194,14 @@ hist(ChildsHDR2024,
 hist(BRAPHDR2023, 
      main = "Histogram of BRAPHDR2023", 
      xlab = "Height to Diameter Ratio", 
-     col = "lightblue", 
+     col = "grey22", 
      breaks = "Sturges")
 
 # Create the second histogram
 hist(BRAPHDR2024, 
      main = "Histogram of BRAPHDR2024", 
      xlab = "Height to Diameter Ratio", 
-     col = "lightgreen", 
+     col = "grey22", 
      breaks = "Sturges")
 
 
