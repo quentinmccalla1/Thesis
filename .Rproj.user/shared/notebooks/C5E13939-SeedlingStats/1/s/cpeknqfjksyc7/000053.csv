@@ -1,6 +1,0 @@
-"0",""
-"0",""
-"0",""
-"0",""
-"0","# Reset plotting area to default"
-"0","par(mfrow = c(2, 2))"

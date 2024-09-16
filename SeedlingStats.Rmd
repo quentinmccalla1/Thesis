@@ -139,11 +139,30 @@ BRAPHDR2023 <- unlist(BRAPHDR2023)
 BRAPHDR2024 <- na.omit(BRAPHDR2024)
 BRAPHDR2024 <- unlist(BRAPHDR2024)
 
-summary(BRAPHDR2023)
+
 
 ```
 
-Hist
+Percent Change
+
+```{r}
+mean(BRAPHDR2023)
+mean(BRAPHDR2024)
+mean(ChildsHDR2023)
+mean(ChildsHDR2024)
+
+percentChange <- function( HDR2023, HDR2024){
+  result <- (HDR2023-HDR2024)/HDR2024 *100
+  
+  return(result)
+  
+}
+
+percentChange(108,90.7)
+
+
+
+```
 
 Hist BRAP
 
