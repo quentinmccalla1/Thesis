@@ -6,9 +6,9 @@ date: "2024-09-12"
 
 
 ```{r}
-#DendroMerge <- read_csv("DendroMergeforR.csv")
+DendroMerge <- read_csv("DendroMergeforR.csv")
 
-#DendroMerge <- DendroMerge[,-8]
+DendroMerge <- DendroMerge[,-8]
 
 
 

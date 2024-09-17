@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 Library
 ```{r}
 #install.packages("dplR")
-#library(dplR)
+library(dplR)
 ```
 
 Read collections

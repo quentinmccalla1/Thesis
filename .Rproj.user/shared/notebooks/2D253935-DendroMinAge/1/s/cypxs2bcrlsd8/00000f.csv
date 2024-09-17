@@ -1,5 +1,6 @@
-"0","summary(model)
-"
+"0","model <- lm(DendroMerge$`Diameter (CM)` ~ DendroMerge$PithHand, data = DendroMerge)"
+"0",""
+"0","summary(model)"
 "1","
 Call:
 "

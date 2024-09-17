@@ -11,9 +11,10 @@ knitr::opts_chunk$set(echo = TRUE)
 # Stats
 
 ```{r}
-library(dplyr)
+library(dplyr) 
+library(tidyverse)
 #install.packages("ggplot2")
-remove(HDR)
+#remove(HDR)
 ```
 
 All seedling
@@ -129,6 +130,7 @@ BRAPHDR2023 <- BRAP1row[,5]
 BRAPHDR2024 <- BRAP1row[,6]
 
 #Clean Data Childs
+
 ChildsHDR2024 <- unlist(ChildsHDR2024)
 ChildsHDR2024 <- na.omit(ChildsHDR2024)
 ChildsHDR2023 <- unlist(ChildsHDR2023)
@@ -168,21 +170,21 @@ Hist BRAP
 
 ```{r}
 # Set up the plotting area to have 1 row and 2 columns
-par(mfrow = c(1, 2)),
+par(mfrow = c(1, 2))
 
 # Create the first histogram
 hist(BRAPHDR2023, 
      main = "Histogram of BRAPHDR2023", 
      xlab = "Values", 
      col = "lightblue", 
-     breaks = "Sturges"),
+     breaks = "Sturges")
 
 # Create the second histogram
 hist(BRAPHDR2024, 
      main = "Histogram of BRAPHDR2024", 
      xlab = "Values", 
      col = "lightgreen", 
-     breaks = "Sturges"),
+     breaks = "Sturges")
 
 # Reset plotting area to default
 par(mfrow = c(1, 1))

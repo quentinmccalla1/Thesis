@@ -1,3 +1,0 @@
-"0","#Mean-Value Chronology"
-"0","Chron.crn <- chron(ChildsRWI)"
-"0","plot(Chron.crn, add.spline = TRUE, nyrs = 5)"
