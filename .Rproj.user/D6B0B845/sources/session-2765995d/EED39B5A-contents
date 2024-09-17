@@ -1,0 +1,84 @@
+---
+title: "Dendro"
+output: html_document
+date: "2024-09-06"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+Library
+```{r}
+#install.packages("dplR")
+library(dplR)
+```
+
+Read collections
+```{r}
+Childs <- read.tucson("ChildsCol1.rwl")
+Sheep <- read.tucson("SheepCol1.rwl")
+UB <- read.tucson("UBCol1.rwl")
+LB <- read.tucson("LBCol1.rwl")
+```
+
+Summary RWL
+
+```{r}
+summary.rwl(Childs)
+```
+
+
+
+Detrend
+```{r}
+ChildsRWI <- detrend( rwl = Childs, method = "AgeDepSpline")
+```
+
+Mean Value Chronologies
+```{r}
+#Childs
+Chron.crn <- chron(ChildsRWI)
+plot(Chron.crn, add.spline = TRUE, nyrs = 5)
+```
+
+
+Basal Area Index
+
+```{r}
+BAI <- bai.in(Childs, d2pith= NULL)
+BAI.rwi <- detrend(rwl= BAI, method = "AgeDepSpline")
+BAIChron <- chron(BAI.rwi)
+plot.crn(BAIChron, add.spline=TRUE, nyrs = 5, window(x=1980))
+```
+
+
+COFECHA
+
+```{r}
+#XDatr/Cofecha
+
+Childsseg <- corr.rwl.seg(Childs, seg.length = 6, pcrit= .1)
+Sheepseg <- corr.rwl.seg(Sheep, seg.length = 6, pcrit = .1)
+UBSeg <- corr.rwl.seg(UB, seg.length = 6,pcrit = .1)
+LBSeg <-corr.rwl.seg(LB,seg.length = 6, pcrit = .1)
+
+#Blue = well correlated to the master chronology
+#Red = poorly correlated to the master chronology
+#Green = not enough overlap
+
+
+
+
+corr.series.seg(rwl = Childs, series = "C32", seg.length = 10)
+
+
+ccf.series.rwl(rwl = Childs, series = "C32", seg.length = 10)
+
+```
+
+
+
+
+

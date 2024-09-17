@@ -1,0 +1,310 @@
+---
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+# lab 02. More introduction to R. Booleans, flow control, functions
+
+NOTES
+
+Functional programming
+
+-   "never repeat yourself", make the computer do the work for you
+
+    simulates rolling a die
+
+```{r}
+dice <- function(ndice = 1){
+  #simulate our dice roles
+  diceroles <- sample.int(6, size = ndice, replace = TRUE)
+
+#Sum dice roles
+dicesum <- sum(diceroles)
+
+#Spit the out put out to the user
+return(dicesum)
+}
+
+```
+
+Run the dice function
+
+```{r}
+#The number in the parenthesis correlates to the first parameter, nDice so 6 means ndice = 6
+dice(6)
+dice()
+#Store output
+ds <- dice(7)
+```
+
+Missing numbers
+
+-   na means missing numbers
+
+-   na.rm remove NAs = TRUE to remove
+
+```{r}
+x <- NA
+y <- 7
+
+x+y
+
+mean(c(x,y), na.rm = TRUE)
+```
+
+Boolean
+
+-   Trues and falses
+
+-   You can use logic to combine multiple tests to complex queries
+
+-   == means is equal to
+
+-   \| \| means or
+
+-   ! means not
+
+```{r}
+5 == 5 & 5>6& 5>4 #and logic
+5 ==5 | 5>6    # or logic
+! 5 >6  # not logic
+```
+
+```{r}
+library(tidyverse)
+ data <- read_csv("MonthlyGlobalTemperature.csv")
+ 
+ years <-data[,1]
+ which(years == 1956)
+ 
+ #Combine logic
+ test <- which(years >1930 & years < 1940)
+ 
+ years$Year[(test)]
+ 
+ #Mean temp in march
+ mean(data$Mar[test])
+```
+
+Flow control
+
+-   a set of commands that tell R how to move through your code
+
+If/else/then statement
+
+```{r}
+if(5 ==5){
+  print("Its true")
+  
+}else{print ("Its false")} 
+```
+
+Loops
+
+-   While loop
+
+Will run until it no longer passes a logical test
+
+```{r}
+
+t<- 0
+
+while(t <10){
+t <- t +1
+print(t)
+}
+```
+
+'break'
+
+-   will break the loop
+
+```{r}
+t <- 0
+while (TRUE) { 
+  t <- t +2
+  print(t)
+  if(t >=20){break
+    }
+  
+}
+
+```
+
+"For" loops
+
+-   vector is a 1 D sequence of numbers
+
+```{r}
+for (i in 1:10) {
+  print(i)
+}
+
+
+
+
+```
+
+```{r}
+
+temperature <- as.matrix(read_csv("MonthlyGlobalTemperature.csv"))
+na.omit(temperature)
+
+
+```
+
+```{r}
+for (col in 2:13) {
+  
+  monthlymeans[col] <- print(mean(temperature[ ,col],na.rm = TRUE))
+  
+}
+  
+
+```
+
+Other ways to repeat a function
+
+```{r}
+library(purrr)
+temperature <- read_csv("MonthlyGlobalTemperature.csv")
+map(temperature,mean, na.rm= TRUE)
+
+
+```
+
+Custom function for a loop
+
+```{r}
+specialmean <- function(tempvec){
+  subsetT <- tempvec[c1,5,9,13]
+  out <- mean(subsetT)
+  return(out)
+  
+}
+
+
+map(temperature,specialmean)
+```
+
+## lab 02 - part 1
+
+To communicate effectively with your congressman, You need to convert a
+bunch of temperatures from Celsius to Fahrenheit.
+
+You could do this manually, using R like a calculator, but since you'll
+be doing it a lot, why not make your life easier?
+
+1a. Write a function that converts a temperature in Celsius to
+Fahrenheit.
+
+1b. test it out, does it convert properly?
+
+1c. use your function to calculate the F equivalent of every C
+temperature (only integers) between 0 and 100. You'll want to use seq()
+for this.
+
+1d. now make a scatter plot comparing C (x-axis) to F (y-axis) as
+always, make reasonable axis labels and such
+
+1e. What temperature is the same in C as in F? I know that you may
+already know this, and it's much easier to solve algebraically, but I
+want you to solve it the hard way. Specifically: write a while loop,
+that uses your function to keep testing integers until you find the
+answer. If I were you, I'd start with the smallest possible C (that's an
+integer), and move up, to make sure you don't miss it. remember - be
+careful with while loops, as they can make your computer keep running
+forever.
+
+1f. Write a for loop that calculates Fahrenheit temperatures for the
+following Celsius temperatures:
+
+```{r}
+Cels <- c(-10,17,25,0,45,-37,24,6,100,11,-18)
+```
+
+1g. Now use the map function inside the purrr package (purrr::map) do
+achieve the same result in one line of code.
+
+2.  OK, what if you wanted to make a more flexible function. You're
+    going to create a function called `temperatureConverter`, which will
+    be your one-stop shop for converting any temperature between F, C or
+    K.
+
+You're function is now going to need more inputs, right? Since you need
+to know the temperature, what it's coming from, and what it's going to.
+Ultimately, it should work if you type something like this:
+
+`newTemp <- temperatureConverter(57,from="C",to="K")`
+
+to make this work, you will need several if-else statements also, please
+set up your function with default values of "C" for from, and "F" for
+to.
+
+demonstrate that your new function works by a. converting 300 K to C b.
+converting 200 F to K c. converting 100 C to F with only one input
+(taking advantage of your defaults)
+
+## Part 2. More functions and loops
+
+Imagine this - we just took out our drones, and collected some fancy new
+topography data for a volcano.
+
+We loaded our data into R, and stored it in the variable "volcano" (this
+is a built in dataset, it's already there. You can type
+`volcano <- volcano` if you want to see it in your environment)
+
+3a. what kind of data set is this?
+
+3b. what are it's dimensions?
+
+this dataset is preloaded in R so you can learn more about it like this:
+
+```{r}
+?volcano
+```
+
+3c. make a quick map of the volcano elevation using the "filled.contour"
+plotting option
+
+OK, we're interested in predicting where on the volcano is most likely
+for landslides to occur to do this, we'd like to make a map of what the
+slope is, everywhere on the volcano
+
+4a. to do this, lets write a function, that calculates slope if you give
+it a vector from the matrix (a vector being 1 column or row from the
+matrix) (remember that slope is elevation change divided by horizontal
+change)
+
+`slope = function()`
+
+so write a function that calculates change in elevation between grid
+cells in a vector. The output should be all positive {use `abs()`} and
+be 1 cell shorter than the input.
+
+4b. now use your function to calculate the slopes from the 43rd column
+(a north-south stripe), and plot them (x=north-south,y=slope)
+
+5a. now create a new matrix that's the appropriate size, full of NAs,
+for your N-S slopes. use `matrix()` to do this.
+
+5b. now write a for loop that loops through all the columns, uses your
+function to calculate the slopes, and then puts the values into your N-S
+slopes matrix
+
+5c. make a filled.contour plot of your N-S slopes
+
+5d. write some code that tells us which cell has the greatest N-S slope
+
+6.  repeat 5a-d for E-W
+
+7a.Challenge question: Make a map that shows total slope on the volcano.
+There are a few ways to do this, but the easiest is probably to average
+your N-S slopes, and E-W slopes together. This is still a little tricky,
+since your matrices are not the same size. How might you solve this and
+get them on the same grid? It might help to sketch out a grid that shows
+where you have elevations and where you have slopes (both NS and EW)
+
+7b. make a final filled.contour plot that shows the average slope. Where
+is the steepest part of the volcano?

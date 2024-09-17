@@ -1,0 +1,57 @@
+---
+title: "Min age"
+output: html_document
+date: "2024-09-12"
+---
+
+
+```{r}
+DendroMerge <- read_csv("DendroMergeforR.csv")
+
+DendroMerge <- DendroMerge[,-8]
+
+
+
+```
+
+
+
+
+Age vs size plot
+```{r}
+ggplot(DendroMerge, aes(x = PithHand, y = `Diameter (CM)`)) +
+  labs( x= "Pith Year", y = "Diameter (cm)", title = "Diameter vs Pith Date") +
+  geom_point(shape=18, size= 3)+
+  geom_smooth( method = "lm", se = FALSE, size = 1.5)+
+  scale_y_continuous(
+    limits = c(0,100)
+  ) +
+scale_x_continuous(
+  limits = c(1985,2020)
+)
+```
+
+
+Age vs Size correlation
+```{r}
+model <- lm(DendroMerge$`Diameter (CM)` ~ DendroMerge$PithHand, data = DendroMerge)
+
+summary(model)
+
+
+```
+
+
+```{r}
+
+```
+
+
+
+
+
+
+
+
+
+
