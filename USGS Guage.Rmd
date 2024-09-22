@@ -36,6 +36,7 @@ CampVerdeGuage <- CampVerdeGuage %>%
 
 ggplot(data = CampVerdeGuage, mapping = aes(x = Date, y = Discharge)) + 
   geom_line()+
+  labs(title = "Below Camp Verde Guage record mean daily discharge 1989 to present")+
     geom_vline(xintercept = as.Date("2023-06-15"), color = "red", linetype = "dashed", size = 1)+
   geom_vline(xintercept = as.Date("2021-10-14"), color = "red", linetype = "dashed", size = 1)+
   geom_vline(xintercept = as.Date("2014-06-01"), color = "red", linetype = "dashed", size = 1)+
