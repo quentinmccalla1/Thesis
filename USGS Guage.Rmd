@@ -9,8 +9,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r}
-install.packages("dataRetrieval"
-)
+#install.packages("dataRetrieval")
 library(dataRetrieval)
 library(ggplot2)
 library(dplyr)
@@ -71,6 +70,7 @@ ggplot(data = CampVerdeGuage, mapping = aes(x = Date, y = Discharge)) +
 
   geom_vline(xintercept = as.Date("2012-06-01"), color = "red", linetype = "dashed", size = 1)+
   geom_vline(xintercept = as.Date("2015-06-01"), color = "red", linetype = "dashed", size = 1)+
+    geom_vline(xintercept = as.Date("2010-06-07"), color = "red", linetype = "dashed", size = 1)+
   geom_vline(xintercept = as.Date("2007-06-04"), color = "yellow", linetype = "dashed", size = 1)+
     geom_vline(xintercept = as.Date("2005-06-01"), color = "red", linetype = "dashed", size = 1)+
 
