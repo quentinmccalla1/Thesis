@@ -9,8 +9,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r}
-install.packages("dataRetrieval"
-)
+#install.packages("dataRetrieval")
 library(dataRetrieval)
 library(ggplot2)
 library(dplyr)
@@ -39,6 +38,9 @@ ggplot(data = CampVerdeGuage, mapping = aes(x = Date, y = Discharge)) +
   labs(title = "Chlids")+
     geom_vline(xintercept = as.Date("2023-06-15"), color = "red", linetype = "dashed", size = 1)+
   geom_vline(xintercept = as.Date("2021-10-14"), color = "red", linetype = "dashed", size = 1)+
+    geom_vline(xintercept = as.Date("2017-06-04"), color = "red", linetype = "dashed", size = 1)+
+  geom_vline(xintercept = as.Date("2019-06-08"), color = "red", linetype = "dashed", size = 1)+
+
     geom_vline(xintercept = as.Date("2010-06-15"), color = "red", linetype = "dashed", size = 1)+
   geom_vline(xintercept = as.Date("2014-06-01"), color = "red", linetype = "dashed", size = 1)+
   geom_vline(xintercept = as.Date("2013-06-05"), color = "red", linetype = "dashed", size = 1)+
@@ -67,10 +69,11 @@ ggplot(data = CampVerdeGuage, mapping = aes(x = Date, y = Discharge)) +
   labs(title = "Sheep")+
     geom_vline(xintercept = as.Date("2023-06-15"), color = "red", linetype = "dashed", size = 1)+
   geom_vline(xintercept = as.Date("2021-10-14"), color = "red", linetype = "dashed", size = 1)+
+      geom_vline(xintercept = as.Date("2019-06-04"), color = "red", linetype = "dashed", size = 1)+
     geom_vline(xintercept = as.Date("2017-06-04"), color = "red", linetype = "dashed", size = 1)+
-
   geom_vline(xintercept = as.Date("2012-06-01"), color = "red", linetype = "dashed", size = 1)+
   geom_vline(xintercept = as.Date("2015-06-01"), color = "red", linetype = "dashed", size = 1)+
+    geom_vline(xintercept = as.Date("2010-06-07"), color = "red", linetype = "dashed", size = 1)+
   geom_vline(xintercept = as.Date("2007-06-04"), color = "yellow", linetype = "dashed", size = 1)+
     geom_vline(xintercept = as.Date("2005-06-01"), color = "red", linetype = "dashed", size = 1)+
 
