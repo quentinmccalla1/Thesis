@@ -20,101 +20,62 @@ library(tidyverse)
 All seedling
 
 ```{r}
-BRAP1row <- read_csv("BRAP1ROW.csv")
-Childs1row <- read_csv("Childs1ROW.csv")
+BRAP10_2023 <- read_csv("BRAP10-2023.csv")
+BRAP06_2024 <- read_csv("BRAP06-2024.csv")
+
+Childs10_2023 <- read_csv("Childs10-2023.csv")
+Childs06_2024 <- read_csv("Childs06-2024.csv")
 
 
-BRAP1row <- na.omit(BRAP1row)
-Childs1row <- na.omit(Childs1row)
+BRAP06_2024 <- na.omit(BRAP06_2024)
+BRAP10_2023 <- na.omit(BRAP10_2023)
+
+Childs10_2023 <- na.omit(Childs10_2023)
+Childs06_2024 <- na.omit(Childs06_2024)
 ```
 
-Summary Stats
 
 ```{r}
-#Height and Diameter means
-BeasleyMeans <- colMeans(BRAP1row)
-ChildsMeans <-colMeans(Childs1row)
+#Make Values numeric
+#Beasley
+ BRAP06_2024 <- BRAP06_2024 %>%
+  mutate(
+    Height = as.numeric(Height),
+    Diameter = as.numeric(Diameter),
+    HDR = as.numeric(HDR)
+  )
+
+ BRAP10_2023 <- BRAP10_2023 %>%
+  mutate(
+    Height = as.numeric(Height),
+    Diameter = as.numeric(Diameter),
+    HDR = as.numeric(HDR)
+  )
+ 
+#Childs
+ 
+Childs10_2023 <- Childs10_2023 %>%
+  mutate(
+    Height = as.numeric(Height_CHD_2023),
+    Diameter = as.numeric(Diameter_CHD_2023),
+    HDR = as.numeric(HDR_CHD_2023)
+  )
+
+Childs06_2024 <- Childs06_2024 %>%
+  mutate(
+    Height = as.numeric(`Height_CHD_06-2024`),
+    Diameter = as.numeric(`Diameter_CHD_06-2024`),
+    HDR = as.numeric(`HDR_CHD_06-2024`)
+  )
+ 
 ```
 
-Change over time
-
-Beasley
-
-```{r}
-#Diameter Beasley
-((BeasleyMeans[3]-BeasleyMeans[1])/BeasleyMeans[1])*100
-#Height Beasley
-((BeasleyMeans[4]-BeasleyMeans[2])/BeasleyMeans[2])*100
-
-
-```
-
-Childs
-
-```{r}
-#print(ChildsMeans)
-
-#Diamter Childs
-((ChildsMeans[3]-ChildsMeans[1])/ChildsMeans[1])*100
-#Height Childs
-((ChildsMeans[4]-ChildsMeans[2])/ChildsMeans[2])*100
-
-```
-
-Ratios
-
-height/diameter ratio
+Stats
 
 ```{r}
 
-#Beasley 2023 HDR
 
-# Define the function to calculate HDR (Height / Diameter)
-HDR2023BRAP <- function(height, diameter) {
-  result <- height / diameter
-  return(result)
-}
-
-# Use mutate to add the new column, passing the correct columns to the function
-BRAP1row <- BRAP1row %>%
-  mutate(HDR2023 = HDR2023BRAP(HeightBRAP2023, DiameterBRAP2024))
-
-
-
-#Beasley 2024 HDR
-HDR2024BRAP <- function(BRAP1row){
-  result <- BRAP1row$HeightBRAP2024 / BRAP1row$DiameterBRAP2024
-}
-# Use mutate to add the new column, passing the correct columns to the function
-BRAP1row <- BRAP1row %>%
-  mutate(HDR2024 = HDR2023BRAP(HeightBRAP2024, DiameterBRAP2024))
-
-
-```
-
-Childs HDR
-
-```{r}
-#Childs 2023 HDR
-HDR2023Childs <- function(height, diameter) {
-  result <- height / diameter
-  return(result)
-}
-
-Childs1row <- Childs1row %>%
-  mutate(HDR2023 = HDR2023Childs(HeightCHD.2023, DiameterCHD2022))
-
-#Childs 2024 HDR
-HDR2024Childs <- function(height, diameter) {
-  result <- height / diameter
-  return(result)
-}
-
-Childs1row <- Childs1row %>%
-  mutate(HDR2024 = HDR2023Childs(HeightCHD2024, DiameterCHD2023))
-
-
-
+cor(BRAPHDR2023, BRAPHDR2024)
 
 ```
 
@@ -124,17 +85,17 @@ Clean data
 
 ```{r}
 # Extract the columns you need
-ChildsHDR2023 <- Childs1row[, 5]
-ChildsHDR2024 <- Childs1row[, 6]
-BRAPHDR2023 <- BRAP1row[,5]
-BRAPHDR2024 <- BRAP1row[,6]
+ChildsHDR2023 <- Childs10_2023[, 6]
+ChildsHDR2024 <- Childs06_2024[, 6]
+BRAPHDR2023 <- BRAP10_2023[,6]
+BRAPHDR2024 <- BRAP06_2024[,6]
 
 #Clean Data Childs
 
 ChildsHDR2024 <- unlist(ChildsHDR2024)
 ChildsHDR2024 <- na.omit(ChildsHDR2024)
 ChildsHDR2023 <- unlist(ChildsHDR2023)
-ChildsHDR2023<- na.omit(ChildsHDR2023
+ChildsHDR2023<- na.omit(ChildsHDR2023)
 
 BRAPHDR2023 <- na.omit(BRAPHDR2023)
 BRAPHDR2023 <- unlist(BRAPHDR2023)
@@ -142,53 +103,8 @@ BRAPHDR2024 <- na.omit(BRAPHDR2024)
 BRAPHDR2024 <- unlist(BRAPHDR2024)
 
 
-
 ```
 
-Percent Change
-
-```{r}
-mean(BRAPHDR2023)
-mean(BRAPHDR2024)
-mean(ChildsHDR2023)
-mean(ChildsHDR2024)
-
-percentChange <- function( HDR2023, HDR2024){
-  result <- (HDR2023-HDR2024)/HDR2024 *100
-  
-  return(result)
-  
-}
-
-percentChange(108,90.7)
-
-
-
-```
-
-Hist BRAP
-
-```{r}
-# Set up the plotting area to have 1 row and 2 columns
-par(mfrow = c(1, 2))
-
-# Create the first histogram
-hist(BRAPHDR2023, 
-     main = "Histogram of BRAPHDR2023", 
-     xlab = "Values", 
-     col = "lightblue", 
-     breaks = "Sturges")
-
-# Create the second histogram
-hist(BRAPHDR2024, 
-     main = "Histogram of BRAPHDR2024", 
-     xlab = "Values", 
-     col = "lightgreen", 
-     breaks = "Sturges")
-
-# Reset plotting area to default
-par(mfrow = c(1, 1))
-```
 
 Hist Childs
 
@@ -235,3 +151,39 @@ par(mfrow = c(2, 2))
 
 
 ```
+
+
+Summary Stats
+
+Tables
+```{r}
+
+# Summarize and calculate means for specific columns
+BRAP2024_table <- BRAP06_2024 %>%
+  summarise(
+    Height = mean(Height, na.rm = TRUE),
+    Diameter = mean(Diameter, na.rm = TRUE),
+    HDR = mean(HDR, na.rm = TRUE)
+  )
+BRAP2023_table <- BRAP10_2023 %>%
+  summarise(
+    Height = mean(Height, na.rm = TRUE),
+    Diameter = mean(Diameter, na.rm = TRUE),
+    HDR = mean(HDR, na.rm = TRUE)
+  )
+
+
+
+BRAP_TABLE <- rbind(BRAP2023_table,BRAP2024_table)
+
+
+
+print(BRAP_TABLE)
+```
+
+
+
+
+
+
+
