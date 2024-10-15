@@ -2,6 +2,9 @@
 title: "Seedling Statistics"
 output: html_document
 date: "2024-09-04"
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r setup, include=FALSE}
@@ -36,7 +39,6 @@ Childs10_2023 <- na.omit(Childs10_2023)
 Childs06_2024 <- na.omit(Childs06_2024)
 
 ```
-
 
 ```{r}
 #Make Values numeric
@@ -120,7 +122,6 @@ BRAPHDR10_2024 <- na.omit(BRAPHDR10_2024)
 
 ```
 
-
 Hist Childs
 
 ```{r}
@@ -171,12 +172,13 @@ par(mfrow = c(2, 3))
 
 ```
 
-
 Summary Stats
 
 Tables
+
 ```{r}
 #Beasley Table
+library(dplyr)
 
 # Summarize and calculate means for specific columns
 BRAP06_2024_table <- BRAP06_2024 %>%
@@ -186,8 +188,8 @@ BRAP06_2024_table <- BRAP06_2024 %>%
     Diameter = mean(Diameter, na.rm = TRUE),
        # SD_Diameter = sd(Diameter, na.rm = TRUE),
     HDR = mean(HDR, na.rm = TRUE),
-     #SD_HDR = sd(HDR, na.rm = TRUE)
-  )
+     #SD_HDR = sd(HDR, na.rm = TRUE) 
+    )
 
 BRAP2023_table <- BRAP10_2023 %>%
   summarise(
@@ -197,8 +199,7 @@ BRAP2023_table <- BRAP10_2023 %>%
         #SD_Diameter = sd(Diameter, na.rm = TRUE),
     HDR = mean(HDR, na.rm = TRUE),
      #SD_HDR = sd(HDR, na.rm = TRUE)
-  )
-
+    )
 
 BRAP10_2024_table <- BRAP10_2024 %>%
  summarise(
@@ -208,17 +209,44 @@ BRAP10_2024_table <- BRAP10_2024 %>%
        # SD_Diameter = sd(Diameter, na.rm = TRUE),
     HDR = mean(HDR, na.rm = TRUE),
      #SD_HDR = sd(HDR, na.rm = TRUE)
-  )
-
-
+   )
+   
 BRAP_TABLE <- rbind(BRAP2023_table,BRAP06_2024_table,BRAP10_2024_table)
 
-
-
+BRAP_TABLE <- BRAP_TABLE %>%
+  mutate(Visit = c("Oct 2023", "June 2024", "Oct 2024"))
+BRAP_TABLE <- BRAP_TABLE[, c(4, 1, 2, 3)]
 print(BRAP_TABLE)
 ```
 
+
+
+
+```{r}
+# Load the gt package
+library(gt)
+
+
+# Create a gt table
+gt_table <- gt(BRAP_TABLE) %>%
+  tab_header(
+    title = "Beasley seedling data",
+    subtitle = "Formatted using the gt package"
+  ) 
+
+# Display the table
+print(gt_table)
+
+```
+
+
+
+
+
+
+
 Childs tables
+
 ```{r}
 # Summarize and calculate means for specific columns
 CHILDS06_2024_table <- Childs06_2024 %>%
@@ -246,34 +274,68 @@ print(Childs_TABLE)
 
 ```
 
-Statistical tests
 
-Welch t test
-Use when: means of two groups with unequal sample sizes and possible unequal variances
-Assumptions: normality of data
+
+Statistical tests Variables 
+Nominal= classify observations into discretecategories. Usually expressed by a work, not a number. Examples: sex
+(male, female), condition (good, poor, fair, etc), LOCATION
+Measurement/numeric/quantitative/Continuous variables= things you can measure, ex. Time
+
+Beasley plots over all 3 times = 3 continuous variables (time) and 1 nominal (location)
+
+Beasley vs Childs= 2 nominal (2 locations)
+
+
+<https://www.biostathandbook.com/testchoice.html>
+
+Diameters and heigths are NOT normally distributed HDR values are
+normally distributed
+
+Median= more useful for very skewed data
+
+T-tests for: seedling heights and diameters between visits. But only can
+compare TWO sets of data at a time ANOVA for : used to compare three
+categorical data sets
+
+Welch t test Use when: means of two groups with unequal sample sizes and
+possible unequal variances Assumptions: normality of data
 
 ```{r}
-hist(Childs06_2024$Diameter)
+hist(Childs10_2023$Height)
 
-t.test(Childs06_2024$Diameter, Childs10_2023$Diameter, var.equal = FALSE)
-
+t.test(ChildsHDR2023, ChildsHDR2024, var.equal = FALSE)
 
 
 ```
 
+Mann-Whitney U Test (Non-parametric) Use when: You are comparing two
+groups but your data are not normally distributed, and the groups have
+unequal sizes. Example: Comparing seedling growth rates between two
+treatments, where one group has more observations and the data are
+skewed. Why: It's a non-parametric test that compares the ranks of the
+data instead of the means.
+
+```{r}
+wilcox.test(Childs10_2023$Diameter, Childs06_2024$Diameter)
+```
+
 ANOVA w/ Unequal sample size
-Use when: You have more than two groups with unequal sample sizes, and you want to compare their means.
-Example: Comparing the average height of seedlings across multiple treatment groups, each with a different number of samples.
-Why: ANOVA can handle unequal sample sizes but assumes equal variances across groups (you can relax this assumption with a modified version like Welch’s ANOVA).
+Use when: You have more than two groups
+with unequal sample sizes, and you want to compare their means. 
+
+Example:
+Comparing the average height of seedlings across multiple treatment
+groups, each with a different number of samples. 
+
+Why: ANOVA can handle
+unequal sample sizes but assumes equal variances across groups (you can
+relax this assumption with a modified version like Welch's ANOVA).
 
 ```{r}
 
 aov()
 
 ```
-
-
-
 
 Individual plot data
 
@@ -284,10 +346,3 @@ LB2023sites <- LB2023sites[-1,]
 LB2023sites <- LB2023sites %>%
   filter(!is.na(LB1D), !is.na(LB1H),!is.na(LB3D...6), !is.na(LB3D...5) )
 ```
-
-
-
-
-
-
-
