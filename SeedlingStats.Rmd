@@ -22,6 +22,7 @@ All seedling
 ```{r}
 BRAP10_2023 <- read_csv("BRAP10-2023.csv")
 BRAP06_2024 <- read_csv("BRAP06-2024.csv")
+BRAP10_2024 <- read_csv("Brap10-2024.csv")
 
 Childs10_2023 <- read_csv("Childs10-2023.csv")
 Childs06_2024 <- read_csv("Childs06-2024.csv")
@@ -29,9 +30,11 @@ Childs06_2024 <- read_csv("Childs06-2024.csv")
 
 BRAP06_2024 <- na.omit(BRAP06_2024)
 BRAP10_2023 <- na.omit(BRAP10_2023)
+BRAP10_2024 <- na.omit(BRAP10_2024)
 
 Childs10_2023 <- na.omit(Childs10_2023)
 Childs06_2024 <- na.omit(Childs06_2024)
+
 ```
 
 
@@ -52,20 +55,27 @@ Childs06_2024 <- na.omit(Childs06_2024)
     HDR = as.numeric(HDR)
   )
  
+  BRAP10_2024 <- BRAP10_2024 %>%
+  mutate(
+    Height = as.numeric(Height),
+    Diameter = as.numeric(Diameter),
+    HDR = as.numeric(HDR)
+  )
+ 
 #Childs
  
 Childs10_2023 <- Childs10_2023 %>%
   mutate(
-    Height = as.numeric(Height_CHD_2023),
-    Diameter = as.numeric(Diameter_CHD_2023),
-    HDR = as.numeric(HDR_CHD_2023)
+    Height = as.numeric(Height),
+    Diameter = as.numeric(Diameter),
+    HDR = as.numeric(HDR)
   )
 
 Childs06_2024 <- Childs06_2024 %>%
   mutate(
-    Height = as.numeric(`Height_CHD_06-2024`),
-    Diameter = as.numeric(`Diameter_CHD_06-2024`),
-    HDR = as.numeric(`HDR_CHD_06-2024`)
+    Height = as.numeric(`Height`),
+    Diameter = as.numeric(`Diameter`),
+    HDR = as.numeric(`HDR`)
   )
  
 ```
@@ -87,8 +97,11 @@ Clean data
 # Extract the columns you need
 ChildsHDR2023 <- Childs10_2023[, 6]
 ChildsHDR2024 <- Childs06_2024[, 6]
+
 BRAPHDR2023 <- BRAP10_2023[,6]
-BRAPHDR2024 <- BRAP06_2024[,6]
+BRAPHDR06_2024 <- BRAP06_2024[,6]
+BRAPHDR10_2024 <- BRAP10_2024[,3]
+
 
 #Clean Data Childs
 
@@ -99,8 +112,10 @@ ChildsHDR2023<- na.omit(ChildsHDR2023)
 
 BRAPHDR2023 <- na.omit(BRAPHDR2023)
 BRAPHDR2023 <- unlist(BRAPHDR2023)
-BRAPHDR2024 <- na.omit(BRAPHDR2024)
-BRAPHDR2024 <- unlist(BRAPHDR2024)
+BRAPHDR06_2024 <- na.omit(BRAPHDR2024)
+BRAPHDR06_2024 <- unlist(BRAPHDR2024)
+BRAPHDR10_2024 <- unlist(BRAPHDR10_2024)
+BRAPHDR10_2024 <- na.omit(BRAPHDR10_2024)
 
 
 ```
@@ -135,17 +150,21 @@ hist(BRAPHDR2023,
      breaks = "Sturges")
 
 # Create the second histogram
-hist(BRAPHDR2024, 
+hist(BRAPHDR06_2024, 
+     main = "Histogram of BRAPHDR2024", 
+     xlab = "Height to Diameter Ratio", 
+     col = "grey22", 
+     breaks = "Sturges")
+
+hist(BRAPHDR06_2024, 
      main = "Histogram of BRAPHDR2024", 
      xlab = "Height to Diameter Ratio", 
      col = "grey22", 
      breaks = "Sturges")
 
 
-
-
 # Reset plotting area to default
-par(mfrow = c(2, 2))
+par(mfrow = c(2, 3))
 
 
 
@@ -157,9 +176,10 @@ Summary Stats
 
 Tables
 ```{r}
+#Beasley Table
 
 # Summarize and calculate means for specific columns
-BRAP2024_table <- BRAP06_2024 %>%
+BRAP06_2024_table <- BRAP06_2024 %>%
   summarise(
     Height = mean(Height, na.rm = TRUE),
     Diameter = mean(Diameter, na.rm = TRUE),
@@ -172,13 +192,46 @@ BRAP2023_table <- BRAP10_2023 %>%
     HDR = mean(HDR, na.rm = TRUE)
   )
 
+BRAP10_2024_table <- BRAP10_2024 %>%
+  summarise(
+    Height = mean(Height, na.rm = TRUE),
+    Diameter = mean(Diameter, na.rm = TRUE),
+    HDR = mean(HDR, na.rm = TRUE)
+  )
 
-
-BRAP_TABLE <- rbind(BRAP2023_table,BRAP2024_table)
+BRAP_TABLE <- rbind(BRAP2023_table,BRAP06_2024_table,BRAP10_2024_table)
 
 
 
 print(BRAP_TABLE)
+```
+
+Childs tables
+```{r}
+# Summarize and calculate means for specific columns
+CHILDS06_2024_table <- Childs06_2024 %>%
+  summarise(
+    Height = mean(Height, na.rm = TRUE),
+    Diameter = mean(Diameter, na.rm = TRUE),
+    HDR = mean(HDR, na.rm = TRUE)
+  )
+CHILDS2023_table <- Childs10_2023 %>%
+  summarise(
+    Height = mean(Height, na.rm = TRUE),
+    Diameter = mean(Diameter, na.rm = TRUE),
+    HDR = mean(HDR, na.rm = TRUE)
+  )
+
+
+
+Childs_TABLE <- rbind(CHILDS2023_table,CHILDS06_2024_table)
+
+
+
+print(Childs_TABLE)
+
+
+
 ```
 
 
