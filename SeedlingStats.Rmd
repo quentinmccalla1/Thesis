@@ -281,15 +281,15 @@ Nominal= classify observations into discretecategories. Usually expressed by a w
 (male, female), condition (good, poor, fair, etc), LOCATION
 Measurement/numeric/quantitative/Continuous variables= things you can measure, ex. Time
 
-Beasley plots over all 3 times = 3 continuous variables (time) and 1 nominal (location)
+Beasley plots over all 3 times = 2 continuous variables (time, height/diameter) and 1 nominal (location)
 
 Beasley vs Childs= 2 nominal (2 locations)
 
 
 <https://www.biostathandbook.com/testchoice.html>
 
-Diameters and heigths are NOT normally distributed HDR values are
-normally distributed
+Diameters and heigths are NOT normally distributed 
+HDR values are normally distributed
 
 Median= more useful for very skewed data
 
