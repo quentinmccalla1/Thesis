@@ -182,22 +182,34 @@ Tables
 BRAP06_2024_table <- BRAP06_2024 %>%
   summarise(
     Height = mean(Height, na.rm = TRUE),
+    #SD_Height = sd(Height, na.rm = TRUE),
     Diameter = mean(Diameter, na.rm = TRUE),
-    HDR = mean(HDR, na.rm = TRUE)
+       # SD_Diameter = sd(Diameter, na.rm = TRUE),
+    HDR = mean(HDR, na.rm = TRUE),
+     #SD_HDR = sd(HDR, na.rm = TRUE)
   )
+
 BRAP2023_table <- BRAP10_2023 %>%
   summarise(
     Height = mean(Height, na.rm = TRUE),
+    #SD_Height = sd(Height, na.rm = TRUE),
     Diameter = mean(Diameter, na.rm = TRUE),
-    HDR = mean(HDR, na.rm = TRUE)
+        #SD_Diameter = sd(Diameter, na.rm = TRUE),
+    HDR = mean(HDR, na.rm = TRUE),
+     #SD_HDR = sd(HDR, na.rm = TRUE)
   )
 
+
 BRAP10_2024_table <- BRAP10_2024 %>%
-  summarise(
+ summarise(
     Height = mean(Height, na.rm = TRUE),
+   # SD_Height = sd(Height, na.rm = TRUE),
     Diameter = mean(Diameter, na.rm = TRUE),
-    HDR = mean(HDR, na.rm = TRUE)
+       # SD_Diameter = sd(Diameter, na.rm = TRUE),
+    HDR = mean(HDR, na.rm = TRUE),
+     #SD_HDR = sd(HDR, na.rm = TRUE)
   )
+
 
 BRAP_TABLE <- rbind(BRAP2023_table,BRAP06_2024_table,BRAP10_2024_table)
 
@@ -232,6 +244,45 @@ print(Childs_TABLE)
 
 
 
+```
+
+Statistical tests
+
+Welch t test
+Use when: means of two groups with unequal sample sizes and possible unequal variances
+Assumptions: normality of data
+
+```{r}
+hist(Childs06_2024$Diameter)
+
+t.test(Childs06_2024$Diameter, Childs10_2023$Diameter, var.equal = FALSE)
+
+
+
+```
+
+ANOVA w/ Unequal sample size
+Use when: You have more than two groups with unequal sample sizes, and you want to compare their means.
+Example: Comparing the average height of seedlings across multiple treatment groups, each with a different number of samples.
+Why: ANOVA can handle unequal sample sizes but assumes equal variances across groups (you can relax this assumption with a modified version like Welch’s ANOVA).
+
+```{r}
+
+aov()
+
+```
+
+
+
+
+Individual plot data
+
+```{r}
+LB2023sites <- read_csv("LB2023sites.csv")
+LB2023sites <- LB2023sites[-1,]
+
+LB2023sites <- LB2023sites %>%
+  filter(!is.na(LB1D), !is.na(LB1H),!is.na(LB3D...6), !is.na(LB3D...5) )
 ```
 
 

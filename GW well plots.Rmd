@@ -1,0 +1,29 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+GW PLOTS
+
+```{r}
+library(dplyr)
+library(lubridate)
+```
+
+Beasley Well 9
+
+Import Data
+```{r}
+Well9JFebtoAug <- read_csv("BRAPWell9_022924to080724.csv")
+
+
+```
+
+Plot
+
+```{r}
+
+```
+
