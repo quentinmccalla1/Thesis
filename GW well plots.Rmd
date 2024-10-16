@@ -8,8 +8,9 @@ This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute
 GW PLOTS
 
 ```{r}
-library(dplyr)
-library(lubridate)
+library(tidyverse)
+
+library(ggplot2)
 ```
 
 Beasley Well 9
@@ -36,7 +37,7 @@ Well9JFebtoAug <- Well9JFebtoAug %>%
 
 # Plot the data
 ggplot(Well9JFebtoAug, aes(x = Date, y = Ft)) +
-  geom_line(color = "blue", size = 1) +
+  geom_line(color = "black", size = 1) +
   labs(title = "Beasley Flat Well 9",
        x = "Date",
        y = "Ft") +

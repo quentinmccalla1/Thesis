@@ -184,31 +184,23 @@ library(dplyr)
 BRAP06_2024_table <- BRAP06_2024 %>%
   summarise(
     Height = mean(Height, na.rm = TRUE),
-    #SD_Height = sd(Height, na.rm = TRUE),
     Diameter = mean(Diameter, na.rm = TRUE),
-       # SD_Diameter = sd(Diameter, na.rm = TRUE),
     HDR = mean(HDR, na.rm = TRUE),
-     #SD_HDR = sd(HDR, na.rm = TRUE) 
     )
 
 BRAP2023_table <- BRAP10_2023 %>%
   summarise(
     Height = mean(Height, na.rm = TRUE),
-    #SD_Height = sd(Height, na.rm = TRUE),
     Diameter = mean(Diameter, na.rm = TRUE),
-        #SD_Diameter = sd(Diameter, na.rm = TRUE),
     HDR = mean(HDR, na.rm = TRUE),
-     #SD_HDR = sd(HDR, na.rm = TRUE)
+     
     )
 
 BRAP10_2024_table <- BRAP10_2024 %>%
  summarise(
     Height = mean(Height, na.rm = TRUE),
-   # SD_Height = sd(Height, na.rm = TRUE),
     Diameter = mean(Diameter, na.rm = TRUE),
-       # SD_Diameter = sd(Diameter, na.rm = TRUE),
     HDR = mean(HDR, na.rm = TRUE),
-     #SD_HDR = sd(HDR, na.rm = TRUE)
    )
    
 BRAP_TABLE <- rbind(BRAP2023_table,BRAP06_2024_table,BRAP10_2024_table)
@@ -253,14 +245,18 @@ CHILDS06_2024_table <- Childs06_2024 %>%
   summarise(
     Height = mean(Height, na.rm = TRUE),
     Diameter = mean(Diameter, na.rm = TRUE),
-    HDR = mean(HDR, na.rm = TRUE)
-  )
+    HDR = mean(HDR, na.rm = TRUE)  )
+
+
 CHILDS2023_table <- Childs10_2023 %>%
   summarise(
     Height = mean(Height, na.rm = TRUE),
     Diameter = mean(Diameter, na.rm = TRUE),
-    HDR = mean(HDR, na.rm = TRUE)
-  )
+    HDR = mean(HDR, na.rm = TRUE),
+    #P_values = "<.001"
+    )
+
+
 
 
 
@@ -271,13 +267,13 @@ Childs_TABLE <- rbind(CHILDS2023_table,CHILDS06_2024_table)
 print(Childs_TABLE)
 
 
-
 ```
 
 
 
 Statistical tests Variables 
-Nominal= classify observations into discretecategories. Usually expressed by a work, not a number. Examples: sex
+
+Nominal= classify observations into discrete categories. Usually expressed by a work, not a number. Examples: sex
 (male, female), condition (good, poor, fair, etc), LOCATION
 Measurement/numeric/quantitative/Continuous variables= things you can measure, ex. Time
 
@@ -303,20 +299,31 @@ possible unequal variances Assumptions: normality of data
 ```{r}
 hist(Childs10_2023$Height)
 
+#Childs HDR P-values <.001
 t.test(ChildsHDR2023, ChildsHDR2024, var.equal = FALSE)
 
+#BRAP HDR P-Values
+BRAPstats <- aov(HDR~ Visit ,data = BRAP_TABLE)
 
 ```
 
 Mann-Whitney U Test (Non-parametric) Use when: You are comparing two
 groups but your data are not normally distributed, and the groups have
-unequal sizes. Example: Comparing seedling growth rates between two
+unequal sizes. 
+Example: Comparing seedling growth rates between two
 treatments, where one group has more observations and the data are
-skewed. Why: It's a non-parametric test that compares the ranks of the
+skewed.
+Why: It's a non-parametric test that compares the ranks of the
 data instead of the means.
 
 ```{r}
+#hist(Childs06_2024$Diameter)
+
+#Stats for childs diameters. <.001
 wilcox.test(Childs10_2023$Diameter, Childs06_2024$Diameter)
+#P value for childs heights. <.001
+wilcox.test(Childs10_2023$Height, Childs06_2024$Height)
+
 ```
 
 ANOVA w/ Unequal sample size
@@ -327,15 +334,33 @@ Example:
 Comparing the average height of seedlings across multiple treatment
 groups, each with a different number of samples. 
 
-Why: ANOVA can handle
-unequal sample sizes but assumes equal variances across groups (you can
-relax this assumption with a modified version like Welch's ANOVA).
+Why: ANOVA can handleunequal sample sizes but assumes equal variances across groups (you can relax this assumption with a modified version like Welch's ANOVA).
 
 ```{r}
+BRAP_TABLE$Visit <- as.factor(BRAP_TABLE$Visit)
+BRAP_TABLE <- na.omit(BRAP_TABLE)
 
-aov()
+
+anova_diameter <- aov(Diameter ~ Visit, data = BRAP_TABLE)
+
+ summary(anova_diameter)
+TukeyHSD(anova_diameter)
+
+
+
 
 ```
+
+
+
+
+
+
+
+
+
+
+
 
 Individual plot data
 
