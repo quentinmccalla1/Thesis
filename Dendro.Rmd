@@ -47,7 +47,7 @@ plot(Chron.crn, add.spline = TRUE, nyrs = 5)
 Basal Area Index
 
 ```{r}
-BAI <- bai.in(Childs, d2pith= NULL)
+BAI <- bai.out(Childs, diam = FALSE)
 BAI.rwi <- detrend(rwl= BAI, method = "AgeDepSpline")
 BAIChron <- chron(BAI.rwi)
 plot.crn(BAIChron, add.spline=TRUE, nyrs = 5, window(x=1980))
