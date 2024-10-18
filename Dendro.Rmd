@@ -34,23 +34,44 @@ summary.rwl(Childs)
 Detrend
 ```{r}
 ChildsRWI <- detrend( rwl = Childs, method = "AgeDepSpline")
+SheepRWI <- detrend( rwl = Sheep, method = "AgeDepSpline")
+UBRWI <- detrend(rwl= UB, method = "AgeDepSpline")
+LBRWI <- detrend(rwl = LB, method = "AgeDepSpline")
 ```
 
-Mean Value Chronologies
+Turn into Chronology
 ```{r}
-#Childs
-Chron.crn <- chron(ChildsRWI)
-plot(Chron.crn, add.spline = TRUE, nyrs = 5)
+ChildsCrn <- chron(ChildsRWI)
+SheepCrn <- chron(SheepRWI)
+UBCrn <- chron(UBRWI)
+LBCrn <- chron(LBRWI)
+```
+
+Rename Columns
+
+```{r}
+
+```
+
+RWI Plots
+```{r}
+
+plot.crn(ChildsCrn, add.spline = TRUE, nyears = 5)
+
+ggplot(data = ChildsCrn, aes(x= Year, y = std))
+
 ```
 
 
 Basal Area Index
 
 ```{r}
-BAI <- bai.out(Childs, diam = FALSE)
+BAI <- bai.out(Childs, diam = NULL)
 BAI.rwi <- detrend(rwl= BAI, method = "AgeDepSpline")
 BAIChron <- chron(BAI.rwi)
 plot.crn(BAIChron, add.spline=TRUE, nyrs = 5, window(x=1980))
+
+
 ```
 
 

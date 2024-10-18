@@ -1,0 +1,5 @@
+﻿Childs,Height (cm),% Change,P-value,Diameter (mm),%  Change,P-value,HDR,% Change,P-value,,,Beasley,Height (cm),% Change ,P-value,Diameter (mm),% Change,P-value,HDR,% Change,P Values
+Nov-23,32.10,NA,NA,2.87,NA,NA,108.10,NA,NA,,,Oct-23,22.07,NA,NA,2.54,NA,NA,84.38,NA,NA
+Jun-24,41.78,30.12,<.001,4.54,58.07,<.001,90.91,-15.90,<.001,,,Jun-24,28.44,28.91,<.001,3.11,22.66,<.001,88.93,5.40,0.04
+,,,,,,,,,,,,Oct-24,36.38,64.85,<.001,3.29,29.75,0.61,106.21,25.88,<.001
+,,,,,,,,,,,,,,,.611 between June 2024 and Oct 2024,,,.012 between June 2024 and Oct 2024,,,

@@ -84,12 +84,6 @@ Childs06_2024 <- Childs06_2024 %>%
 
 Stats
 
-```{r}
-
-
-cor(BRAPHDR2023, BRAPHDR2024)
-
-```
 
 # Plots
 
@@ -97,11 +91,11 @@ Clean data
 
 ```{r}
 # Extract the columns you need
-ChildsHDR2023 <- Childs10_2023[, 6]
-ChildsHDR2024 <- Childs06_2024[, 6]
+ChildsHDR2023 <- Childs10_2023[, 3]
+ChildsHDR2024 <- Childs06_2024[, 3]
 
-BRAPHDR2023 <- BRAP10_2023[,6]
-BRAPHDR06_2024 <- BRAP06_2024[,6]
+BRAPHDR2023 <- BRAP10_2023[,3]
+BRAPHDR06_2024 <- BRAP06_2024[,3]
 BRAPHDR10_2024 <- BRAP10_2024[,3]
 
 
@@ -114,8 +108,8 @@ ChildsHDR2023<- na.omit(ChildsHDR2023)
 
 BRAPHDR2023 <- na.omit(BRAPHDR2023)
 BRAPHDR2023 <- unlist(BRAPHDR2023)
-BRAPHDR06_2024 <- na.omit(BRAPHDR2024)
-BRAPHDR06_2024 <- unlist(BRAPHDR2024)
+BRAPHDR06_2024 <- na.omit(BRAPHDR06_2024)
+BRAPHDR06_2024 <- unlist(BRAPHDR06_2024)
 BRAPHDR10_2024 <- unlist(BRAPHDR10_2024)
 BRAPHDR10_2024 <- na.omit(BRAPHDR10_2024)
 
@@ -253,12 +247,34 @@ CHILDS2023_table <- Childs10_2023 %>%
 
 Childs_TABLE <- rbind(CHILDS2023_table,CHILDS06_2024_table)
 
+Childs_TABLE <- Childs_TABLE %>%
+  mutate(Visit = c("Oct 2023", "June 2024"))
 
 
 print(Childs_TABLE)
 
 
 ```
+
+Percent Change Function
+
+```{r}
+PercentChange <- function(old,new) {
+  if (old == 0) {
+    return(NA)  # Return NA if the old value is 0 (to avoid division by zero)
+  }
+  
+  change <- ((new- old) / abs(old)) * 100
+  return(change)
+}
+
+
+```
+
+
+
+
+
 
 Statistical tests Variables
 
@@ -294,9 +310,10 @@ hist(Childs10_2023$Height)
 t.test(ChildsHDR2023, ChildsHDR2024, var.equal = FALSE)
 
 #BRAP HDR P-Values
-BRAPstats <- aov(HDR~ Visit ,data = BRAP_TABLE)
+t.test(BRAP10_2023$HDR,BRAP10_2024$HDR)
 
 ```
+
 
 Mann-Whitney U Test (Non-parametric) Use when: You are comparing two
 groups but your data are not normally distributed, and the groups have
@@ -307,11 +324,15 @@ data instead of the means.
 
 ```{r}
 #hist(Childs06_2024$Diameter)
+wilcox.test(BRAP06_2024$Height,BRAP10_2024$Height)
 
 #Stats for childs diameters. <.001
 wilcox.test(Childs10_2023$Diameter, Childs06_2024$Diameter)
+
 #P value for childs heights. <.001
 wilcox.test(Childs10_2023$Height, Childs06_2024$Height)
+
+
 
 ```
 
@@ -329,14 +350,27 @@ like Welch's ANOVA).
 BRAP_TABLE$Visit <- as.factor(BRAP_TABLE$Visit)
 BRAP_TABLE <- na.omit(BRAP_TABLE)
 
+# Convert Visit to a factor if it isn't already
+BRAP_TABLE$Visit <- as.factor(BRAP_TABLE$Visit)
 
-anova_diameter <- aov(Diameter ~ Visit, data = BRAP_TABLE)
+# Ensure Height is numeric
+BRAP_TABLE$Height <- as.numeric(BRAP_TABLE$Height)
 
- summary(anova_diameter)
-TukeyHSD(anova_diameter)
+anova_height <- aov(Visit ~ Height, data = BRAP_TABLE)
+
+
+summary(anova_diameter)
+
+welch_anova <- oneway.test(Diameter ~ Visit, data = BRAP_TABLE)
+print(welch_anova)
+
+
+```
 
 
 
+```{r}
+BrapAll <- read_csv("BRAPALL.csv")
 
 ```
 
