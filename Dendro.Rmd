@@ -21,6 +21,9 @@ Childs <- read.tucson("ChildsCol1.rwl")
 Sheep <- read.tucson("SheepCol1.rwl")
 UB <- read.tucson("UBCol1.rwl")
 LB <- read.tucson("LBCol1.rwl")
+
+ALL <- read.tucson("All.rwl")
+ALLCor <- read.tucson("AllCorrelated.rwl")
 ```
 
 Summary RWL
@@ -33,18 +36,22 @@ summary.rwl(Childs)
 
 Detrend
 ```{r}
-ChildsRWI <- detrend( rwl = Childs, method = "AgeDepSpline")
-SheepRWI <- detrend( rwl = Sheep, method = "AgeDepSpline")
-UBRWI <- detrend(rwl= UB, method = "AgeDepSpline")
-LBRWI <- detrend(rwl = LB, method = "AgeDepSpline")
+Childs <- detrend( rwl = Childs, method = "AgeDepSpline")
+Sheep <- detrend( rwl = Sheep, method = "AgeDepSpline")
+UB <- detrend(rwl= UB, method = "AgeDepSpline")
+LB <- detrend(rwl = LB, method = "AgeDepSpline")
+ALL <- detrend(rwl = ALL, method = "AgeDepSpline")
+ALLCor <- detrend(rwl= ALLCor, method = "AgeDepSpline")
 ```
 
 Turn into Chronology
 ```{r}
-ChildsCrn <- chron(ChildsRWI)
-SheepCrn <- chron(SheepRWI)
-UBCrn <- chron(UBRWI)
-LBCrn <- chron(LBRWI)
+Childscrn <- chron(Childs)
+Sheepcrn <- chron(Sheep)
+UBcrn <- chron(UB)
+LBcrn <- chron(LB)
+Allcrn <- chron(ALL)
+AllCorcrn <- chron(ALLCor)
 ```
 
 Rename Columns
@@ -55,10 +62,14 @@ Rename Columns
 
 RWI Plots
 ```{r}
+plot.crn(Sheepcrn, add.spline = TRUE, nyears = 5)
+plot.crn(UBcrn, add.spline = TRUE, nyears = 5)
+plot.crn(LBcrn, add.spline = TRUE, nyears = 5)
 
-plot.crn(ChildsCrn, add.spline = TRUE, nyears = 5)
+plot.crn(Childscrn, add.spline = TRUE, nyears = 5)
 
-ggplot(data = ChildsCrn, aes(x= Year, y = std))
+plot.crn(AllCorcrn, add.spline = TRUE, nyears = 5)
+plot.crn(Allcrn, add.spline = TRUE, nyears = 5)
 
 ```
 
@@ -66,10 +77,29 @@ ggplot(data = ChildsCrn, aes(x= Year, y = std))
 Basal Area Index
 
 ```{r}
-BAI <- bai.out(Childs, diam = NULL)
-BAI.rwi <- detrend(rwl= BAI, method = "AgeDepSpline")
-BAIChron <- chron(BAI.rwi)
-plot.crn(BAIChron, add.spline=TRUE, nyrs = 5, window(x=1980))
+AllBAI <- bai.in(ALL, d2pith = NULL)
+AllBAIchrn <- chron(AllBAI)
+plot.crn(AllBAIchrn)
+
+AllCorBAI <- bai.in(ALLCor, d2pith = NULL)
+AllCorBAIchrn <- chron(AllCorBAI)
+plot.crn(AllCorBAIchrn)
+
+ChildsBAI <- bai.in(Childs, d2pith = NULL)
+ChildsBAIchrn <- chron(ChildsBAI)
+plot.crn(ChildsBAIchrn)
+
+SheepBAI <- bai.in(Sheep, d2pith = NULL)
+SheepBAIchrn <- chron(SheepBAI)
+plot.crn(SheepBAIchrn)
+
+UBBAI <- bai.in(UB, d2pith = NULL)
+UBBAIchrn <- chron(UBBAI)
+plot.crn(UBBAIchrn)
+
+LBBAI <- bai.in(LB, d2pith = NULL)
+LBBAIchrn <- chron(LBBAI)
+plot.crn(LBBAIchrn)
 
 
 ```
