@@ -1,8 +1,0 @@
-"0",""
-"0",""
-"0","# Create the first histogram"
-"0","hist(BRAPHDR2023, "
-"0","     main = ""Histogram of BRAPHDR2023"", "
-"0","     xlab = ""Height to Diameter Ratio"", "
-"0","     col = ""grey22"", "
-"0","     breaks = ""Sturges"")"

@@ -1,7 +1,0 @@
-"0","for (col in 2:13) {"
-"0","  "
-"0","  #monthlymeans[col] <- print(mean(temperature[ ,col],na.rm = TRUE))"
-"0","  "
-"0","}"
-"0","  "
-"0",""

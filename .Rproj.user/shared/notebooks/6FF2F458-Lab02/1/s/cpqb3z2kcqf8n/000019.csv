@@ -1,8 +1,0 @@
-"0","Fer <- function(temperature){"
-"0",""
-"0","fer <- (temperature[2:13])*9/5 + 32"
-"0","  return(fer)"
-"0","  "
-"0","}"
-"0","print(Fer(temperature"
-"0","))"

@@ -1,8 +1,0 @@
-"0","for (col in 1:ncol(volcano)) {"
-"0","  elevation <- volcano[, col]"
-"0","  "
-"0","  slopes <- Slope(elevation)"
-"0","  NS_matrix[1:(length(slopes)), col] <- slopes"
-"0","  "
-"0","}"
-"0",""

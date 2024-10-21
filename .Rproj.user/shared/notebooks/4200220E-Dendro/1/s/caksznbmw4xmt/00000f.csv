@@ -1,0 +1,177 @@
+"0","Childs <- detrend( rwl = Childs, method = ""AgeDepSpline"")"
+"2","Warning in (function (y, y.name = """", make.plot = TRUE, method = c(""Spline"",  :"
+"2","
+ "
+"2"," In raw series C6: Fits from method=='AgeDepSpline' are not all positive. 
+  This is extremely rare. Series will be detrended with method=='Mean'. 
+  This might not be what you want. 
+  ARSTAN would tell you to plot that dirty dog at this point. 
+  Proceed with caution.
+"
+"0","Sheep <- detrend( rwl = Sheep, method = ""AgeDepSpline"")"
+"2","Warning in (function (y, y.name = """", make.plot = TRUE, method = c(""Spline"",  :"
+"2","
+ "
+"2"," In raw series S29: Fits from method=='AgeDepSpline' are not all positive. 
+  This is extremely rare. Series will be detrended with method=='Mean'. 
+  This might not be what you want. 
+  ARSTAN would tell you to plot that dirty dog at this point. 
+  Proceed with caution.
+"
+"0","UB <- detrend(rwl= UB, method = ""AgeDepSpline"")"
+"2","Warning in (function (y, y.name = """", make.plot = TRUE, method = c(""Spline"",  :"
+"2","
+ "
+"2"," In raw series UB44: Fits from method=='AgeDepSpline' are not all positive. 
+  This is extremely rare. Series will be detrended with method=='Mean'. 
+  This might not be what you want. 
+  ARSTAN would tell you to plot that dirty dog at this point. 
+  Proceed with caution.
+"
+"2","Warning in (function (y, y.name = """", make.plot = TRUE, method = c(""Spline"",  :"
+"2","
+ "
+"2"," In raw series UB51: Fits from method=='AgeDepSpline' are not all positive. 
+  This is extremely rare. Series will be detrended with method=='Mean'. 
+  This might not be what you want. 
+  ARSTAN would tell you to plot that dirty dog at this point. 
+  Proceed with caution.
+"
+"0","LB <- detrend(rwl = LB, method = ""AgeDepSpline"")"
+"2","Warning in (function (y, y.name = """", make.plot = TRUE, method = c(""Spline"",  :"
+"2","
+ "
+"2"," In raw series LB-32: Fits from method=='AgeDepSpline' are not all positive. 
+  This is extremely rare. Series will be detrended with method=='Mean'. 
+  This might not be what you want. 
+  ARSTAN would tell you to plot that dirty dog at this point. 
+  Proceed with caution.
+"
+"0","ALL <- detrend(rwl = ALL, method = ""AgeDepSpline"")"
+"2","Warning in (function (y, y.name = """", make.plot = TRUE, method = c(""Spline"",  :"
+"2","
+ "
+"2"," In raw series C6: Fits from method=='AgeDepSpline' are not all positive. 
+  This is extremely rare. Series will be detrended with method=='Mean'. 
+  This might not be what you want. 
+  ARSTAN would tell you to plot that dirty dog at this point. 
+  Proceed with caution.
+"
+"2","Warning in (function (y, y.name = """", make.plot = TRUE, method = c(""Spline"",  :"
+"2","
+ "
+"2"," In raw series C7: Fits from method=='AgeDepSpline' are not all positive. 
+  This is extremely rare. Series will be detrended with method=='Mean'. 
+  This might not be what you want. 
+  ARSTAN would tell you to plot that dirty dog at this point. 
+  Proceed with caution.
+"
+"2","Warning in (function (y, y.name = """", make.plot = TRUE, method = c(""Spline"",  :"
+"2","
+ "
+"2"," In raw series LB-32: Fits from method=='AgeDepSpline' are not all positive. 
+  This is extremely rare. Series will be detrended with method=='Mean'. 
+  This might not be what you want. 
+  ARSTAN would tell you to plot that dirty dog at this point. 
+  Proceed with caution.
+"
+"2","Warning in (function (y, y.name = """", make.plot = TRUE, method = c(""Spline"",  :"
+"2","
+ "
+"2"," In raw series S29: Fits from method=='AgeDepSpline' are not all positive. 
+  This is extremely rare. Series will be detrended with method=='Mean'. 
+  This might not be what you want. 
+  ARSTAN would tell you to plot that dirty dog at this point. 
+  Proceed with caution.
+"
+"2","Warning in (function (y, y.name = """", make.plot = TRUE, method = c(""Spline"",  :"
+"2","
+ "
+"2"," In raw series S3: Fits from method=='AgeDepSpline' are not all positive. 
+  This is extremely rare. Series will be detrended with method=='Mean'. 
+  This might not be what you want. 
+  ARSTAN would tell you to plot that dirty dog at this point. 
+  Proceed with caution.
+"
+"2","Warning in (function (y, y.name = """", make.plot = TRUE, method = c(""Spline"",  :"
+"2","
+ "
+"2"," In raw series S7: Fits from method=='AgeDepSpline' are not all positive. 
+  This is extremely rare. Series will be detrended with method=='Mean'. 
+  This might not be what you want. 
+  ARSTAN would tell you to plot that dirty dog at this point. 
+  Proceed with caution.
+"
+"2","Warning in (function (y, y.name = """", make.plot = TRUE, method = c(""Spline"",  :"
+"2","
+ "
+"2"," In raw series S9: Fits from method=='AgeDepSpline' are not all positive. 
+  This is extremely rare. Series will be detrended with method=='Mean'. 
+  This might not be what you want. 
+  ARSTAN would tell you to plot that dirty dog at this point. 
+  Proceed with caution.
+"
+"2","Warning in (function (y, y.name = """", make.plot = TRUE, method = c(""Spline"",  :"
+"2","
+ "
+"2"," In raw series SB45: Fits from method=='AgeDepSpline' are not all positive. 
+  This is extremely rare. Series will be detrended with method=='Mean'. 
+  This might not be what you want. 
+  ARSTAN would tell you to plot that dirty dog at this point. 
+  Proceed with caution.
+"
+"2","Warning in (function (y, y.name = """", make.plot = TRUE, method = c(""Spline"",  :"
+"2","
+ "
+"2"," In raw series UB44: Fits from method=='AgeDepSpline' are not all positive. 
+  This is extremely rare. Series will be detrended with method=='Mean'. 
+  This might not be what you want. 
+  ARSTAN would tell you to plot that dirty dog at this point. 
+  Proceed with caution.
+"
+"2","Warning in (function (y, y.name = """", make.plot = TRUE, method = c(""Spline"",  :"
+"2","
+ "
+"2"," In raw series UB50: Fits from method=='AgeDepSpline' are not all positive. 
+  This is extremely rare. Series will be detrended with method=='Mean'. 
+  This might not be what you want. 
+  ARSTAN would tell you to plot that dirty dog at this point. 
+  Proceed with caution.
+"
+"2","Warning in (function (y, y.name = """", make.plot = TRUE, method = c(""Spline"",  :"
+"2","
+ "
+"2"," In raw series UB51: Fits from method=='AgeDepSpline' are not all positive. 
+  This is extremely rare. Series will be detrended with method=='Mean'. 
+  This might not be what you want. 
+  ARSTAN would tell you to plot that dirty dog at this point. 
+  Proceed with caution.
+"
+"2","Warning in (function (y, y.name = """", make.plot = TRUE, method = c(""Spline"",  :"
+"2","
+ "
+"2"," In raw series UB-64: Fits from method=='AgeDepSpline' are not all positive. 
+  This is extremely rare. Series will be detrended with method=='Mean'. 
+  This might not be what you want. 
+  ARSTAN would tell you to plot that dirty dog at this point. 
+  Proceed with caution.
+"
+"0","ALLCor <- detrend(rwl= ALLCor, method = ""AgeDepSpline"")"
+"2","Warning in (function (y, y.name = """", make.plot = TRUE, method = c(""Spline"",  :"
+"2","
+ "
+"2"," In raw series LB-32: Fits from method=='AgeDepSpline' are not all positive. 
+  This is extremely rare. Series will be detrended with method=='Mean'. 
+  This might not be what you want. 
+  ARSTAN would tell you to plot that dirty dog at this point. 
+  Proceed with caution.
+"
+"2","Warning in (function (y, y.name = """", make.plot = TRUE, method = c(""Spline"",  :"
+"2","
+ "
+"2"," In raw series S29: Fits from method=='AgeDepSpline' are not all positive. 
+  This is extremely rare. Series will be detrended with method=='Mean'. 
+  This might not be what you want. 
+  ARSTAN would tell you to plot that dirty dog at this point. 
+  Proceed with caution.
+"

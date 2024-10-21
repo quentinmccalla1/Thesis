@@ -1,5 +1,0 @@
-"0","BAI <- bai.out(Childs, diam = FALSE)
-"
-"2","Error in if (ncol(rwl) != nrow(diam)) stop(""dimension problem: "", ""'ncol(rw)' != 'nrow(diam)'"") : 
-  argument is of length zero
-"

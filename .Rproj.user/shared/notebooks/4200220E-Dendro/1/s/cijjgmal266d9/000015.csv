@@ -1,0 +1,4 @@
+"0",""
+"0","SheepBAI <- bai.in(Sheep, d2pith = NULL)"
+"0","SheepBAIchrn <- chron(SheepBAI)"
+"0","plot.crn(SheepBAIchrn)"

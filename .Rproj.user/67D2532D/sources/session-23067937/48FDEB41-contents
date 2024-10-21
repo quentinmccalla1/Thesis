@@ -1,0 +1,120 @@
+---
+title: "USGS Flow stats"
+output: html_document
+date: "2024-09-17"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#install.packages("dataRetrieval")
+library(dataRetrieval)
+library(ggplot2)
+library(dplyr)
+```
+
+```{r}
+CampVerdeGuage <- readNWISdv(
+  "09506000",
+  "00060",
+  startDate = "1989-01-01",
+  endDate = "",
+  statCd = "00003"
+)
+
+CampVerdeGuage <- CampVerdeGuage %>%
+  rename(Discharge = X_00060_00003)
+```
+
+
+
+```{r fig.height=8, fig.width=12}
+#Childs
+
+ggplot(data = CampVerdeGuage, mapping = aes(x = Date, y = Discharge)) + 
+  geom_line()+
+  labs(title = "Chlids")+
+    geom_vline(xintercept = as.Date("2023-06-15"), color = "red", linetype = "dashed", size = 1)+
+  geom_vline(xintercept = as.Date("2021-10-14"), color = "red", linetype = "dashed", size = 1)+
+    geom_vline(xintercept = as.Date("2017-06-04"), color = "red", linetype = "dashed", size = 1)+
+  geom_vline(xintercept = as.Date("2019-06-08"), color = "red", linetype = "dashed", size = 1)+
+
+    geom_vline(xintercept = as.Date("2010-06-15"), color = "red", linetype = "dashed", size = 1)+
+  geom_vline(xintercept = as.Date("2014-06-01"), color = "red", linetype = "dashed", size = 1)+
+  geom_vline(xintercept = as.Date("2013-06-05"), color = "red", linetype = "dashed", size = 1)+
+  geom_vline(xintercept = as.Date("2007-06-04"), color = "red", linetype = "dashed", size = 1)+
+    geom_vline(xintercept = as.Date("2005-06-01"), color = "red", linetype = "dashed", size = 1)+
+
+  geom_vline(xintercept = as.Date("2001-06-01"), color = "yellow", linetype = "dashed", size = 1)+
+geom_hline( yintercept = 52700, color= "blue", linetype = "dashed", size =1)+
+   annotate("text", x = as.Date("1990-04-01"), y = 52700, 
+           label = "Restructuring Flow", color = "black", vjust = -1, size = 3)+
+  
+geom_hline(yintercept = 10500, color = "blue", linetype = "dashed", size = 1)+
+    annotate("text" ,x = as.Date("1990-04-01"), y = 10500, label ="Rejuvenating  flow"
+             , color ="black", vjust =-1, size = 3)
+  
+
+
+
+```
+
+
+```{r}
+#Sheep
+ggplot(data = CampVerdeGuage, mapping = aes(x = Date, y = Discharge)) + 
+  geom_line()+
+  labs(title = "Sheep")+
+    geom_vline(xintercept = as.Date("2023-06-15"), color = "red", linetype = "dashed", size = 1)+
+  geom_vline(xintercept = as.Date("2021-10-14"), color = "red", linetype = "dashed", size = 1)+
+      geom_vline(xintercept = as.Date("2019-06-04"), color = "red", linetype = "dashed", size = 1)+
+    geom_vline(xintercept = as.Date("2017-06-04"), color = "red", linetype = "dashed", size = 1)+
+  geom_vline(xintercept = as.Date("2012-06-01"), color = "red", linetype = "dashed", size = 1)+
+  geom_vline(xintercept = as.Date("2015-06-01"), color = "red", linetype = "dashed", size = 1)+
+    geom_vline(xintercept = as.Date("2010-06-07"), color = "red", linetype = "dashed", size = 1)+
+  geom_vline(xintercept = as.Date("2007-06-04"), color = "yellow", linetype = "dashed", size = 1)+
+    geom_vline(xintercept = as.Date("2005-06-01"), color = "red", linetype = "dashed", size = 1)+
+
+  geom_vline(xintercept = as.Date("2001-06-01"), color = "red", linetype = "dashed", size = 1)+
+geom_hline( yintercept = 52700, color= "blue", linetype = "dashed", size =1)+
+   annotate("text", x = as.Date("1990-04-01"), y = 52700, 
+           label = "Restructuring Flow", color = "black", vjust = -1, size = 3)+
+  
+geom_hline(yintercept = 10500, color = "blue", linetype = "dashed", size = 1)+
+    annotate("text" ,x = as.Date("1990-04-01"), y = 10500, label ="Rejuvenating  flow"
+             , color ="black", vjust =-1, size = 3)
+
+
+```
+
+
+
+
+```{r}
+#Beasley
+ggplot(data = CampVerdeGuage, mapping = aes(x = Date, y = Discharge)) + 
+  geom_line()+
+  labs(title = "Beasley")+
+    geom_vline(xintercept = as.Date("2023-06-15"), color = "red", linetype = "dashed", size = 1)+
+  geom_vline(xintercept = as.Date("2021-10-14"), color = "red", linetype = "dashed", size = 1)+  
+  geom_vline(xintercept = as.Date("2017-06-05"), color = "red", linetype = "dashed", size = 1)+
+
+  geom_vline(xintercept = as.Date("2015-06-01"), color = "red", linetype = "dashed", size = 1)+
+  geom_vline(xintercept = as.Date("2014-06-01"), color = "red", linetype = "dashed", size = 1)+
+  geom_vline(xintercept = as.Date("2010-06-04"), color = "red", linetype = "dashed", size = 1)+
+  geom_vline(xintercept = as.Date("2007-06-01"), color = "yellow", linetype = "dashed", size = 1)+
+    geom_vline(xintercept = as.Date("2005-06-01"), color = "red", linetype = "dashed", size = 1)+
+
+geom_hline( yintercept = 52700, color= "blue", linetype = "dashed", size =1)+
+   annotate("text", x = as.Date("1990-04-01"), y = 52700, 
+           label = "Restructuring Flow", color = "black", vjust = -1, size = 3)+
+  
+geom_hline(yintercept = 10500, color = "blue", linetype = "dashed", size = 1)+
+    annotate("text" ,x = as.Date("1990-04-01"), y = 10500, label ="Rejuvenating  flow"
+             , color ="black", vjust =-1, size = 3)
+
+
+```
+

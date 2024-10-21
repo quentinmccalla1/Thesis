@@ -1,1 +1,0 @@
-{"frames":[{"func":"bai.out(Childs, diam = FALSE)","file":"","line_number":0,"end_line_number":0,"character_number":0,"end_character_number":0}],"message":"Error in if (ncol(rwl) != nrow(diam)) stop(\"dimension problem: \", \"'ncol(rw)' != 'nrow(diam)'\") : \n  argument is of length zero\n"}

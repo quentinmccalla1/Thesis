@@ -1,6 +1,0 @@
-"0","ChildsRWI <- detrend( rwl = Childs, method = ""AgeDepSpline"")"
-"2","Warning: In raw series C6: Fits from method=='AgeDepSpline' are not all positive. 
-  This is extremely rare. Series will be detrended with method=='Mean'. 
-  This might not be what you want. 
-  ARSTAN would tell you to plot that dirty dog at this point. 
-  Proceed with caution."
