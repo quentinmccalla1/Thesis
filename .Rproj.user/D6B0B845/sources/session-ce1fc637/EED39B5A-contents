@@ -29,7 +29,7 @@ ALLCor <- read.tucson("AllCorrelated.rwl")
 Summary RWL
 
 ```{r}
-summary.rwl(Childs)
+summary.rwl(ALLCor)
 ```
 
 
@@ -101,11 +101,6 @@ LBBAI <- bai.in(LB, d2pith = NULL)
 LBBAIchrn <- chron(LBBAI)
 plot.crn(LBBAIchrn)
 
-
-```
-
-
-```{r}
 
 ```
 
