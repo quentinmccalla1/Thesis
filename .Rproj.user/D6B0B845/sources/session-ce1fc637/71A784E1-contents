@@ -57,7 +57,8 @@ AllCorcrn <- chron(ALLCor)
 Rename Columns
 
 ```{r}
-
+cor(AllCorcrn,Allcrn)
+cor(Sheepcrn,Allcrn)
 ```
 
 RWI Plots
