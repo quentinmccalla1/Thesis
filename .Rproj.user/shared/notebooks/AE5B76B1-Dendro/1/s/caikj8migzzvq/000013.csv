@@ -1,0 +1,4 @@
+"0",""
+"0","ChildsBAI <- bai.in(Childs, d2pith = NULL)"
+"0","ChildsBAIchrn <- chron(ChildsBAI)"
+"0","plot.crn(ChildsBAIchrn)"

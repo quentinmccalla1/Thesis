@@ -1,0 +1,4 @@
+"0",""
+"0","AllCorBAI <- bai.in(ALLCor, d2pith = NULL)"
+"0","AllCorBAIchrn <- chron(AllCorBAI)"
+"0","plot.crn(AllCorBAIchrn)"
