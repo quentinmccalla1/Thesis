@@ -1,3 +1,0 @@
-"0","AllBAI <- bai.in(ALL, d2pith = NULL)"
-"0","AllBAIchrn <- chron(AllBAI)"
-"0","plot.crn(AllBAIchrn)"

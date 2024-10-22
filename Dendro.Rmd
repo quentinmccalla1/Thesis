@@ -29,7 +29,7 @@ ALLCor <- read.tucson("AllCorrelated.rwl")
 Summary RWL
 
 ```{r}
-summary.rwl(Childs)
+summary.rwl(ALLCor)
 ```
 
 
