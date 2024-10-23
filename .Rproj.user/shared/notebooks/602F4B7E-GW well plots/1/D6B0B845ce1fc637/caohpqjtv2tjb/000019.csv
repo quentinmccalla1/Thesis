@@ -1,0 +1,10 @@
+"0","Well9JFebtoAug$Date <- as.POSIXct(Well9JFebtoAug$Date, format = ""%m/%d/%Y %H:%M"")  # Adjust format
+Well9JFebtoAug <- Well9JFebtoAug %>%
+  group_by(Date) %>%
+  summarise(Ft = mean(Ft, na.rm = TRUE))  # Replace with appropriate summary function
+
+# Plot the data
+ggplot(Well9JFebtoAug, aes(x = Date, y = Ground Surface)) +
+"
+"2","Error: unexpected symbol in ""ggplot(Well9JFebtoAug, aes(x = Date, y = Ground Surface""
+"

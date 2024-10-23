@@ -36,7 +36,7 @@ Well9JFebtoAug <- Well9JFebtoAug %>%
   summarise(Ft = mean(Ft, na.rm = TRUE))  # Replace with appropriate summary function
 
 # Plot the data
-ggplot(Well9JFebtoAug, aes(x = Date, y = Ft)) +
+ggplot(Well9JFebtoAug, aes(x = Date, y = Ground Surface)) +
   geom_line(color = "black", size = 1) +
   labs(title = "Beasley Flat Well 9",
        x = "Date",
