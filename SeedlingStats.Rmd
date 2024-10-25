@@ -84,7 +84,6 @@ Childs06_2024 <- Childs06_2024 %>%
 
 Stats
 
-
 # Plots
 
 Clean data
@@ -271,11 +270,6 @@ PercentChange <- function(old,new) {
 
 ```
 
-
-
-
-
-
 Statistical tests Variables
 
 Nominal= classify observations into discrete categories. Usually
@@ -313,7 +307,6 @@ t.test(ChildsHDR2023, ChildsHDR2024, var.equal = FALSE)
 t.test(BRAP10_2023$HDR,BRAP10_2024$HDR)
 
 ```
-
 
 Mann-Whitney U Test (Non-parametric) Use when: You are comparing two
 groups but your data are not normally distributed, and the groups have
@@ -366,8 +359,6 @@ print(welch_anova)
 
 
 ```
-
-
 
 ```{r}
 BrapAll <- read_csv("BRAPALL.csv")

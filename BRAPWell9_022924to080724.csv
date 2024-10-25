@@ -1,4 +1,4 @@
-﻿Date,Abs Pres,Ft,Transducer under,Ground Surface,Temp,,12.48,Stage at installation,,,12.48 subracted from 43.07 to give me the amount of feet the Hobo was off when it was launched. Then that amount was subtracted from all the values
+﻿Date,Abs Pres,Ft,Transducer under,GroundSurface,Temp,,12.48,Stage at installation,,,12.48 subracted from 43.07 to give me the amount of feet the Hobo was off when it was launched. Then that amount was subtracted from all the values
 2/29/2024 15:00,18.6476,43.075956,12.479956,1.709956,54.322,,-30.595956,Correction?,,,
 2/29/2024 16:00,18.636,43.04916,12.45316,1.68316,54.322,,,,,,
 2/29/2024 17:00,18.6329,43.041999,12.445999,1.675999,54.322,,,,,,
