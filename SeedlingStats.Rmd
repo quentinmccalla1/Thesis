@@ -23,9 +23,9 @@ library(tidyverse)
 All seedling
 
 ```{r}
-BRAP10_2023 <- read_csv("BRAP10-2023.csv")
-BRAP06_2024 <- read_csv("BRAP06-2024.csv")
-BRAP10_2024 <- read_csv("Brap10-2024.csv")
+BRAP10_2023 <- read_csv("BRAP10_2023.csv")
+BRAP06_2024 <- read_csv("BRAP06_2024.csv")
+BRAP10_2024 <- read_csv("Brap10_2024.csv")
 
 Childs10_2023 <- read_csv("Childs10-2023.csv")
 Childs06_2024 <- read_csv("Childs06-2024.csv")
@@ -93,9 +93,9 @@ Clean data
 ChildsHDR2023 <- Childs10_2023[, 3]
 ChildsHDR2024 <- Childs06_2024[, 3]
 
-BRAPHDR2023 <- BRAP10_2023[,3]
-BRAPHDR06_2024 <- BRAP06_2024[,3]
-BRAPHDR10_2024 <- BRAP10_2024[,3]
+BRAPHDR2023 <- BRAP10_2023[,4]
+BRAPHDR06_2024 <- BRAP06_2024[,4]
+BRAPHDR10_2024 <- BRAP10_2024[,4]
 
 
 #Clean Data Childs
@@ -116,24 +116,26 @@ BRAPHDR10_2024 <- na.omit(BRAPHDR10_2024)
 ```
 
 Hist Childs
+```{r}
+
+par(mfrow = c(2, 2))
+
+# Create the first histogram
+hist(ChildsHDR2023,  main = "Histogram of Childs HDR 2023",  xlab = "Height to Diameter Ratio",  col = "grey",  breaks = "Sturges")
+
+# Create the second histogram
+hist(ChildsHDR2024, main = "Histogram of Childs HDR 2024", xlab = "Height to Diameter Ratio", col = "grey", breaks = "Sturges")
+
+
+```
+
+
+
 
 ```{r}
 # Set up the plotting area to have 1 row and 2 columns
 par(mfrow = c(2, 2))
 
-# Create the first histogram
-hist(ChildsHDR2023, 
-     main = "Histogram of Childs HDR 2023", 
-     xlab = "Height to Diameter Ratio", 
-     col = "grey", 
-     breaks = "Sturges")
-
-# Create the second histogram
-hist(ChildsHDR2024, 
-     main = "Histogram of Childs HDR 2024",
-     xlab = "Height to Diameter Ratio", 
-     col = "grey", 
-     breaks = "Sturges")
 
 
 # Create the first histogram
@@ -145,13 +147,13 @@ hist(BRAPHDR2023,
 
 # Create the second histogram
 hist(BRAPHDR06_2024, 
-     main = "Histogram of BRAPHDR2024", 
+     main = "Histogram of BRAPHDR06_2024", 
      xlab = "Height to Diameter Ratio", 
      col = "grey22", 
      breaks = "Sturges")
 
-hist(BRAPHDR06_2024, 
-     main = "Histogram of BRAPHDR2024", 
+hist(BRAPHDR10_2024, 
+     main = "Histogram of BRAPHDR10_2024", 
      xlab = "Height to Diameter Ratio", 
      col = "grey22", 
      breaks = "Sturges")
@@ -305,6 +307,8 @@ t.test(ChildsHDR2023, ChildsHDR2024, var.equal = FALSE)
 
 #BRAP HDR P-Values
 t.test(BRAP10_2023$HDR,BRAP10_2024$HDR)
+#<.001
+t.test(BRAP06_2024$HDR,BRAP10_2024$HDR)
 
 ```
 
