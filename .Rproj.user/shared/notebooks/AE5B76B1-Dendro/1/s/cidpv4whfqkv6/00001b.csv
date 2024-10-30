@@ -1,0 +1,7 @@
+"0","Allcrn$Year <- seq(1988, by = 1, lengh.out = nrow(Allcrn))
+"
+"2","Warning: In seq.default(1988, by = 1, lengh.out = nrow(Allcrn)) :
+ extra argument ‘lengh.out’ will be disregarded"
+"2","Error in seq.default(1988, by = 1, lengh.out = nrow(Allcrn)) : 
+  wrong sign in 'by' argument
+"

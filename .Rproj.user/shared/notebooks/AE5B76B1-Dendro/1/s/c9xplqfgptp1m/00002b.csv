@@ -1,8 +1,0 @@
-"0","#Blue = well correlated to the master chronology"
-"0","#Red = poorly correlated to the master chronology"
-"0","#Green = not enough overlap"
-"0",""
-"0",""
-"0","corr.series.seg(rwl = All, series = ""C32"", seg.length = 10)"
-"2","Error: object 'All' not found
-"
