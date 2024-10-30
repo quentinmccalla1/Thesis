@@ -1,5 +1,6 @@
-"0","summary(DendroMerge$InnerRing)
-"
+"0","DendroMerge$InnerRing <- as.numeric(DendroMerge$InnerRing)"
+"2","Warning: NAs introduced by coercion"
+"0","summary(DendroMerge$InnerRing)"
 "1","   Min. "
 "1","1st Qu. "
 "1"," Median "
