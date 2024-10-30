@@ -106,13 +106,13 @@ combined_data <- rbind(Sheepcrn, Childscrn, UBcrn, LBcrn, Allcrn)
 
 # Create the ggplot with legend
 ggplot(combined_data, aes(x = Year, y = std, color = Dataset, linetype = Dataset)) +
+    geom_line(data = Allcrn, aes(x = Year, y = std), color = "black", size = 1) +  # Thicker black line
   geom_line(size = .5) +  # Line thickness
-  labs(x = "Year", y = "Standard Deviation", title = "Multiple Line Graphs") +
+  labs(x = "Year", y = "RWI", title = "Multiple Line Graphs") +
   scale_color_manual(values = c("Sheep Bridge" = "lightgreen", 
                                  "Childs" = "red", 
                                  "Upper Beasley" = "blue", 
-                                 "Lower Beasley" = "orange",
-                                "All" = "black")) +  # Custom colors
+                                 "Lower Beasley" = "orange"))+
     geom_hline(yintercept = 1, linetype= "dashed", color = "black")+
 
   theme_minimal() +
@@ -163,30 +163,21 @@ AllBAIchrn$Year <- seq(1988, by = 1 , length.out = nrow(AllBAIchrn))
 
 All bai plot
 
+
 ```{r}
-# Combine all datasets into one
-SheepBAIchrn$Dataset <- "Sheep Bridge"
-ChildsBAIchrn$Dataset <- "Childs"
-UBBAIchrn$Dataset <- "Upper Beasley"
-LBBAIchrn$Dataset <- "Lower Beasley"
-AllBAIchrn$Dataset <- "All"
-
-# Combine datasets
-combinedBAI_data <- rbind(SheepBAIchrn, ChildsBAIchrn, UBBAIchrn, LBBAIchrn, AllBAIchrn)
-
-# Create the ggplot with legend
+# Plot with ggplot2
 ggplot(combinedBAI_data, aes(x = Year, y = std, color = Dataset, linetype = Dataset)) +
-  geom_line(size = .5) +  # Line thickness
-  labs(x = "Year", y = "Standard Deviation", title = "Multiple Line Graphs") +
+  geom_line(size = 0.5) +  # Default line size for dataset lines
+  geom_line(data = AllBAIchrn, aes(x = Year, y = std), color = "black", size = 1) +  # Thicker black line
+  labs(x = "Year", y = "BAI (mm/yr2)", title = "Basal Area Increment for all sites") +
   scale_color_manual(values = c("Sheep Bridge" = "lightgreen", 
-                                 "Childs" = "red", 
-                                 "Upper Beasley" = "blue", 
-                                 "Lower Beasley" = "orange",
-                                "All" = "black")) +  # Custom colors
+                                "Childs" = "red", 
+                                "Upper Beasley" = "blue", 
+                                "Lower Beasley" = "orange")) +  # Custom colors
   theme_minimal() +
   theme(legend.title = element_blank())  # Optionally remove legend title
-```
 
+```
 
 
 

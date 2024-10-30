@@ -50,7 +50,29 @@ DendroMerge$InnerRing <- as.numeric(DendroMerge$InnerRing)
 summary(DendroMerge$InnerRing)
 ```
 
+Age bar graph
 
+
+```{r}
+DendroSiteAges <- read_csv("DendroSiteAges.csv")
+
+DendroSiteAges <- DendroSiteAges %>%
+  arrange(Year) %>%  # Make sure data is ordered by year
+  mutate(CumulativeInnerRing = cumsum(All))
+
+# Bar plot with specified y-values
+ggplot(data = DendroSiteAges, aes(x=Year, y = All)) +
+    geom_line(aes(y = CumulativeInnerRing), color = "darkblue", size = 1) +  # Cumulative line
+  geom_col() +
+   scale_y_continuous(
+    name = "Inner Ring Count",                                               # Primary y-axis label
+    sec.axis = sec_axis(~ ., name = "Cumulative Inner Ring Count")          # Secondary y-axis label
+  ) +
+  labs(x = "Year", y = "Count", title = "Inner Ring Tree Ring Count") +
+  theme_minimal()
+
+
+```
 
 
 
