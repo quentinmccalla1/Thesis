@@ -62,14 +62,45 @@ DendroSiteAges <- DendroSiteAges %>%
 
 # Bar plot with specified y-values
 ggplot(data = DendroSiteAges, aes(x=Year, y = All)) +
-    #geom_line(aes(y = CumulativeInnerRing), color = "darkblue", size = 1) +  # Cumulative line
   geom_col() +
+  geom_line(data= annual_means, aes(x= Year, y= Mean) )
   # scale_y_continuous(name = "Inner Ring Count",sec.axis = sec_axis(~ ., name = "Cumulative Inner Ring Count") ) +
   labs(x = "Year", y = "Count", title = "Inner Ring Tree Ring Count") +
   theme_minimal()
 
 
 ```
+
+
+```{r}
+# Ensure Date in CampVerdeGuage is of type integer for proper alignment with Year in DendroSiteAges
+CampVerdeGuage$Year <- as.numeric(format(CampVerdeGuage$Date, "%Y"))
+
+ggplot() +
+  # Bar plot for DendroSiteAges (ring count)
+  geom_col(data = DendroSiteAges, aes(x = Year, y = All), fill = "grey", alpha = 0.7) +
+  
+  # Line plot for CampVerdeGuage (discharge) on a secondary y-axis
+  geom_line(data = CampVerdeGuage, 
+            aes(x = Year, y = Discharge * (max(DendroSiteAges$All) / max(CampVerdeGuage$Discharge)) ,log= "Y"),
+            color = "darkblue", size = 1) +
+  
+  labs(x = "Year", 
+       y = "Inner Ring Count", 
+       title = "Inner Ring Tree Ring Count with Discharge") +
+  
+  # Set primary and secondary y-axis labels
+    scale_y_continuous(
+    name = "Inner Ring Count",
+    sec.axis = sec_axis(~ . / (max(DendroSiteAges$All) / max(CampVerdeGuage$Discharge)), 
+                        name = "Discharge (Log Scale)", )  # Applying log scale to secondary y-axis
+  ) +
+    scale_x_continuous(breaks = seq(min(DendroSiteAges$Year), max(DendroSiteAges$Year), by = 5)) +  # Set x-axis breaks every 5 years
+
+  theme_minimal()
+
+```
+
 
 ```{r}
  ggplot(DendroSiteAges, aes(x = Year, y = CumulativeInnerRing)) + 

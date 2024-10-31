@@ -1,0 +1,11 @@
+"0","# Bar plot with specified y-values
+ggplot(data = DendroSiteAges, aes(x=Year, y = All)) +
+  geom_col() +
+  geom_line(data= annual_means, aes(x= Year, y= Mean) )
+  # scale_y_continuous(name = ""Inner Ring Count"",sec.axis = sec_axis(~ ., name = ""Cumulative Inner Ring Count"") ) +
+  labs(x = ""Year"", y = ""Count"", title = ""Inner Ring Tree Ring Count"") +
+  theme_minimal()
+"
+"1","NULL
+"
+"0",""

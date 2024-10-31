@@ -34,7 +34,7 @@ CampVerdeGuage <- CampVerdeGuage %>%
 ```{r fig.height=8, fig.width=12}
 #Childs
 
-ggplot(data = CampVerdeGuage, mapping = aes(x = Date, y = Discharge)) + 
+ggplot(data = CampVerdeGuage, mapping = aes(x = Date, y = Discharge), log("y")) + 
   geom_line()+
   labs(title = "Chlids")+
     geom_vline(xintercept = as.Date("2023-06-15"), color = "red", linetype = "dashed", size = 1)+
@@ -118,4 +118,43 @@ geom_hline(yintercept = 10500, color = "blue", linetype = "dashed", size = 1)+
 
 
 ```
+
+
+Mean annual values
+```{r}
+# Load necessary libraries
+library(dplyr)
+library(lubridate)
+
+# Calculate mean annual values
+annual_means <- CampVerdeGuage %>%
+  group_by(year = year(Date)) %>%  # Corrected here
+  summarise(mean_value = mean(Discharge, na.rm = TRUE))  # Replace 'Discharge' with your parameter name
+
+annual_means <- setNames(annual_means, c("Year", "Mean"))
+# View the results
+print(annual_means)
+
+
+ggplot(data = annual_means, aes(x = Year, y = Mean)) +
+  geom_line() +
+  labs(title = "Mean Annual Values",
+       x = "Year",
+       y = "Mean Value") +
+  theme_minimal()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
