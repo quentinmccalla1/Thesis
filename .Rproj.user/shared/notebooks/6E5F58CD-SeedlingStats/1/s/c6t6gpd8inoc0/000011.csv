@@ -1,0 +1,5 @@
+"0","welch_anova <- oneway.test(Diameter ~ Visit, data = BRAP_TABLE)
+"
+"2","Error in oneway.test(Diameter ~ Visit, data = BRAP_TABLE) : 
+  not enough observations
+"

@@ -1,3 +1,0 @@
-"0"," ggplot(DendroSiteAges, aes(x = Year, y = CumulativeInnerRing)) + "
-"0","  geom_line(color = ""darkblue"", size = 1) +"
-"0","  labs(title = ""Cumulative Core Count"", y= ""Count"")"

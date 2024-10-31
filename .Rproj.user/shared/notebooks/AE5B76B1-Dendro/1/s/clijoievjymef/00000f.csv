@@ -1,4 +1,0 @@
-"0","AllNoDetrend <- chron(ALL)"
-"0","AllCorNoDetrend <- chron(ALLCor)"
-"0",""
-"0","plot.crn(AllNoDetrend)"
