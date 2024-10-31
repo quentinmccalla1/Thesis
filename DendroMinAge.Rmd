@@ -31,7 +31,7 @@ ggplot(DendroMerge, aes(x = PithHand, y = `Diameter (CM)`, color= ID2)) +
   ) +
 scale_x_continuous(
   limits = c(1985,2020)
-)
+)+ theme_minimal()
 ```
 
 
@@ -62,12 +62,9 @@ DendroSiteAges <- DendroSiteAges %>%
 
 # Bar plot with specified y-values
 ggplot(data = DendroSiteAges, aes(x=Year, y = All)) +
-    geom_line(aes(y = CumulativeInnerRing), color = "darkblue", size = 1) +  # Cumulative line
+    #geom_line(aes(y = CumulativeInnerRing), color = "darkblue", size = 1) +  # Cumulative line
   geom_col() +
-   scale_y_continuous(
-    name = "Inner Ring Count",                                               # Primary y-axis label
-    sec.axis = sec_axis(~ ., name = "Cumulative Inner Ring Count")          # Secondary y-axis label
-  ) +
+  # scale_y_continuous(name = "Inner Ring Count",sec.axis = sec_axis(~ ., name = "Cumulative Inner Ring Count") ) +
   labs(x = "Year", y = "Count", title = "Inner Ring Tree Ring Count") +
   theme_minimal()
 
@@ -75,21 +72,10 @@ ggplot(data = DendroSiteAges, aes(x=Year, y = All)) +
 ```
 
 ```{r}
-# Load necessary libraries
-library(ggplot2)
-library(gridExtra)
-
-# Create two example plots
-plot1 <- ggplot(DendroSiteAges, aes(x = Year, y = All)) + 
-  geom_col(fill = "skyblue") +
-  labs(title = "Bar Plot of All Counts")
-
-plot2 <- ggplot(DendroSiteAges, aes(x = Year, y = CumulativeInnerRing)) + 
+ ggplot(DendroSiteAges, aes(x = Year, y = CumulativeInnerRing)) + 
   geom_line(color = "darkblue", size = 1) +
-  labs(title = "Line Plot of Cumulative Inner Ring")
+  labs(title = "Cumulative Core Count", y= "Count")
 
-# Combine the plots
-grid.arrange(plot1, plot2, ncol = 2)  # ncol specifies the number of columns
 
 ```
 

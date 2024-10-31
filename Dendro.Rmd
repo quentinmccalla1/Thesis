@@ -112,8 +112,7 @@ ggplot(combined_data, aes(x = Year, y = std, color = Dataset, linetype = Dataset
   scale_color_manual(values = c("Sheep Bridge" = "lightgreen", 
                                  "Childs" = "red", 
                                  "Upper Beasley" = "blue", 
-                                 "Lower Beasley" = "orange"
-                               )) +  # Custom colors
+                                 "Lower Beasley" = "orange"))+
     geom_hline(yintercept = 1, linetype= "dashed", color = "black")+
 
   theme_minimal() +
@@ -170,7 +169,7 @@ All bai plot
 ggplot(combinedBAI_data, aes(x = Year, y = std, color = Dataset, linetype = Dataset)) +
   geom_line(size = 0.5) +  # Default line size for dataset lines
   geom_line(data = AllBAIchrn, aes(x = Year, y = std), color = "black", size = 1) +  # Thicker black line
-  labs(x = "Year", y = "BAI (mm/yr2)", title = "Multiple Line Graphs") +
+  labs(x = "Year", y = "BAI (mm/yr2)", title = "Basal Area Increment for all sites") +
   scale_color_manual(values = c("Sheep Bridge" = "lightgreen", 
                                 "Childs" = "red", 
                                 "Upper Beasley" = "blue", 

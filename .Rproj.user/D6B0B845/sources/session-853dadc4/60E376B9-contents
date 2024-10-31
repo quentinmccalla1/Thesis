@@ -300,7 +300,6 @@ Welch t test Use when: means of two groups with unequal sample sizes and
 possible unequal variances Assumptions: normality of data
 
 ```{r}
-hist(Childs10_2023$Height)
 
 #Childs HDR P-values <.001
 t.test(ChildsHDR2023, ChildsHDR2024, var.equal = FALSE)
@@ -354,10 +353,6 @@ BRAP_TABLE$Visit <- as.factor(BRAP_TABLE$Visit)
 BRAP_TABLE$Height <- as.numeric(BRAP_TABLE$Height)
 
 anova_height <- aov(Visit ~ Height, data = BRAP_TABLE)
-
-
-summary(anova_diameter)
-
 welch_anova <- oneway.test(Diameter ~ Visit, data = BRAP_TABLE)
 print(welch_anova)
 
