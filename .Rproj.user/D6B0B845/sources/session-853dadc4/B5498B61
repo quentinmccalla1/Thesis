@@ -3,7 +3,7 @@
     "path": "~/GitHub/Thesis1/DendroMinAge.Rmd",
     "project_path": "DendroMinAge.Rmd",
     "type": "r_markdown",
-    "hash": "1750542358",
+    "hash": "2736443104",
     "contents": "",
     "dirty": false,
     "created": 1726171886160.0,
@@ -13,15 +13,15 @@
         "tempName": "Untitled1",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "41,14",
-        "scrollLine": "37"
+        "cursorPosition": "62,0",
+        "scrollLine": "55"
     },
     "folds": "",
-    "lastKnownWriteTime": 1730390874,
+    "lastKnownWriteTime": 1730395573,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1730390874899,
+    "last_content_update": 1730395573462,
     "read_only": false,
     "read_only_alternatives": []
 }
