@@ -1,0 +1,5 @@
+"0",""
+"0","par(mfrow = c(2, 2))"
+"0",""
+"0","# Create the first histogram"
+"0","hist(ChildsHDR2023,  main = ""Histogram of Childs HDR 2023"",  xlab = ""Height to Diameter Ratio"",  col = ""grey"",  breaks = ""Sturges"")"
