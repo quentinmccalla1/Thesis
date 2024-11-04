@@ -1,0 +1,6 @@
+"0",""
+"0","hist(BRAPHDR10_2024, "
+"0","     main = ""Histogram of BRAPHDR10_2024"", "
+"0","     xlab = ""Height to Diameter Ratio"", "
+"0","     col = ""grey22"", "
+"0","     breaks = ""Sturges"")"

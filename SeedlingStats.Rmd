@@ -364,12 +364,3 @@ BrapAll <- read_csv("BRAPALL.csv")
 
 ```
 
-Individual plot data
-
-```{r}
-LB2023sites <- read_csv("LB2023sites.csv")
-LB2023sites <- LB2023sites[-1,]
-
-LB2023sites <- LB2023sites %>%
-  filter(!is.na(LB1D), !is.na(LB1H),!is.na(LB3D...6), !is.na(LB3D...5) )
-```
