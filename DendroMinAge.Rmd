@@ -38,7 +38,7 @@ scale_x_continuous(
 Age vs Size correlation
 ```{r}
 model <- lm(DendroMerge$`Diameter (CM)` ~ DendroMerge$PithHand, data = DendroMerge)
-
+c
 summary(model)
 
 
@@ -47,8 +47,14 @@ summary(model)
 
 ```{r}
 DendroMerge$InnerRing <- as.numeric(DendroMerge$InnerRing)
+DendroMer
 summary(DendroMerge$InnerRing)
+DendroMerge %>%
+  count(ID2)
+
 ```
+
+
 
 Age bar graph
 

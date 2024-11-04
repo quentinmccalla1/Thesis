@@ -40,7 +40,31 @@ chi2_data <- round(chi2_data)
 chisq.test(chi2_data)
 View(chi2_data)
 
-qchisq()
+
+```
+
+```{r}
+# Reshape data for ANOVA
+library(tidyr)
+library(dplyr)
+ImageryAreas <- read_excel("ImageryStatistics150m.xlsx")
+colnames(ImageryAreas)
+ImageryAreas_long <- ImageryAreas %>%
+  pivot_longer(cols = -1, names_to = "Year", values_to = "Area")
+
+# Convert Year to a factor
+ImageryAreas_long$Year <- as.factor(ImageryAreas_long$Year)
+
+# Run ANOVA
+anova_result <- aov(Area ~ Year + Error(1/Year), data = ImageryAreas_long)
+summary(anova_result)
+
+```
+
+```{r}
+# Example of linear regression with year as a numeric variable
+trend_result <- lm(Area ~ as.numeric(Year), data = ImageryAreas_long)
+summary(trend_result)
 
 ```
 

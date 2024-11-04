@@ -3,7 +3,7 @@
     "path": "~/GitHub/Thesis1/GW well plots.Rmd",
     "project_path": "GW well plots.Rmd",
     "type": "r_markdown",
-    "hash": "3252044206",
+    "hash": "2035685487",
     "contents": "",
     "dirty": false,
     "created": 1730226967620.0,
@@ -13,15 +13,15 @@
         "chunk_output_type": "inline",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "57,0",
-        "scrollLine": "0"
+        "cursorPosition": "64,0",
+        "scrollLine": "54"
     },
     "folds": "",
-    "lastKnownWriteTime": 1730228772,
+    "lastKnownWriteTime": 1730760803,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1730228772381,
+    "last_content_update": 1730760803690,
     "read_only": false,
     "read_only_alternatives": []
 }

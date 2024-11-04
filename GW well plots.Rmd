@@ -58,6 +58,9 @@ ggplot(Well9JFebtoAug, aes(x = Date, y = M)) +
 
 summary(Well9JFebtoAug$M)
 
+filter(Well9JFebtoAug, Date == "2024-05-18")
+
+
 
 ```
 
