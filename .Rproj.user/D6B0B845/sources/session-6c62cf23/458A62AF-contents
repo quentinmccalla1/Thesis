@@ -21,18 +21,26 @@ ImageryAreas <- read_excel("ImageryStatistics150m.xlsx")
 ```{r}
 library(dplyr)
 
-# Clean and prepare ImageryAreas
-ImageryAreas <- ImageryAreas %>%
-  # Bind rows if ImageryAreas is a list of data frames
-  bind_rows() %>%
-  # Convert each column to numeric, handling any lists or non-numeric values
-  mutate(across(everything(), ~ as.numeric(unlist(.)))) %>%
-  # Replace any Inf, -Inf, and NA values with 0
-  replace(is.na(.), 0) %>%
-  replace(!is.finite(.), 0)
+# Load your data into a data frame (if not already)
+# ImageryAreas <- read.table("your_data_file.txt", header = TRUE)  # Example for loading data
 
-# Run the Chi-squared test
-chisq.test(ImageryAreas)
+# Step 1: Convert the data frame columns to numeric where applicable
+ImageryAreas <- ImageryAreas %>%
+  # Ensure all area columns are numeric; this converts columns 2 onward, assuming column 1 is a label
+  mutate(across(-1, as.numeric)) %>%
+  # Remove any rows or columns with NA values
+  na.omit()
+
+# Step 2: Prepare data for Chi-squared by removing the category column if needed
+chi2_data <- ImageryAreas[, -1]  # Removes the first column if it is a label
+
+# Step 3: Perform Chi-squared test
+# Note: Chi-squared tests require integer values, so round if necessary
+chi2_data <- round(chi2_data)
+chisq.test(chi2_data)
+View(chi2_data)
+
+qchisq()
 
 ```
 
