@@ -1,3 +1,0 @@
-"0",""
-"0","# Create the second histogram"
-"0","hist(ChildsHDR2024, main = ""Histogram of Childs HDR 2024"", xlab = ""Height to Diameter Ratio"", col = ""grey"", breaks = ""Sturges"")"

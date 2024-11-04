@@ -1,0 +1,38 @@
+---
+title: "Imagery Statistics"
+output: html_document
+date: "2024-11-04"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+install.packages("readxl")
+library("readxl")
+```
+
+```{r}
+ImageryAreas <- read_excel("ImageryStatistics150m.xlsx")
+```
+
+
+```{r}
+library(dplyr)
+
+# Clean and prepare ImageryAreas
+ImageryAreas <- ImageryAreas %>%
+  # Bind rows if ImageryAreas is a list of data frames
+  bind_rows() %>%
+  # Convert each column to numeric, handling any lists or non-numeric values
+  mutate(across(everything(), ~ as.numeric(unlist(.)))) %>%
+  # Replace any Inf, -Inf, and NA values with 0
+  replace(is.na(.), 0) %>%
+  replace(!is.finite(.), 0)
+
+# Run the Chi-squared test
+chisq.test(ImageryAreas)
+
+```
+
