@@ -1,0 +1,8 @@
+"0","PDSImean <- PDSI %>%
+  group_by(year = year(Year)) %>%  # Extract year using lubridate
+  summarise(mean_value = mean(Value, na.rm = TRUE))
+"
+"2","Warning: [38;5;232mThere was 1 warning in `group_by()`.[39m
+[38;5;232m[36mℹ[38;5;232m In argument: `year = year(Year)`.[39m
+Caused by warning:
+[33m![39m tz(): Don't know how to compute timezone for object of class numeric; returning ""UTC""."

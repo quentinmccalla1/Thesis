@@ -185,38 +185,85 @@ ggplot(combinedBAI_data, aes(x = Year, y = std, color = Dataset, linetype = Data
 
 ```
 
+
+
+
+
+Remove autocorrelation
+
+
+```{r}
+
+```
+
+
+
 Correlate to Verde Flows
 
 ```{r}
-
-
 # Check column names in both data frames
 colnames(annual_means)
 colnames(Crosscrn)
+colnames(mean_winter_flow)
+colnames(PDSImean)
+colnames(MeanTemp)
 
 # Rename 'date' column in Crosscrn to 'Date' if necessary
 colnames(annual_means)[colnames(annual_means) == "year"] <- "Year"
+colnames(meanmin)[colnames(meanmin) == "year"] <- "Year"
+colnames(PDSImean)[colnames(PDSImean) == "year"] <- "Year"
+colnames(MeanTemp)[colnames(MeanTemp) == "year"] <- "Year"
+colnames(Crosscrn)[colnames(Crosscrn) == "year"] <- "Year"
+
+ 
+annual_means$year <- as.numeric(as.character(annual_means$Year))
+mean_winter_flow$Year <- as.numeric(as.character(mean_winter_flow$Year))
+meanmin$Year <- as.numeric(as.character(meanmin$Year))
+PDSImean$Year <-as.numeric(as.character(PDSImean$Year))
+MeanTemp$Year <- as.numeric(as.character(MeanTemp$Year))
+Crosscrn$Year <- as.numeric(Crosscrn$Year)
+
+# Corrected syntax
+# Standardize 'Year' column and remove duplicate 'annual_means'
+AllMerged <- Reduce(function(x, y) merge(x, y, by = "Year", all = TRUE), 
+                    list(annual_means, mean_winter_flow, meanmin, PDSImean, MeanTemp, Crosscrn))
 
 
+AllMerged <- AllMerged[,-3]
+AllMerged <- AllMerged[,-5]
+AllMerged <- AllMerged[,-5]
+AllMerged <- AllMerged[,-7]
 
-annual_means$year <- as.numeric(as.character(annual_means$Date))
+colnames(AllMerged) <- c("Year", "Discharge","PDSI","Ferenheit","RWI","Sample Depth")
 
 
-
-merged_data <- merge(annual_means, Crosscrn, by = "Year" )
-
-cor(merged_data$mean_value, merged_data$std)
+  cor(AllMerged$RWI,AllMerged$Discharge)
 
 ```
 
+Response Function Analysis
+Comparing tree ring growth to...
+Streamflow (Downloaded)(Filtered by year)
+Temperature (Downloaded)
+VPD?
+RH?
+PDSI (downloaded)
+
+https://www.ncei.noaa.gov/access/monitoring/climate-at-a-glance/county/time-series/AZ-025/tavg/1/0/1993-2023?base_prd=true&begbaseyear=1901&endbaseyear=2000
 
 ```{r}
+  auto_model <- arima(Crosscrn$std)
+residuals <- residuals(auto_model)
+#Check for autocorrelatio
+plot(merged_data$mean_value, merged_data$std, type = "o")
+acf(merged_data$std)
+lag.plot(merged_data$std, lag = 1)
+
+#Yes! Data is autocorrelated
 
 
-merged_data <- merge(annualmeansCOR, Crosscrn, by = "Date" )
+
 
 ```
-
-
 
 

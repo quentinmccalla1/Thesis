@@ -32,23 +32,18 @@ CampVerdeGuage <- CampVerdeGuage %>%
 
 
 ```{r fig.height=8, fig.width=12}
-#Childs
+#All NAIP
 
 ggplot(data = CampVerdeGuage, mapping = aes(x = Date, y = Discharge), log("y")) + 
   geom_line()+
   labs(title = "Chlids")+
     geom_vline(xintercept = as.Date("2023-06-15"), color = "red", linetype = "dashed", size = 1)+
-  geom_vline(xintercept = as.Date("2021-10-14"), color = "red", linetype = "dashed", size = 1)+
-    geom_vline(xintercept = as.Date("2017-06-04"), color = "red", linetype = "dashed", size = 1)+
+  geom_vline(xintercept = as.Date("2021-10-14"), color = "red", linetype = "dashed", size = 1)+ 
   geom_vline(xintercept = as.Date("2019-06-08"), color = "red", linetype = "dashed", size = 1)+
-
-    geom_vline(xintercept = as.Date("2010-06-15"), color = "red", linetype = "dashed", size = 1)+
-  geom_vline(xintercept = as.Date("2014-06-01"), color = "red", linetype = "dashed", size = 1)+
+    geom_vline(xintercept = as.Date("2017-06-04"), color = "red", linetype = "dashed", size = 1)+ 
+  geom_vline(xintercept = as.Date("2015-06-01"), color = "red", linetype = "dashed", size = 1)+
   geom_vline(xintercept = as.Date("2013-06-05"), color = "red", linetype = "dashed", size = 1)+
-  geom_vline(xintercept = as.Date("2007-06-04"), color = "red", linetype = "dashed", size = 1)+
-    geom_vline(xintercept = as.Date("2005-06-01"), color = "red", linetype = "dashed", size = 1)+
-
-  geom_vline(xintercept = as.Date("2001-06-01"), color = "yellow", linetype = "dashed", size = 1)+
+    geom_vline(xintercept = as.Date("2010-06-15"), color = "red", linetype = "dashed", size = 1)+
 geom_hline( yintercept = 52700, color= "blue", linetype = "dashed", size =1)+
    annotate("text", x = as.Date("1990-04-01"), y = 52700, 
            label = "Restructuring Flow", color = "black", vjust = -1, size = 3)+
@@ -62,62 +57,6 @@ geom_hline(yintercept = 10500, color = "blue", linetype = "dashed", size = 1)+
 
 ```
 
-
-```{r}
-#Sheep
-ggplot(data = CampVerdeGuage, mapping = aes(x = Date, y = Discharge)) + 
-  geom_line()+
-  labs(title = "Sheep")+
-    geom_vline(xintercept = as.Date("2023-06-15"), color = "red", linetype = "dashed", size = 1)+
-  geom_vline(xintercept = as.Date("2021-10-14"), color = "red", linetype = "dashed", size = 1)+
-      geom_vline(xintercept = as.Date("2019-06-04"), color = "red", linetype = "dashed", size = 1)+
-    geom_vline(xintercept = as.Date("2017-06-04"), color = "red", linetype = "dashed", size = 1)+
-  geom_vline(xintercept = as.Date("2012-06-01"), color = "red", linetype = "dashed", size = 1)+
-  geom_vline(xintercept = as.Date("2015-06-01"), color = "red", linetype = "dashed", size = 1)+
-    geom_vline(xintercept = as.Date("2010-06-07"), color = "red", linetype = "dashed", size = 1)+
-  geom_vline(xintercept = as.Date("2007-06-04"), color = "yellow", linetype = "dashed", size = 1)+
-    geom_vline(xintercept = as.Date("2005-06-01"), color = "red", linetype = "dashed", size = 1)+
-
-  geom_vline(xintercept = as.Date("2001-06-01"), color = "red", linetype = "dashed", size = 1)+
-geom_hline( yintercept = 52700, color= "blue", linetype = "dashed", size =1)+
-   annotate("text", x = as.Date("1990-04-01"), y = 52700, 
-           label = "Restructuring Flow", color = "black", vjust = -1, size = 3)+
-  
-geom_hline(yintercept = 10500, color = "blue", linetype = "dashed", size = 1)+
-    annotate("text" ,x = as.Date("1990-04-01"), y = 10500, label ="Rejuvenating  flow"
-             , color ="black", vjust =-1, size = 3)
-
-
-```
-
-
-
-
-```{r}
-#Beasley
-ggplot(data = CampVerdeGuage, mapping = aes(x = Date, y = Discharge)) + 
-  geom_line()+
-  labs(title = "Beasley")+
-    geom_vline(xintercept = as.Date("2023-06-15"), color = "red", linetype = "dashed", size = 1)+
-  geom_vline(xintercept = as.Date("2021-10-14"), color = "red", linetype = "dashed", size = 1)+  
-  geom_vline(xintercept = as.Date("2017-06-05"), color = "red", linetype = "dashed", size = 1)+
-
-  geom_vline(xintercept = as.Date("2015-06-01"), color = "red", linetype = "dashed", size = 1)+
-  geom_vline(xintercept = as.Date("2014-06-01"), color = "red", linetype = "dashed", size = 1)+
-  geom_vline(xintercept = as.Date("2010-06-04"), color = "red", linetype = "dashed", size = 1)+
-  geom_vline(xintercept = as.Date("2007-06-01"), color = "yellow", linetype = "dashed", size = 1)+
-    geom_vline(xintercept = as.Date("2005-06-01"), color = "red", linetype = "dashed", size = 1)+
-
-geom_hline( yintercept = 52700, color= "blue", linetype = "dashed", size =1)+
-   annotate("text", x = as.Date("1990-04-01"), y = 52700, 
-           label = "Restructuring Flow", color = "black", vjust = -1, size = 3)+
-  
-geom_hline(yintercept = 10500, color = "blue", linetype = "dashed", size = 1)+
-    annotate("text" ,x = as.Date("1990-04-01"), y = 10500, label ="Rejuvenating  flow"
-             , color ="black", vjust =-1, size = 3)
-
-
-```
 
 
 Mean annual values
@@ -136,18 +75,66 @@ annual_means <- setNames(annual_means, c("Year", "Mean"))
 print(annual_means)
 
 
-ggplot(data = annual_means, aes(x = Year, y = Mean)) +
-  geom_line() +
-  labs(title = "Mean Annual Values",
-       x = "Year",
-       y = "Mean Value") +
-  theme_minimal()
+
 ```
 
 
 
+Mean Winter flows November-march
+```{r}
+# Extract year and month
+CampVerdeGuage$Year <- format(CampVerdeGuage$Date, "%Y")
+CampVerdeGuage$Month <- format(CampVerdeGuage$Date, "%m")
+
+# Filter for months between November and March
+winter_data <- CampVerdeGuage %>%
+  filter(Month %in% c("11", "12", "01", "02", "03"))
 
 
+# Check column names in the dataset
+colnames(winter_data)
+
+
+# Calculate the mean flow for each year
+mean_winter_flow <- winter_data %>%
+  group_by(Year) %>%
+  summarise(mean_winter_flow = mean(Discharge, na.rm = TRUE))  # Replace 'Flow' with your actual column name
+
+
+```
+
+
+Mean min flow
+```{r}
+meanmin <- CampVerdeGuage %>%
+  group_by(year = year(Date)) %>%  # Corrected here
+  summarise(min = min(Discharge, na.rm = TRUE))  # Replace 'Discharge' with your parameter name
+```
+
+
+Mean PDSI Yavapai County Yearly
+
+```{r}
+PDSI <- read_csv("PDSI-AZ-1994to2023.csv")
+
+
+# Calculate mean PDSI value per year
+PDSImean <- PDSI %>%
+  group_by(year = Year) %>%  # If 'Year' is already numeric
+  summarise(mean_value = mean(Value, na.rm = TRUE))
+
+```
+
+
+Mean Yearly Temp Yavapai county
+
+```{r}
+YearlyTemp <- read_csv("AverageMonthlyTemp-YavapaiCounty_1993-2024.csv")
+
+MeanTemp <- YearlyTemp %>%
+  group_by(year = Year) %>%  # If 'Year' is already numeric
+  summarise(mean_value = mean(`Degrees F`, na.rm = TRUE))
+```
 
 
 

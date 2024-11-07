@@ -1,7 +1,0 @@
-"0","# Calculate mean annual values
-annual_means <- CampVerdeGuage %>%
-  group_by(year = year(Date)) %>%  # Corrected here
-  summarise(mean_value = mean(Discharge, na.rm = TRUE))  # Replace 'Discharge' with your parameter name
-"
-"2","Error: object 'CampVerdeGuage' not found
-"
