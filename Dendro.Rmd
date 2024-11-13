@@ -235,9 +235,9 @@ AllMerged <- AllMerged[,-5]
 AllMerged <- AllMerged[,-7]
 
 colnames(AllMerged) <- c("Year", "Discharge","PDSI","Ferenheit","RWI","Sample Depth")
+AllMerged <- subset(AllMerged, Year >= 1994 & Year <= 2023)
 
-
-  cor(AllMerged$RWI,AllMerged$Discharge)
+  cor(AllMerged$RWI,AllMerged$PDSI)
 
 ```
 

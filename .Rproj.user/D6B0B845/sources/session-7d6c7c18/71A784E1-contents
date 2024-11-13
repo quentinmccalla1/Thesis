@@ -235,10 +235,14 @@ AllMerged <- AllMerged[,-5]
 AllMerged <- AllMerged[,-7]
 
 colnames(AllMerged) <- c("Year", "Discharge","PDSI","Ferenheit","RWI","Sample Depth")
+AllMerged <- subset(AllMerged, Year >= 1994 & Year <= 2023)
+
+  cor(AllMerged$RWI,AllMerged$Ferenheit)
 
 
-  cor(AllMerged$RWI,AllMerged$Discharge)
 
+  
+  
 ```
 
 Response Function Analysis
@@ -261,9 +265,53 @@ lag.plot(merged_data$std, lag = 1)
 
 #Yes! Data is autocorrelated
 
-
-
-
 ```
+
+
+```{r}
+install.packages("boot")
+library(boot)
+library(tidyverse)
+AllMerged <- AllMerged %>%
+    mutate(
+        Temp_Lag1 = lag(Ferenheit, 1),
+        Precip_Lag1 = lag(Discharge, 1)
+    )
+
+# Fit a linear model with climate variables and their lagged versions
+model_lagged <- lm(RWI ~ Ferenheit + Discharge + Temp_Lag1 + Precip_Lag1, data = AllMerged)
+summary(model_lagged)
+
+# Define a bootstrap function to resample data and fit the model
+bootstrap_analysis <- function(data, indices) {
+    sample_data <- data[indices, ]
+    model <- lm(RWI ~ Ferenheit + Discharge + Temp_Lag1 + Precip_Lag1, data = AllMerged)
+    return(coef(model))
+}
+
+# Run the bootstrap procedure with 1000 resamples
+set.seed(123)
+results <- boot(data, statistic = bootstrap_analysis, R = 1000)
+
+# View the bootstrap results
+print(results)
+
+# Calculate and print the confidence intervals for the coefficients
+conf_intervals <- boot.ci(results, type = "perc")
+print(conf_intervals)
+
+# Plot the relationship between predictors and response variable
+par(mfrow = c(1, 2))  # For a 1x2 plot layout
+plot(data$Temperature, data$RingWidth, xlab = "Temperature", ylab = "Ring Width", main = "Temperature vs Ring Width")
+plot(data$Precipitation, data$RingWidth, xlab = "Precipitation", ylab = "Ring Width", main = "Precipitation vs Ring Width")
+```
+
+
+
+
+
+
+
+
 
 

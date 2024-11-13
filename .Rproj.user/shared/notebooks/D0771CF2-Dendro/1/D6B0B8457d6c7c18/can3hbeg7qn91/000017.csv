@@ -1,0 +1,6 @@
+"0","set.seed(123)
+results <- boot(data, statistic = bootstrap_analysis, R = 1000)
+"
+"2","Error in boot(data, statistic = bootstrap_analysis, R = 1000) : 
+  could not find function ""boot""
+"

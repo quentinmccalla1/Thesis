@@ -1,0 +1,4 @@
+"0","  auto_model <- arima(Crosscrn$std)"
+"0","residuals <- residuals(auto_model)"
+"0","#Check for autocorrelatio"
+"0","plot(merged_data$mean_value, merged_data$std, type = ""o"")"
