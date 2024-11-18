@@ -1,19 +1,19 @@
 {
-    "id": "B5498B61",
-    "path": "~/GitHub/Thesis1/DendroMinAge.Rmd",
-    "project_path": "DendroMinAge.Rmd",
+    "id": "87C602A6",
+    "path": "~/GitHub/Thesis1/GW well plots.Rmd",
+    "project_path": "GW well plots.Rmd",
     "type": "r_markdown",
-    "hash": "0",
+    "hash": "2035685487",
     "contents": "",
     "dirty": false,
-    "created": 1726171886160.0,
+    "created": 1730226967620.0,
     "source_on_save": false,
-    "relative_order": 2,
+    "relative_order": 5,
     "properties": {
-        "tempName": "Untitled1",
+        "chunk_output_type": "inline",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "53,0",
+        "cursorPosition": "64,0",
         "scrollLine": "0"
     },
     "folds": "",
@@ -21,7 +21,7 @@
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1730760803650,
+    "last_content_update": 1730760803690,
     "read_only": false,
     "read_only_alternatives": []
 }
