@@ -58,11 +58,64 @@ ggplot(Well9JFebtoAug, aes(x = Date, y = M)) +
 
 summary(Well9JFebtoAug$M)
 
-filter(Well9JFebtoAug, Date == "2024-05-18")
+Well9JFebtoAug %>%
+  filter(M == min(M, na.rm = TRUE)) %>%
+  pull(Date)
+```
 
+
+```{r}
+# Ensure Date is in the correct format
+Well9JFebtoAug <- Well9JFebtoAug %>%
+  mutate(Date = as.POSIXct(Date, format = "%m/%d/%Y %H:%M"))  # Specify the correct format for MM/DD/YYYY HH:MM
+
+# Remove any rows with NA in Date (if necessary)
+Well9JFebtoAug <- Well9JFebtoAug %>%
+  filter(!is.na(Date))
+
+# Add Inundated column based on depth (M > 0)
+Well9JFebtoAug <- Well9JFebtoAug %>%
+  mutate(Inundated = `M` > 0)  # TRUE if M > 0
+
+# Calculate time differences and sum durations of inundation
+total_inundated_time <- Well9JFebtoAug %>%
+  arrange(Date) %>%
+  mutate(Time_Diff = c(0, as.numeric(diff(Date)) / 3600)) %>%  # Convert seconds to hours
+  filter(Inundated == TRUE) %>%
+  summarise(Total_Time_Hours = sum(Time_Diff, na.rm = TRUE))
+
+# Display the result in days
+total_inundated_time / 24
+
+```
+
+
+
+
+```{r}
+calculate_inundation_time <- function(data, date_column, ground_elevation_column, threshold = 0) {
+  # Ensure Date is in datetime format
+  data <- data %>%
+    mutate(!!sym(date_column) := as.POSIXct(!!sym(date_column), format = "%Y-%m-%d %H:%M:%S"))  # Specify the format
+  # Add Inundated column based on ground elevation and threshold
+  data <- data %>%
+    mutate(Inundated = !!sym(ground_elevation_column) <= threshold)  # TRUE if Ground Surface is below threshold
+  # Calculate time differences and sum durations of inundation
+  total_inundated_time <- data %>%
+    arrange(!!sym(date_column)) %>%
+    mutate(Time_Diff = c(0, as.numeric(diff(!!sym(date_column))) / 3600)) %>%  # Convert seconds to hours
+    filter(Inundated == TRUE) %>%
+    summarise(Total_Time_Hours = sum(Time_Diff, na.rm = TRUE))  # Total inundated time in hour
+  return(total_inundated_time)
+}
+
+# Run the function to calculate inundation time for Well9JFebtoAug dataset
+resultLB1 <- calculate_inundation_time(Well9JFebtoAug, "Date", "M", threshold = -.44)
+print(resultLB1)
 
 
 ```
+
 
 
 ```{r}
