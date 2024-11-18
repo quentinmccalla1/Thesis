@@ -1,0 +1,6 @@
+"0","SheepBAIchrn$Year <- seq(1988, by = 1, length.out = nrow(Sheepcrn))"
+"0","ChildsBAIchrn$Year <- seq(1993, by = 1, length.out = nrow(Childscrn))"
+"0","UBBAIchrn$Year <- seq(1994, by= 1, length.out= nrow(UBcrn))"
+"0","LBBAIchrn$Year <- seq(1994, by= 1, length.out = nrow(LBcrn))"
+"0","AllBAIchrn$Year <- seq(1988, by = 1 , length.out = nrow(AllBAIchrn))"
+"0","CrossBAIchrn$Year <- seq(1994, by= 1, length.out= nrow(CrossBAIchrn))"
