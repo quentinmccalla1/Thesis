@@ -1,4 +1,0 @@
-"0",""
-"0","UBBAI <- bai.in(UB, d2pith = NULL)"
-"0","UBBAIchrn <- chron(UBBAI)"
-"0","plot.crn(UBBAIchrn)"

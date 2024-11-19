@@ -19,27 +19,35 @@ ImageryAreas <- read_excel("ImageryStatistics150m.xlsx")
 
 
 ```{r}
+library(readxl)
 library(dplyr)
+library(ggplot2)
 
-# Load your data into a data frame (if not already)
-# ImageryAreas <- read.table("your_data_file.txt", header = TRUE)  # Example for loading data
+# Load the data
+data <- read_excel("ImageryStatistics150m.xlsx")
 
-# Step 1: Convert the data frame columns to numeric where applicable
-ImageryAreas <- ImageryAreas %>%
-  # Ensure all area columns are numeric; this converts columns 2 onward, assuming column 1 is a label
-  mutate(across(-1, as.numeric)) %>%
-  # Remove any rows or columns with NA values
-  na.omit()
+# Inspect the structure (adjust column names if necessary)
+str(data)
 
-# Step 2: Prepare data for Chi-squared by removing the category column if needed
-chi2_data <- ImageryAreas[, -1]  # Removes the first column if it is a label
+# Summarize land use by year and category
+summary_data <- data %>%
+  group_by(Year, LandUseCategory) %>%
+  summarize(TotalArea = sum(Area, na.rm = TRUE), .groups = "drop")
 
-# Step 3: Perform Chi-squared test
-# Note: Chi-squared tests require integer values, so round if necessary
-chi2_data <- round(chi2_data)
-chisq.test(chi2_data)
-View(chi2_data)
+# Visualize land use changes over years
+ggplot(summary_data, aes(x = Year, y = TotalArea, fill = LandUseCategory)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Land Use Comparison Between Years", x = "Year", y = "Total Area") +
+  theme_minimal()
 
+# Perform a chi-squared test (pivot data to a contingency table format)
+contingency_table <- summary_data %>%
+  pivot_wider(names_from = LandUseCategory, values_from = TotalArea, values_fill = 0) %>%
+  select(-Year) %>%
+  as.matrix()
+
+chisq_test <- chisq.test(contingency_table)
+print(chisq_test)
 
 ```
 

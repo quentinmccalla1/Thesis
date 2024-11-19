@@ -1,4 +1,0 @@
-"0",""
-"0","CrossBAI <- bai.in(Crossdated, d2pith = NULL)"
-"0","CrossBAIchrn <- chron(CrossBAI)"
-"0","plot.crn(CrossBAIchrn)"

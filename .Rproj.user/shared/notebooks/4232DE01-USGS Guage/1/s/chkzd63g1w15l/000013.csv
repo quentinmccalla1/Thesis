@@ -1,0 +1,7 @@
+"0","Precip <- read.csv(""YavapaiPrecip.csv"")"
+"0",""
+"0","Precip <-  Precip %>%"
+"0","  group_by(year = Year) %>%  # If 'Year' is already numeric"
+"0","  summarise(total = sum(`Value`, na.rm = TRUE))"
+"0",""
+"0",""
