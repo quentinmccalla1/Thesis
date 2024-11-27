@@ -359,8 +359,42 @@ print(welch_anova)
 
 ```
 
+
+
+
 ```{r}
-BrapAll <- read_csv("BRAPALL.csv")
+BRAPsurvey <- read.csv("WellSurvey.csv")
+
+
+library(ggplot2)
+
+# Distance to river vs survivorship
+ggplot(BRAPsurvey, aes(x = BRAPsurvey$Distance.to.river..m., y = BRAPsurvey$X..Change.from.original.survey)) +
+    geom_point() +
+    geom_smooth(method = "lm") +
+    labs(title = "Seedling Survivorship vs Distance to River", x = "Distance to River (m)", y = "Survivorship (%)")
+
+# Distance above groundwater vs survivorship
+ggplot(BRAPsurvey, aes(x = BRAPsurvey$Difference.between.plot.and.river.stage..m., y = BRAPsurvey$X..Change.from.original.survey)) +
+    geom_point() +
+    geom_smooth(method = "lm") +
+    labs(title = "Seedling Survivorship vs Distance Above Groundwater", x = "Distance Above Groundwater (m)", y = "Survivorship (%)")
+
+# Distance above groundwater vs survivorship
+ggplot(BRAPsurvey, aes(x = Difference.between.plot.and.GW.level.m., y = X..Change.from.original.survey)) +
+    geom_point() +
+      geom_smooth(method = "lm") +
+    labs(title = "Seedling Survivorship vs Distance Above Groundwater", 
+         x = "Distance Above Groundwater (m)", 
+         y = "Survivorship (%)")
+```
+
+```{r}
+survivalmodel <- glm(X..Change.from.original.survey ~ BRAPsurvey$Difference.between.plot.and.river.stage..m., data = BRAPsurvey)
+summary(survivalmodel)
 
 ```
+
+
+
 
