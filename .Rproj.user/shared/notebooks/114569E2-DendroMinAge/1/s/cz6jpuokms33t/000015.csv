@@ -1,0 +1,7 @@
+"0","# Calculate the mean diameter per site (grouped by 'ID2')"
+"0","mean_diameters_all_sites <- DendroMerge %>%"
+"0","  group_by(ID2) %>%  # Group by 'ID2' (site ID)"
+"0","  summarise(mean_diameter = mean(`Diameter (CM)`, na.rm = TRUE))  # Calculate mean diameter for each site"
+"0",""
+"0","# Print the result"
+"0","print(mean_diameters_all_sites)"

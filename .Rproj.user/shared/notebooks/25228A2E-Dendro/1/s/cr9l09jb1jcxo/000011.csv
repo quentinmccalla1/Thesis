@@ -1,0 +1,7 @@
+"0",""
+"0","# Rename 'date' column in Crosscrn to 'Date' if necessary"
+"0","colnames(annual_means)[colnames(annual_means) == ""year""] <- ""Year"""
+"0","colnames(meanmin)[colnames(meanmin) == ""year""] <- ""Year"""
+"0","colnames(PDSImean)[colnames(PDSImean) == ""year""] <- ""Year"""
+"2","Error: object 'PDSImean' not found
+"

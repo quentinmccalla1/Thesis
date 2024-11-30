@@ -1,9 +1,4 @@
 "0","Childscrn <- chron(Childs)"
-"0","Sheepcrn <- chron(Sheep)"
-"0","UBcrn <- chron(UB)"
-"0","LBcrn <- chron(LB)"
-"0","Allcrn <- chron(ALL)"
-"0","AllCorcrn <- chron(ALLCor)"
-"0",""
-"0","Crosscrn <- chron(Crossdated)"
-"0",""
+"2","Error in h(simpleError(msg, call)) : 
+  error in evaluating the argument 'x' in selecting a method for function 'rowSums': object 'Childs' not found
+"
