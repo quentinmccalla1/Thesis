@@ -1,8 +1,0 @@
-"0",""
-"0","# Distance above groundwater vs survivorship"
-"0","ggplot(BRAPsurvey, aes(x = Difference.between.plot.and.GW.level.m., y = X..Change.from.original.survey)) +"
-"0","    geom_point() +"
-"0","      geom_smooth(method = ""lm"") +"
-"0","    labs(title = ""Seedling Survivorship vs Distance Above Groundwater"", "
-"0","         x = ""Distance Above Groundwater (m)"", "
-"0","         y = ""Survivorship (%)"")"

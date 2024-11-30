@@ -1,1 +1,0 @@
-{"frames":[{"func":"qchisq()","file":"","line_number":0,"end_line_number":0,"character_number":0,"end_character_number":0}],"message":"Error in qchisq() : argument \"p\" is missing, with no default\n"}
