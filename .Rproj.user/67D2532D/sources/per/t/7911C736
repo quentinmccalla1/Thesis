@@ -3,7 +3,7 @@
     "path": "~/GitHub/Thesis/Thesis1/USGS Guage.Rmd",
     "project_path": "USGS Guage.Rmd",
     "type": "r_markdown",
-    "hash": "1835206045",
+    "hash": "3458023947",
     "contents": "",
     "dirty": false,
     "created": 1732925416026.0,
@@ -12,16 +12,16 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "159,0",
-        "scrollLine": "156",
+        "cursorPosition": "184,0",
+        "scrollLine": "181",
         "last_setup_crc32": "c55cd56fbb338d19"
     },
     "folds": "",
-    "lastKnownWriteTime": 1732940335,
+    "lastKnownWriteTime": 1732945286,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1732940336043,
+    "last_content_update": 1732945286845,
     "read_only": false,
     "read_only_alternatives": []
 }

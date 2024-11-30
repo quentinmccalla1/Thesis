@@ -160,9 +160,12 @@ Mean Yearly Temp Yavapai county
 
 
 ```{r}
+
+YearlyTemp <- read.csv("AverageMonthlyTemp-YavapaiCounty_1993-2024.csv")
+
 MeanTemp <- YearlyTemp %>%
   group_by(Year, Month) %>%
-  summarise(mean_value = mean(`Degrees F`, na.rm = TRUE), .groups = "drop") %>%
+  summarise(mean_value = mean(`Value`, na.rm = TRUE), .groups = "drop") %>%
   pivot_wider(names_from = Month, values_from = mean_value, names_prefix = "Month_") %>%
   arrange(Year)
 
@@ -181,9 +184,22 @@ print(MeanTemp)
 ```{r}
 Precip <- read.csv("YavapaiPrecip.csv")
 
-Precip <-  Precip %>%
-  group_by(year = Year) %>%  # If 'Year' is already numeric
-  summarise(total = sum(`Value`, na.rm = TRUE))
+
+Precip <- Precip %>%
+  group_by(Year, Month) %>%
+  summarise(mean_value = mean(`Value`, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(names_from = Month, values_from = mean_value, names_prefix = "Month_") %>%
+  arrange(Year)
+
+# Rename columns to month names
+month_names <- c("January", "February", "March", "April", "May", "June", 
+                 "July", "August", "September", "October", "November", "December")
+
+# Assign the month names to the columns (excluding the "Year" column)
+colnames(Precip)[2:13] <- month_names
+
+# View the resulting data
+print(Precip)
 
 
 ```
