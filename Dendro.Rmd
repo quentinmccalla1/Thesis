@@ -430,6 +430,7 @@ ResponseSeas <- seascorr(
   #ci = .1,
   var_names = c("MeanFlow", "Temp"))
 plot(ResponseSeas)
+summary(ResponseSeas)
 ```
 
 
