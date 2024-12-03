@@ -1,4 +1,0 @@
-"0","Childscrn <- chron(Childs)"
-"2","Error in h(simpleError(msg, call)) : 
-  error in evaluating the argument 'x' in selecting a method for function 'rowSums': object 'Childs' not found
-"

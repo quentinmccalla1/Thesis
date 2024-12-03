@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Library
 ```{r}
-#install.packages("dplR")
+install.packages("dplR")
 install.packages("treeclim")
 library(dplR)
 library(tidyverse)
@@ -21,49 +21,6 @@ library(tidyverse)
 install.packages("C:\\Users\\qrm32\\Downloads\\treeclim_2.0.6.0.tar.gz", repos = NULL, type = "source")
 library(treeclim)
 ```
-
-
-
-Read collections
-```{r}
-Childs <- read.tucson("ChildsCol1.rwl")
-Sheep <- read.tucson("SheepCol1.rwl")
-UB <- read.tucson("UBCol1.rwl")
-LB <- read.tucson("LBCol1.rwl")
-ALL <- read.tucson("All.rwl")
-ALLCor <- read.tucson("AllCorrelated.rwl")
-
-Crossdated <- read.tucson("All.3+.rwl")
-```
-
-Detrend
-```{r}
-Childs <- detrend( rwl = Childs, method = "AgeDepSpline")
-Sheep <- detrend( rwl = Sheep, method = "AgeDepSpline")
-UB <- detrend(rwl= UB, method = "AgeDepSpline")
-LB <- detrend(rwl = LB, method = "AgeDepSpline")
-ALL <- detrend(rwl = ALL, method = "AgeDepSpline")
-ALLCor <- detrend(rwl= ALLCor, method = "AgeDepSpline")
-Crossdated <- detrend(rwl = Crossdated, method = "AgeDepSpline")
-```
-
-Turn into Chronology
-```{r}
-Childscrn <- chron(Childs)
-Sheepcrn <- chron(Sheep)
-UBcrn <- chron(UB)
-LBcrn <- chron(LB)
-Allcrn <- chron(ALL)
-AllCorcrn <- chron(ALLCor)
-
-Crosscrn <- chron(Crossdated)
-
-```
-
-
-
-
-
 
 ```{r}
 files <- c("ChildsCol1.rwl", "SheepCol1.rwl", "UBCol1.rwl", 
@@ -215,12 +172,6 @@ ggplot(combinedBAI_data, aes(x = Year, y = std, color = Dataset, linetype = Data
 Remove autocorrelation
 
 
-```{r}
-
-```
-
-
-
 Correlate to Verde Flows
 
 ```{r}
@@ -359,68 +310,81 @@ plot(gam_model)
 
 
 
+
+
+
 ```{r}
-common_years <- intersect(AllCor_rwl_crn$Year, intersect(annual_means$Year, MeanTemp$Year))
+# Align datasets and prepare for analysis
+common_years <- Reduce(intersect, list(Allcrn$Year, monthly_means$Year))
 
-AllCorcrn <- AllCorcrn %>%
-  mutate(Year = 1988 + seq_along(1:nrow(AllCorcrn)) - 1)
+# Clean and prepare the `Allcrn` dataset
+Allcrn <- Allcrn %>%
+  as.data.frame() %>%                       # Ensure it is a data frame
+  mutate(across(-Year, as.numeric)) %>%     # Convert all columns except 'Year' to numeric
+  filter(Year %in% common_years) %>%        # Filter by common years
+  distinct(Year, .keep_all = TRUE)          # Remove duplicates
 
+# Clean and prepare the `monthly_means` dataset
+monthly_means <- monthly_means %>%
+  as.data.frame() %>%                       # Ensure it is a data frame
+  mutate(across(-Year, as.numeric)) %>%     # Convert all columns except 'Year' to numeric
+  filter(Year %in% common_years) %>%        # Filter by common years
+  distinct(Year, .keep_all = TRUE)          # Remove duplicates
 
+# Clean and prepare the Mean Temp dataset
+MeanTemp <- MeanTemp %>%
+  as.data.frame() %>%                       # Ensure it is a data frame
+  mutate(across(-Year, as.numeric)) %>%     # Convert all columns except 'Year' to numeric
+  filter(Year %in% common_years) %>%        # Filter by common years
+  distinct(Year, .keep_all = TRUE)          # Remove duplicates
 
-AllCorcrn <- AllCorcrn %>% filter(Year %in% common_years)
-annual_means <- annual_means %>% filter(Year %in% common_years)
-MeanTemp <- MeanTemp %>% filter(year %in% common_years)
-
-
-# Convert to a data frame
-if (is.list(MeanTemp)) {
-  MeanTemp <- as.data.frame(MeanTemp)
-}
-if (is.list(monthly_means)) {
-  monthly_means <- as.data.frame(monthly_means)
-}
-
-if (is.list(Precip)) {
-  Precip <- as.data.frame(Precip)
-}
-
-
+# Clean and prepare the Precip dataset
+Precip <- Precip %>%
+  as.data.frame() %>%                       # Ensure it is a data frame
+  mutate(across(-Year, as.numeric)) %>%     # Convert all columns except 'Year' to numeric
+  filter(Year %in% common_years) %>%        # Filter by common years
+  distinct(Year, .keep_all = TRUE)          # Remove duplicates
 ```
 
 
 ```{r}
-#Changed bootstrap to "exact", March is always significant and april is occasionally significant
+#Mean flows, Exact Bootstrap
 Response <- dcc(
-  chrono = Allcrn,
+  chrono = Allcrn,  #not the chronology
   climate =  monthly_means,
-  boot = "exact",
+  boot = "std",
   var_names = "MeanFlow")
 plot(Response)
 
-#STD bootstrap, April is usually significant
+#Mean Flows STD bootstrap, April is usually significant
 Response <- dcc(
-  chrono = Allcrn,
+  chrono = AllCorcrn,
   climate =  monthly_means,
   boot = "std",
  # selection = -11:6,
   var_names = "MeanFlow")
 plot(Response)
 
-ResponseTemp <- dcc(
-  chrono = AllCorcrn,
+#Mean Precip STD bootstrap
+PrecipResponse <- dcc(
+  chrono = Allcrn,
   climate =  Precip,
-  boot = "std",
-  var_names = "MeanTemp")
-plot(ResponseTemp)
+  boot = "exact",
+ # selection = -11:6,
+  var_names = "Precip")
+plot(PrecipResponse)
 
+#Temp
 ResponseTemp <- dcc(
   chrono = AllCorcrn,
   climate =  MeanTemp,
   boot = "stationary",
-  selection = 4:10,
+  selection = 1:12,
   var_names = "MeanTemp")
 plot(ResponseTemp)
 ```
+
+
 
 
 ```{r}

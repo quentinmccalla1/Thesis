@@ -1,0 +1,7 @@
+"0","ResponseSeas <- seascorr("
+"0","  chrono = Childs_rwl_crn,"
+"0","  climate =  list(monthly_means, MeanTemp),"
+"0","  #ci = .1,"
+"0","  var_names = c(""MeanFlow"", ""Temp""))"
+"2","Error: object 'Childs_rwl_crn' not found
+"

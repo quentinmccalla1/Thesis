@@ -1,0 +1,11 @@
+"0","long_data <- long_data %>%"
+"0","  mutate(Date = dmy(paste(""01"", Date))) %>%  # Convert Date to Date format"
+"0","  arrange(Date)  # Sort by Date"
+"0",""
+"0","# Calculate mean for each Variable and Date"
+"0","mean_values <- mean_values %>%"
+"0","  group_by(Variable) %>%  # Group by Variable to calculate % change separately for each"
+"0","  mutate(Percentage_Change = (Mean_Value - lag(Mean_Value)) / lag(Mean_Value) * 100) %>%"
+"0","  ungroup()  # Remove the grouping"
+"2","Error: object 'mean_values' not found
+"
