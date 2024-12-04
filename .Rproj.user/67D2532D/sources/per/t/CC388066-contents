@@ -389,7 +389,7 @@ plot(ResponseTemp)
 
 ```{r}
 ResponseSeas <- seascorr(
-  chrono = Childs_rwl_crn,
+  chrono = Allcrn,
   climate =  list(monthly_means, MeanTemp),
   #ci = .1,
   var_names = c("MeanFlow", "Temp"))
