@@ -1,0 +1,407 @@
+---
+title: "FinalProject"
+author: "Quentin McCalla"
+date: '`r Sys.Date()`'
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r Library, message=FALSE, warning=FALSE}
+file.edit("~/.Rprofile")
+options(repos = c(CRAN = "https://cloud.r-project.org"))
+
+install.packages("tidyverse",repos = "https://cloud.r-project.org")
+install.packages("gridExtra")
+install.packages("grid")
+library(grid)
+library(kableExtra)
+library(tidyverse)
+library(knitr)
+
+
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+```{r}
+brap_data <- read.csv("BRAPALL.csv")
+WellSurvey <- read_csv("WellSurvey.csv")
+
+# Reshape to long format
+long_data <- brap_data %>%
+  pivot_longer(cols = starts_with("Diameter") | starts_with("Height") | starts_with("HDR"),
+               names_to = c("Variable", "Date"),
+               names_sep = "(?<=[A-Za-z])(?=\\d)",  # Separate based on letter and number
+               values_to = "Value")
+long_data$Variable <- as.factor(long_data$Variable)
+long_data$Date <- as.factor(long_data$Date)
+```
+
+# 1. Motivation
+
+The Verde River is in central Arizona and its watershed drains over 4
+million acres. Elevations range from over 3650 m ASL in the San
+Francisco Peaks to about 1300ft ASL at its confluence with the Salt
+River. The Verde River gains volume from a string of canyons with
+perennial tributaries. These include Sycamore, Wet Beaver, Oak, and West
+Clear creeks. These perennial tributaries get large portions of their
+base flow from springs discharging from the regional aquifers
+(Ecological Implications of Verde River Flows, 2008).
+
+![](https://lh7-rt.googleusercontent.com/slidesz/AGV_vUdGzZX7W_tJ4eI0bRc1o6QoOn1waTEsLbfUlZEDjckVozLf1NnCxo231yciz0aPRrIfSnIfr-2OTG_se4gx8q1N7BlFiVPsycGjvDeZK4Cy2t9hvoWguN8FoHNbM0FrlwuxJrEX=s2048?key=pO-Te1_GQjPj-5hKiIKaHohx){width="411"}
+
+Figure 1. Map of the Verde River watershed and study sites
+
+The Verde Wild and Scenic (W&S) River extends from Beasley RAP to Sheep
+Bridge Dispersed Camping area just above Horseshoe Reservoir (Figure 1
+). The river is isolated and generally inaccessible by road along this
+reach. The region is rugged and arid with Fossil Creek and the
+intermittent East Verde River contributing flow to the river. After the
+W&S portion of the river, the Verde enters Horseshoe Reservoir, the
+first of two large storage reservoirs on the river. Shortly after
+Horseshoe Reservoir the river flows into Bartlett Reservoir and then
+joins the Salt River just northeast of the Phoenix metropolitan area.
+Although there are no large storage reservoirs above the Verde River
+Wild and Scenic Corridor, the Verde River is still impacted by human
+use. Base flow in the upper Verde Valley comes mainly from the Big Chino
+and Little Chino aquifers (Wirt, DeWitt, and Langenheim 2005). These
+aquifers are pumped by municipal, irrigation, and domestic wells near in
+the Little Chino Basin. Perennial flow in the Verde begins about 5 miles
+lower downstream than it did historically (Ecological Implications of
+Verde River Flows , 2008). Surface water diversions between Clarkdale
+and Beasley RAP reduce base flow during the summer when water levels are
+historically at their lowest. In total, irrigation ditches withdraw
+about 34,000 acre feet with about half of that being consumed (Alam
+1997; Blasch et al. 2006) . The Verde Valley also is an agricultural
+area with land being used for: pasture, pecans, grapes, corn, and
+vegetables. However, most farms are small both in size and revenue
+(USDA, 2012)
+
+## Background
+
+Riparian forests in Arizona are disproportionately important to the
+landscape despite their relatively small geographic area. Riparian
+forests in Arizona cover only about 0.4% of the land surface area yet
+support more biodiversity and ecosystem functions than surrounding
+upland habitat (Ffolliott et al. 2004). In Arizona, 80 percent of all
+vertebrate species complete a part of their lifecycle in riparian areas
+(Hubbard, 1977). Riparian forest:s support and enhance terrestrial and
+aquatic habitat, filter upland sediment and nutrients, store water and
+recharge aquifers and stabilize stream banks among many other functions
+(Schultz et al. 2009).
+
+Fremont Cottonwood (*Populus fremontii*) and Gooding Willow (*Salix
+goodingii*) are major components of riparian forests along the Verde
+River . Tree diversity is low in Verde River riparian forests with
+Fremont Cottonwood and Gooding Willows being the dominant species.
+
+The reproductive ecology of cottonwood and willow influences how and
+when they regenerate. These trees are pioneer species, meaning they rely
+on disturbance and Riparian forest regeneration is limited by several
+natural and anthropomorphic causes. Summer drought, along with summer
+and fall floods, are leading causes of seedling mortality. Seedling
+roots must grow fast enough to maintain access to soil water as the
+water table drops throughout spring and summer and returns to base--flow
+conditions (Stromberg, 1993). Humans altering natural flow regimes have
+been detrimental to riparian forest regeneration. Water diversions
+reduce stream flow beginning in spring and continuing through the
+summer. Stream diversions lower water levels in streams as cottonwood
+and willow seedlings are trying to reach the water table before they dry
+out. Further impacts are from dams that trap sediment and reduce the
+amount and variability of flow during winter floods. These floods are
+fundamental for carrying sediment and nutrients downstream as well as
+scouring out new habitat for seeds to germinate on (Stromberg, 1997).
+
+The winter of 2023 produced the largest floods along the Verde River in
+30 years. Flows peaked at over 50,000 CFS near Camp Verde, AZ. This was
+a large enough disturbance to: remove vegetation, topple trees, scour
+new channels and deposit fresh sediment. This allowed Fremont
+Cottonwoods to regenerate for the first time in about 15 years.
+
+## Question
+
+Cottonwood growth and regeneration along the Verde River have yet to
+studied.These forests are not only important politically because of the
+Wild and Scenic designation, but also ecologically. Understanding what
+influences survival and how quickly cottonwoods grow is key to ensuring
+that they persist into the future.
+
+## Dataset
+
+The dataset was collected via field work at Beasley River Access Point
+(BRAP) near Camp Verde ,Arizona. Plots Ten regeneration plots were
+established in Fall 2023 and initially surveyed. The height in
+centimeters and the diameter in millimeters of each seedling was
+measured in a plot.Plots that were too large or had too many seedlings
+were sampled. The height-diameter ratio (HDR) was then calculated by
+dividing the height of each seedling (in mm) by its diameter (in mm) to
+give me a single metric of seedling size. A larger HDR indicates a
+taller, skinnier seedling.The sites were then visited in Spring of 2024
+and Fall of 2024. This gave me seedling size and density changes between
+all visits. Survey Data In winter of 2024 a shallow groundwater well was
+installed in the alluvial, floodplain aquifer and a HOBO WL13 logger was
+activated which took groundwater measurements every hour. In summer of
+2024, members of the larger Forest Service Gila River adjudication team
+came to flagstaff to help with the project. They brought survey caliber
+GNSS equipment. With this equipment we were able to precisely measure
+the plot elevations and locations. This gave me my variables: distance
+to river, difference between plot elevation and river stage, and
+elevation of plot above the groundwater table.
+
+The seedling dataset is accurate and precisely measured. However, as
+with any sampling method, not all seedlings on a river reach are
+measured. This means that we are hoping that the seedlings measured are
+representative of the entire river reach.The survey data is highly
+reliable and accurate but because of equipment restraints, the same
+equipment wont be able to be used at my other site.
+
+## Methodology
+
+## Seedling statistics For seedling size metrics,I used an Analysis of
+
+Variance (ANOVA test). I used this test because: I have more than 2
+variables at more than 2 times and each visit has a different amount of
+seedlings. One weakness with this analysis is that it ideally uses
+normally distributed data which only one of my variables (HDR) is. The
+ANOVA test is also helpful because it tells me which variables are
+statistically significant which is necessary in ecology.
+
+## Survey Variables
+
+The survey variables were compared to seedling survivorship (as a percent from original survey). A Spearman correlation
+was used because I need to know if the correlations are statistically
+significant. Also the Spearman correlation was used because I was unsure
+if the trends were linear in nature.
+
+## Hypothesis
+
+I hypothesize that: 1) Height will increase the fastest because pioneer
+species like cottonwoods need to get above competition before they are
+shaded out. 2) Height above groundwater level will be the most
+significant factor in seedling survivalship.Fremont Cottonwoods need to
+be connected to perennial water due to their high evapotranspiration
+rates so if they are too far removed from the water table, they
+desiccate quickly.
+
+## Results/Discussion 
+### Growth
+
+```{r Table 1, message=FALSE, warning=FALSE}
+
+# Calculate mean for each Variable and Date
+mean_values <- long_data %>%
+  mutate(Date = dmy(paste("15", Date))) %>%  
+  group_by(Variable, Date) %>%  # Group by Variable and Date
+  summarise(Mean_Value = mean(Value, na.rm = TRUE), .groups = "drop") %>%  
+  arrange(Variable, Date) %>%  # Ensure data is sorted by Variable and Date
+  group_by(Variable) %>%  # Regroup by Variable
+  mutate(Percentage_Change = (Mean_Value - lag(Mean_Value)) / lag(Mean_Value) * 100) %>%  
+  ungroup() %>%  # Remove grouping
+  arrange(Variable, Date)  # Final sort by Variable and Date for display
+
+
+mean_values %>%
+  kable("html", caption = "Changes in seedling growth") %>%
+  kable_styling(full_width = FALSE)
+
+```
+
+This table shows the percent increases between of each variable. All
+size metrics increased between each visit. Height increased by about 30%
+each visit while HDR increased at a rapid rate between Spring and Fall
+of 2024. Diameter had the opposite trend, increasing the most between
+Fall 2023 and Spring 2024. This could indicate that changes in size distribution are caused mainly by increases in height.
+
+```{r Size Plots, message=FALSE, warning=FALSE}
+ggplot(long_data, aes(x = Value, fill = Variable)) +
+  geom_histogram(bins = 20, alpha = 0.7, position = "identity") +
+  facet_wrap(~ Variable, scales = "free") +
+  labs(
+    title = "Histograms of Diameter, Height, and HDR",
+    x = "Value",
+    y = "Count"
+  ) +
+  theme_minimal()
+```
+
+This chart shows a little about the size structure of the seedlings.
+Neither diameter or height are normally distributed. However, when you
+convert the to the same units and then divide them, you get a size
+structure that is more or less normally distributed.This indicates that
+seedling size and their growth on a plot level follows a normal
+distribution.
+
+### ANOVA and Tukey Table
+
+```{r}
+# Run ANOVA model
+anova_model <- aov(Value ~ Variable * Date, data = long_data)
+tukey_results <- TukeyHSD(anova_model)
+
+# Function to extract Tukey's results into a data frame
+extract_tukey_results <- function(tukey_result, comparison_name) {
+  if (comparison_name %in% names(tukey_result)) {
+    tukey_df <- as.data.frame(tukey_result[[comparison_name]])
+    if (nrow(tukey_df) > 0) {
+      tukey_df$Comparison <- rownames(tukey_df)
+      rownames(tukey_df) <- NULL
+      colnames(tukey_df) <- c("Estimate", "Lower_CI", "Upper_CI", "P_Value", "Comparison")
+      return(tukey_df[, c("Comparison", "Estimate", "Lower_CI", "Upper_CI", "P_Value")])
+    }
+  }
+  return(data.frame(Comparison = NA, Estimate = NA, Lower_CI = NA, Upper_CI = NA, P_Value = NA))
+}
+# Extract Tukey results for the interaction term
+tukey_results_interaction_df <- extract_tukey_results(tukey_results, "Variable:Date")
+selected_rows <- c(3, 6, 11, 14, 18, 21, 24, 29, 33)
+selected_data <- data.frame()
+# Loop through the selected rows and add them to the data frame
+for (row in selected_rows) {
+  if (row <= nrow(tukey_results_interaction_df)) {
+    selected_data <- rbind(selected_data, tukey_results_interaction_df[row, ])
+  }
+}
+
+# Generate the kable table
+selected_data %>%
+  kable("html", caption = "Selected Rows from Tukey Test") %>%
+  kable_styling(full_width = FALSE) %>%
+  row_spec(which(selected_data$P_Value < 0.05), background = "lightgreen")
+
+
+```
+
+The results of the ANOVA test and Tukey HSD test. Not all relationships
+were relevant so just the key variable interactions were kept in the
+final table. Relationships that had a P-value less than or equal to .05
+were considered significant.Date was a significant factor for all 3
+visits. All height changes between visits were significant. HDR changes
+between Fall 2023 to Fall 2024 and Spring 2024 to Fall 2024 were
+significant. None of the diameter changes were significant.The fact that
+heights are increasing faster and more significantly supports my
+hypothesis that seedlings are prioritizing growing taller rather than
+wider in order to grow above their competition.
+
+### Survey data
+
+```{r}
+# Target variable (change this to your actual target variable name)
+target_var <- WellSurvey$`% Change from original survey`
+column_names <- setdiff(names(WellSurvey), "target_var")
+# Initialize an empty data frame to store results
+cor_results <- data.frame(Variable = character(), Correlation = numeric(), P_Value = numeric(), stringsAsFactors = FALSE)
+
+# Loop through the list of variables to test correlation with the target
+for (var_name in column_names) {
+  current_var <- WellSurvey[[var_name]]
+  if (is.numeric(current_var) && sum(complete.cases(current_var, target_var)) > 2) {
+    # Perform Spearman correlation test
+    cor_test <- tryCatch(
+      cor.test(target_var, current_var, method = "spearman", use = "complete.obs"),
+      error = function(e) NULL
+    )
+        if (!is.null(cor_test)) {
+      cor_results <- rbind(cor_results, 
+                           data.frame(Variable = var_name, 
+                                      Correlation = cor_test$estimate, 
+                                      P_Value = cor_test$p.value))
+    }
+  }
+}
+
+
+correlation_results <- data.frame(cor_results)
+rownames(correlation_results) <- NULL
+correlation_results <- correlation_results[-4,]
+
+correlation_results %>%
+  kable("html", caption = "Highlighted Rows Based on P-Value") %>%
+  kable_styling(full_width = FALSE) %>%
+  row_spec(which(correlation_results$P_Value < 0.05), background = "lightgreen")
+
+```
+
+As for the survey data, the only significant factor in seedling
+survivorship was the difference between plot elevation and river stage.
+Both distance to river and the elevation above groundwater level were
+insignificant.This makes sense because rivers often have variable topography on their floodplain. Therefore, a plot can be a further distance from the active channel but still be very close to the water table.
+
+This is a perennial river so it is baseflow and
+groundwater fed. Because of this, I believe that river stage is general
+elevation of the groundwater table at a certain elevation. Therefore,
+the difference between plot elevation and river stage is more likely
+measuring the elevation of the groundwater level too.
+
+## Limitations
+
+I believe that the groundwater level was poorly incorporated. Because
+there is a single well and the plots are spread out over 100s of meters
+the elevation of each plot is changing. Projecting the groundwater level
+under a well hundreds of meters up and downstream of the well is going
+to be inaccurate of where the groundwater level actually is. In addition, many plots saw multi-year recruitment. Seedlings regenerated again in the Spring of 2024. This not only increased densities at some plots but also caused an influx of seedlings with small diameters. This could be cause of diameters being smaller and the changes being insignificant. A committee member said that knowing if multi-year recruitment is happening is relevant so that they should not be excluded from the analysis.
+
+## Conclusion
+
+In conclusion, seedlings along the Verde Wild and Scenic river continue
+to grow. Their heights increase the most and significantly as opposed to
+their diameters. The only significant variable that I found to impact
+their survivorship at a site is their elevation above the river (and
+most likely groundwater) level. Future field work and analysis will
+hopefully investigate other variables such as : soil texture, light
+availability and herbaceous competition on seedling survival.
+
+### Works Cited
+
+Alam, J. 1997. \"Irrigation in the Verde Valley.\" *A report of the
+irrigation diversion improvement project. Verde Natural Resource
+Conservation District*.
+
+Blasch, Kyle W, John P Hoffmann, Leslie F Graser, Jeannie R Bryson, and
+Alan L Flint. 2006. *Hydrogeology of the Upper and Middle Verde River
+Watersheds, Central Arizona*. U. S. Geological Survey.
+
+Cooper, David J, David M Merritt, Douglas C Andersen, and Rodney A
+Chimner. 1999. \"Factors Controlling the Establishment of Fremont
+Cottonwood Seedlings on the Upper Green River, USA.\" *Regulated Rivers:
+Research & Management: An International Journal Devoted to River
+Research and Management* 15(5): 419--40.
+
+Dyson, Megan, Ger Bergkamp, and John Scanlon. 2003. \"Flow: The
+Essentials of Environmental Flows.\" *IUCN, Gland, Switzerland and
+Cambridge, UK*: 20--87.
+
+*Ecological Implications of Verde River Flows*. 2008. Arizona Water
+Institute, The Nature Conservancy, and Verde River Basin Partnership.
+
+Ffolliott, Peter F, Leonard F DeBano, Malchus B Baker Jr, Daniel G
+Neary, and Kenneth N Brooks. 2004. \"Hydrology and Impacts of
+Disturbances on Hydrologic Function.\" *Riparian Areas of the
+Southwestern United States: Hydrology, Ecology, and Management; Baker,
+MB, Ffolliott, PF, DeBano, LF, Neary, DG, Eds*: 51.
+
+Schultz, RC, TM Isenhart, JP Colletti, WW Simpkins, RP Udawatta, and PL
+Schultz. 2009. \"Riparian and Upland Buffer Practices.\" *North American
+agroforestry: An integrated science and practice*: 163--218.
+
+Stromberg, Julie C. 1993. \"Fremont Cottonwood-Goodding Willow Riparian
+Forests: A Review of Their Ecology, Threats, and Recovery Potential.\"
+*Journal of the Arizona-Nevada Academy of Science*: 97--110.
+
+Stromberg, Juliet C. 1997. \"Growth and Survivorship of Fremont
+Cottonwood, Goodding Willow, and Salt Cedar Seedlings after Large Floods
+in Central Arizona.\" *The Great Basin Naturalist*: 198--208.
+
+USDA. 2012. *Yavapai County Profile*.
+<https://agcensus.library.cornell.edu/wp-content/uploads/2012-Arizona-cp04025.pdf.>
+
+USFWS. 2012. *Designation of Critical Habitat for Southwestern Willow
+Flycatcher*.
+
+Wirt, Laurie, Ed DeWitt, and Victoria E Langenheim. 2005. *Geologic
+Framework of Aquifer Units and Ground-Water Flowpaths, Verde River
+Headwaters, North-Central Arizona*. US Geological Survey.

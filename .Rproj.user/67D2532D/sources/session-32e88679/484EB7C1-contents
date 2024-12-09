@@ -1,0 +1,120 @@
+---
+title: "Seedling revamp"
+output: html_document
+date: "2024-12-09"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r Library, message=FALSE, warning=FALSE}
+
+install.packages("tidyverse",repos = "https://cloud.r-project.org")
+install.packages("gridExtra")
+install.packages("grid")
+library(grid)
+library(kableExtra)
+library(tidyverse)
+library(knitr)
+
+
+```
+
+```{r}
+brap_data <- read_csv("BRAPALL.csv")
+```
+
+```{r}
+# Reshape to long format
+long_data <- brap_data %>%
+  pivot_longer(cols = starts_with("Diameter") | starts_with("Height") | starts_with("HDR") | starts_with("Plot"),
+               names_to = c("Variable", "Date", "plot"),
+               names_sep = "(?<=[A-Za-z])(?=\\d)",  # Separate based on letter and number
+               values_to = "Value")
+long_data$Variable <- as.factor(long_data$Variable)
+long_data$Date <- as.factor(long_data$Date)
+```
+
+
+
+
+
+```{r}
+# Run ANOVA model
+anova_model <- aov(Value ~ Variable * Date, data = long_data)
+tukey_results <- TukeyHSD(anova_model)
+
+# Function to extract Tukey's results into a data frame
+extract_tukey_results <- function(tukey_result, comparison_name) {
+  if (comparison_name %in% names(tukey_result)) {
+    tukey_df <- as.data.frame(tukey_result[[comparison_name]])
+    if (nrow(tukey_df) > 0) {
+      tukey_df$Comparison <- rownames(tukey_df)
+      rownames(tukey_df) <- NULL
+      colnames(tukey_df) <- c("Estimate", "Lower_CI", "Upper_CI", "P_Value", "Comparison")
+      return(tukey_df[, c("Comparison", "Estimate", "Lower_CI", "Upper_CI", "P_Value")])
+    }
+  }
+  return(data.frame(Comparison = NA, Estimate = NA, Lower_CI = NA, Upper_CI = NA, P_Value = NA))
+}
+# Extract Tukey results for the interaction term
+tukey_results_interaction_df <- extract_tukey_results(tukey_results, "Variable:Date")
+selected_rows <- c(3, 6, 11, 14, 18, 21, 24, 29, 33)
+selected_data <- data.frame()
+# Loop through the selected rows and add them to the data frame
+for (row in selected_rows) {
+  if (row <= nrow(tukey_results_interaction_df)) {
+    selected_data <- rbind(selected_data, tukey_results_interaction_df[row, ])
+  }
+}
+
+# Generate the kable table
+selected_data %>%
+  kable("html", caption = "Selected Rows from Tukey Test") %>%
+  kable_styling(full_width = FALSE) %>%
+  row_spec(which(selected_data$P_Value < 0.05), background = "lightgreen")
+
+
+```
+
+
+
+```{r}
+# Target variable (change this to your actual target variable name)
+target_var <- WellSurvey$`% Change from original survey`
+column_names <- setdiff(names(WellSurvey), "target_var")
+# Initialize an empty data frame to store results
+cor_results <- data.frame(Variable = character(), Correlation = numeric(), P_Value = numeric(), stringsAsFactors = FALSE)
+
+# Loop through the list of variables to test correlation with the target
+for (var_name in column_names) {
+  current_var <- WellSurvey[[var_name]]
+  if (is.numeric(current_var) && sum(complete.cases(current_var, target_var)) > 2) {
+    # Perform Spearman correlation test
+    cor_test <- tryCatch(
+      cor.test(target_var, current_var, method = "spearman", use = "complete.obs"),
+      error = function(e) NULL
+    )
+        if (!is.null(cor_test)) {
+      cor_results <- rbind(cor_results, 
+                           data.frame(Variable = var_name, 
+                                      Correlation = cor_test$estimate, 
+                                      P_Value = cor_test$p.value))
+    }
+  }
+}
+
+
+correlation_results <- data.frame(cor_results)
+rownames(correlation_results) <- NULL
+correlation_results <- correlation_results[-4,]
+
+correlation_results %>%
+  kable("html", caption = "Highlighted Rows Based on P-Value") %>%
+  kable_styling(full_width = FALSE) %>%
+  row_spec(which(correlation_results$P_Value < 0.05), background = "lightgreen")
+
+```
