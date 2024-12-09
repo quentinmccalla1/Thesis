@@ -135,9 +135,6 @@ hist(ChildsHDR2024, main = "Histogram of Childs HDR 2024", xlab = "Height to Dia
 ```{r}
 # Set up the plotting area to have 1 row and 2 columns
 par(mfrow = c(2, 2))
-
-
-
 # Create the first histogram
 hist(BRAPHDR2023, 
      main = "Histogram of BRAPHDR2023", 
@@ -206,23 +203,6 @@ BRAP_TABLE <- BRAP_TABLE[, c(4, 1, 2, 3)]
 print(BRAP_TABLE)
 ```
 
-```{r}
-# Load the gt package
-library(gt)
-
-
-# Create a gt table
-gt_table <- gt(BRAP_TABLE) %>%
-  tab_header(
-    title = "Beasley seedling data",
-    subtitle = "Formatted using the gt package"
-  ) 
-
-# Display the table
-print(gt_table)
-
-```
-
 Childs tables
 
 ```{r}
@@ -242,19 +222,12 @@ CHILDS2023_table <- Childs10_2023 %>%
     #P_values = "<.001"
     )
 
-
-
-
-
 Childs_TABLE <- rbind(CHILDS2023_table,CHILDS06_2024_table)
 
 Childs_TABLE <- Childs_TABLE %>%
   mutate(Visit = c("Oct 2023", "June 2024"))
 
-
 print(Childs_TABLE)
-
-
 ```
 
 Percent Change Function
@@ -397,4 +370,128 @@ summary(survivalmodel)
 
 
 
+```{r}
+brap_data <- read.csv("BRAPALL.csv")
+WellSurvey <- read_csv("WellSurvey.csv")
 
+# Reshape to long format
+long_data <- brap_data %>%
+  pivot_longer(cols = starts_with("Diameter") | starts_with("Height") | starts_with("HDR"),
+               names_to = c("Variable", "Date"),
+               names_sep = "(?<=[A-Za-z])(?=\\d)",  # Separate based on letter and number
+               values_to = "Value")
+long_data$Variable <- as.factor(long_data$Variable)
+long_data$Date <- as.factor(long_data$Date)
+```
+
+
+```{r Table 1, message=FALSE, warning=FALSE}
+
+# Calculate mean for each Variable and Date
+mean_values <- long_data %>%
+  mutate(Date = dmy(paste("15", Date))) %>%  
+  group_by(Variable, Date) %>%  # Group by Variable and Date
+  summarise(Mean_Value = mean(Value, na.rm = TRUE), .groups = "drop") %>%  
+  arrange(Variable, Date) %>%  # Ensure data is sorted by Variable and Date
+  group_by(Variable) %>%  # Regroup by Variable
+  mutate(Percentage_Change = (Mean_Value - lag(Mean_Value)) / lag(Mean_Value) * 100) %>%  
+  ungroup() %>%  # Remove grouping
+  arrange(Variable, Date)  # Final sort by Variable and Date for display
+
+
+mean_values %>%
+  kable("html", caption = "Changes in seedling growth") %>%
+  kable_styling(full_width = FALSE)
+
+```
+
+
+```{r Size Plots, message=FALSE, warning=FALSE}
+ggplot(long_data, aes(x = Value, fill = Variable)) +
+  geom_histogram(bins = 20, alpha = 0.7, position = "identity") +
+  facet_wrap(~ Variable, scales = "free") +
+  labs(
+    title = "Histograms of Diameter, Height, and HDR",
+    x = "Value",
+    y = "Count"
+  ) +
+  theme_minimal()
+```
+
+
+```{r}
+# Run ANOVA model
+anova_model <- aov(Value ~ Variable * Date, data = long_data)
+tukey_results <- TukeyHSD(anova_model)
+
+# Function to extract Tukey's results into a data frame
+extract_tukey_results <- function(tukey_result, comparison_name) {
+  if (comparison_name %in% names(tukey_result)) {
+    tukey_df <- as.data.frame(tukey_result[[comparison_name]])
+    if (nrow(tukey_df) > 0) {
+      tukey_df$Comparison <- rownames(tukey_df)
+      rownames(tukey_df) <- NULL
+      colnames(tukey_df) <- c("Estimate", "Lower_CI", "Upper_CI", "P_Value", "Comparison")
+      return(tukey_df[, c("Comparison", "Estimate", "Lower_CI", "Upper_CI", "P_Value")])
+    }
+  }
+  return(data.frame(Comparison = NA, Estimate = NA, Lower_CI = NA, Upper_CI = NA, P_Value = NA))
+}
+# Extract Tukey results for the interaction term
+tukey_results_interaction_df <- extract_tukey_results(tukey_results, "Variable:Date")
+selected_rows <- c(3, 6, 11, 14, 18, 21, 24, 29, 33)
+selected_data <- data.frame()
+# Loop through the selected rows and add them to the data frame
+for (row in selected_rows) {
+  if (row <= nrow(tukey_results_interaction_df)) {
+    selected_data <- rbind(selected_data, tukey_results_interaction_df[row, ])
+  }
+}
+
+# Generate the kable table
+selected_data %>%
+  kable("html", caption = "Selected Rows from Tukey Test") %>%
+  kable_styling(full_width = FALSE) %>%
+  row_spec(which(selected_data$P_Value < 0.05), background = "lightgreen")
+
+
+```
+
+
+
+```{r}
+# Target variable (change this to your actual target variable name)
+target_var <- WellSurvey$`% Change from original survey`
+column_names <- setdiff(names(WellSurvey), "target_var")
+# Initialize an empty data frame to store results
+cor_results <- data.frame(Variable = character(), Correlation = numeric(), P_Value = numeric(), stringsAsFactors = FALSE)
+
+# Loop through the list of variables to test correlation with the target
+for (var_name in column_names) {
+  current_var <- WellSurvey[[var_name]]
+  if (is.numeric(current_var) && sum(complete.cases(current_var, target_var)) > 2) {
+    # Perform Spearman correlation test
+    cor_test <- tryCatch(
+      cor.test(target_var, current_var, method = "spearman", use = "complete.obs"),
+      error = function(e) NULL
+    )
+        if (!is.null(cor_test)) {
+      cor_results <- rbind(cor_results, 
+                           data.frame(Variable = var_name, 
+                                      Correlation = cor_test$estimate, 
+                                      P_Value = cor_test$p.value))
+    }
+  }
+}
+
+
+correlation_results <- data.frame(cor_results)
+rownames(correlation_results) <- NULL
+correlation_results <- correlation_results[-4,]
+
+correlation_results %>%
+  kable("html", caption = "Highlighted Rows Based on P-Value") %>%
+  kable_styling(full_width = FALSE) %>%
+  row_spec(which(correlation_results$P_Value < 0.05), background = "lightgreen")
+
+```
