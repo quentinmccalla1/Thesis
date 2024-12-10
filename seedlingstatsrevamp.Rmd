@@ -25,18 +25,135 @@ library(knitr)
 
 ```{r}
 brap_data <- read_csv("BRAPALL.csv")
+
+brap_data <- brap_data %>%
+  mutate(across(starts_with("HDR"), ~ as.numeric(.)))
 ```
 
+
 ```{r}
-# Reshape to long format
-long_data <- brap_data %>%
-  pivot_longer(cols = starts_with("Diameter") | starts_with("Height") | starts_with("HDR") | starts_with("Plot"),
-               names_to = c("Variable", "Date", "plot"),
-               names_sep = "(?<=[A-Za-z])(?=\\d)",  # Separate based on letter and number
-               values_to = "Value")
-long_data$Variable <- as.factor(long_data$Variable)
-long_data$Date <- as.factor(long_data$Date)
+brap_data %>%
+  filter(Plot == 8, Visit == 102023) %>%  # Filter for Plot 1 and Visit 102023
+  group_by(Plot) %>%  # Group by the Variable (e.g., Diameter, Height, HDR)
+  summarise(mean_value = mean(Diameter, na.rm = TRUE))  # Calculate mean for each Variable
+
+
 ```
+
+
+```{r}
+# Loop through each variable (Diameter, Height, HDR)
+variables <- c("Diameter", "Height", "HDR")
+results <- data.frame()  # Empty data frame to store the results
+
+for (var in variables) {
+  # Calculate the mean for each plot and visit
+  mean_value <- brap_data %>%
+    filter(Visit == 102024) %>%  # Filter for the specific Visit (102023)
+    group_by(Plot) %>%  # Group by Plot
+    summarise(mean_value = mean(.data[[var]], na.rm = TRUE), .groups = "drop")  # Calculate mean, remove NA
+  
+  # Add the variable name to the result
+  mean_value$Variable <- var
+  
+  # Bind to the results
+  results <- bind_rows(results, mean_value)
+}
+
+# View the final results
+print(results)
+
+```
+
+
+```{r}
+variables <- c("Diameter", "Height", "HDR")  # List of variables
+visits <- unique(brap_data$Visit)  # Get all unique Visit values
+results <- data.frame()  # Empty data frame to store the results
+
+for (var in variables) {
+  for (visit in visits) {  # Loop through each visit
+    # Calculate the mean for each plot and visit
+    mean_value <- brap_data %>%
+      filter(Visit == visit) %>%  # Filter for the current visit
+      group_by(Plot) %>%  # Group by Plot
+      summarise(mean_value = mean(.data[[var]], na.rm = TRUE), .groups = "drop")  # Calculate mean, remove NA
+    
+    # Add the variable name and visit to the result
+    mean_value$Variable <- var
+    mean_value$Visit <- visit
+    
+    # Bind to the results
+    results <- bind_rows(results, mean_value)
+  }
+}
+
+# View the final results
+print(results)
+
+```
+
+Anova Height
+```{r}
+brap_data$Visit <- as.factor(brap_data$Visit)
+brap_data$Plot <- as.factor(brap_data$Plot)
+
+
+# Run separate ANOVA models for each variable
+variables <- c("Height", "Diameter", "HDR")
+results <- list()  # Create an empty list to store results
+
+for (var in variables) {
+  anova_result <- aov(as.formula(paste(var, "~ Visit")), data = brap_data)
+  results[[var]] <- summary(anova_result)  # Store the summary for each variable
+}
+
+# Check the results for each variable
+results
+
+tukey_results <- TukeyHSD(anova_model)
+tukey_results$Visit
+
+```
+
+HDR Visit
+```{r}
+# Run the ANOVA model for HDR with Visit as a factor
+anova_hdr <- aov(HDR ~ Visit, data = brap_data)
+
+# Check the summary of the ANOVA model
+summary(anova_hdr)
+
+# If the ANOVA is significant, run Tukey's post-hoc test
+tukey_hdr <- TukeyHSD(anova_hdr)
+
+# View the Tukey results for Visit
+tukey_hdr$Visit
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -44,7 +161,8 @@ long_data$Date <- as.factor(long_data$Date)
 
 ```{r}
 # Run ANOVA model
-anova_model <- aov(Value ~ Variable * Date, data = long_data)
+brap_data$Visit <- as.factor(brap_data$Visit)
+anova_model <- aov(Height ~ Visit, data = brap_data)
 tukey_results <- TukeyHSD(anova_model)
 
 # Function to extract Tukey's results into a data frame
