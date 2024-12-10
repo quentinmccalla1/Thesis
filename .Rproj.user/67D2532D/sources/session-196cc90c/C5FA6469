@@ -1,0 +1,28 @@
+{
+    "id": "C5FA6469",
+    "path": null,
+    "project_path": null,
+    "type": "object_explorer",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1733850017843.0,
+    "source_on_save": false,
+    "relative_order": 10,
+    "properties": {
+        "id": "d6a0ff6db08248a3aaedd73349a3a2fb",
+        "name": "anova_hdr",
+        "title": "anova_hdr",
+        "language": "R",
+        "source_window_id": "",
+        "Source": "Source"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 3184022619816,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1733850017843,
+    "read_only": false,
+    "read_only_alternatives": []
+}
