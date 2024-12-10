@@ -1,0 +1,19 @@
+"0","Response <- dcc(
+  chrono = Allcrn,  #not the chronology
+  climate =  monthly_means,
+  boot = ""stationary"",
+  method = ""response"",
+   selection = 1:12,
+  var_names = ""Stationary"")
+"
+"1","Running for timespan "
+"1",""
+"1","1989"
+"1",""
+"1"," - "
+"1",""
+"1","2023"
+"1",""
+"1","...
+"
+"0","plot(Response)"

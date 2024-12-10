@@ -95,8 +95,107 @@ for (var in variables) {
 # View the final results
 print(Childsresults)
 
+```
+
+
+BRAP Specific variable plot
+```{r}
+# Initialize an empty data frame to store the results
+Childsresults <- data.frame()
+
+# Choosevariable
+variable_of_interest <- "HDR"
+
+for (visit in visits) {  # Loop through each visit
+  # Calculate the mean for each plot and visit for the "Diameter" variable
+  mean_value <- childs_data %>%
+    filter(Visit == visit) %>%  # Filter for the current visit
+    group_by(Plot) %>%  # Group by Plot
+    summarise(mean_value = mean(.data[[variable_of_interest]], na.rm = TRUE), .groups = "drop")  # Calculate mean, remove NA
+  
+  # Add the variable name and visit to the result
+  mean_value$Variable <- variable_of_interest
+  mean_value$Visit <- visit
+  
+  # Bind to the results
+  Childsresults <- bind_rows(Childsresults, mean_value)
+}
+
+# Pivot the data so that each visit is a separate column
+Childsresults_wide <- Childsresults %>%
+  pivot_wider(names_from = Visit, values_from = mean_value)
+
+# View the final results in a table format using kable
+Childsresults_wide %>%
+  kable("html", caption = "Mean HDR Values by Visit for Childs") %>%
+  kable_styling(full_width = FALSE)
 
 ```
+
+Childs plot specific means
+```{r}
+# Initialize an empty data frame to store the results
+Childsresults <- data.frame()
+
+# Choose the variable of interest
+variable_of_interest <- "Height"
+
+# Define the visits explicitly, ensuring that '122024' is included
+visits <- c("62024", "102023", "102024", "122024")  # List all the visits you want to include
+
+for (visit in visits) {  # Loop through each visit
+  # Calculate the mean for each plot and visit for the chosen variable
+  mean_value <- childs_data %>%
+    filter(Visit == visit) %>%  # Filter for the current visit
+    group_by(Plot) %>%  # Group by Plot
+    summarise(mean_value = mean(.data[[variable_of_interest]], na.rm = TRUE), .groups = "drop")  # Calculate mean, remove NA
+  
+  # Add the variable name and visit to the result
+  mean_value$Variable <- variable_of_interest
+  mean_value$Visit <- visit
+  
+  # Bind to the results
+  Childsresults <- bind_rows(Childsresults, mean_value)
+}
+
+# Pivot the data so that each visit is a separate column
+Childsresults_wide <- Childsresults %>%
+  pivot_wider(names_from = Visit, values_from = mean_value)
+
+# View the final results in a table format using kable
+Childsresults_wide %>%
+  kable("html", caption = "Mean Height Values by Visit for Childs") %>%
+  kable_styling(full_width = FALSE)
+
+```
+
+
+Plot graphs
+```{r}
+
+# Choose the variable of interest (Height in this case)
+variable_of_interest <- "Height"
+
+# Calculate the mean height for each plot and visit
+mean_height <- childs_data %>%
+  group_by(Plot, Visit) %>%  # Group by Plot and Visit
+  summarise(mean_height = mean(.data[[variable_of_interest]], na.rm = TRUE), .groups = "drop")  # Calculate mean height, remove NA
+
+# Create a bar plot with more space between bars
+ggplot(mean_height, aes(x = factor(Plot), y = mean_height, fill = Visit)) +
+  geom_bar(stat = "identity", position = position_dodge(width = .8)) +  # Increase spacing between bars
+  labs(title = "Mean Height by Plot and Visit",
+       x = "Plot",
+       y = "Mean Height") +
+  theme_minimal() +
+  scale_fill_manual(values = c("skyblue", "lightgreen", "orange", "pink")) +  # Customize colors
+  scale_x_discrete(expand = expansion(add = c(2,2))) +  # Add more space around bars on x-axis
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for better readability
+
+```
+
+
+
 
 Factor Visit
 ```{r}
@@ -104,37 +203,7 @@ brap_data$Visit <- as.factor(brap_data$Visit)
 childs_data$Visit <- as.factor(childs_data$Visit)
 
 ```
-
-
-BRAP Anova Height
-```{r}
-# Run the ANOVA model for HDR with Visit as a factor
-BRAPanova_height <- aov(Height ~ Visit, data = brap_data)
-
-# If the ANOVA is significant, run Tukey's post-hoc test
-BRAPtukey_hdr <- TukeyHSD(BRAPanova_hdr)
-
-# View the Tukey results for Visit
-BRAPtukey_hdr$Visit
-
-```
-
-BRAP HDR Visit
-```{r}
-# Run the ANOVA model for HDR with Visit as a factor
-BRAPanova_hdr <- aov(HDR ~ Visit, data = brap_data)
-# Check the summary of the ANOVA model
-summary(BRAPanova_hdr)
-
-# If the ANOVA is significant, run Tukey's post-hoc test
-BRAPtukey_hdr <- TukeyHSD(BRAPanova_hdr)
-
-# View the Tukey results for Visit
-BRAPtukey_hdr$Visit
-
-```
-
-
+Brap ANovw
 
 ```{r}
 # List of variables to analyze
@@ -196,7 +265,7 @@ for (var in variables) {
 final_results <- bind_rows(formatted_results)
 # Display as a styled table
 final_results %>%
-  kable("html", caption = "Tukey's HSD Results for Each Variable") %>%
+  kable("html", caption = "Tukey's HSD Results for BRAP") %>%
   kable_styling(full_width = FALSE) %>%
   row_spec(which(final_results$P_Value < 0.05), background = "lightgreen")
 
@@ -324,7 +393,7 @@ rownames(correlation_results) <- NULL
 correlation_results <- correlation_results[-4,]
 
 correlation_results %>%
-  kable("html", caption = "Highlighted Rows Based on P-Value") %>%
+  kable("html", caption = "Variables vs % Change in density from original survey") %>%
   kable_styling(full_width = FALSE) %>%
   row_spec(which(correlation_results$P_Value < 0.05), background = "lightgreen")
 
@@ -363,7 +432,7 @@ rownames(correlation_results) <- NULL
 correlation_results <- correlation_results[-4,]
 
 correlation_results %>%
-  kable("html", caption = "Highlighted Rows Based on P-Value") %>%
+  kable("html", caption = "Variables vs %Change in original density") %>%
   kable_styling(full_width = FALSE) %>%
   row_spec(which(correlation_results$P_Value < 0.05), background = "lightgreen")
 

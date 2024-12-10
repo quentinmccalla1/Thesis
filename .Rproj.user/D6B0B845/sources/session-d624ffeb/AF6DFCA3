@@ -3,25 +3,25 @@
     "path": "~/GitHub/Thesis1/seedlingstatsrevamp.Rmd",
     "project_path": "seedlingstatsrevamp.Rmd",
     "type": "r_markdown",
-    "hash": "4287795391",
+    "hash": "1623949383",
     "contents": "",
     "dirty": false,
     "created": 1733845537101.0,
     "source_on_save": false,
-    "relative_order": 9,
+    "relative_order": 6,
     "properties": {
         "source_window_id": "",
         "Source": "Source",
         "last_setup_crc32": "d624ffebbb338d19",
-        "cursorPosition": "205,12",
-        "scrollLine": "211"
+        "cursorPosition": "191,49",
+        "scrollLine": "72"
     },
-    "folds": "",
-    "lastKnownWriteTime": 1733849679,
+    "folds": "43|6|68|0|\n72|6|97|0|\n101|6|132|0|\n135|6|169|0|\n",
+    "lastKnownWriteTime": 1733856665,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1733849679211,
+    "last_content_update": 1733856665916,
     "read_only": false,
     "read_only_alternatives": []
 }

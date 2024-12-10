@@ -18,9 +18,22 @@ library(tidyverse)
 ```
 
 ```{r}
-install.packages("C:\\Users\\qrm32\\Downloads\\treeclim_2.0.6.0.tar.gz", repos = NULL, type = "source")
+
+install.packages("lmodel2")
+install.packages("np")
+install.packages("RcppArmadillo")
+
+# Install the package from a local file
+install.packages("C:/Users/qm43/Documents/GitHub/Thesis1/treeclim_2.0.6.0.tar.gz", repos = NULL, type = "source")
+
+
+# Load the library
 library(treeclim)
+
 ```
+
+
+
 
 ```{r}
 files <- c("ChildsCol1.rwl", "SheepCol1.rwl", "UBCol1.rwl", 
@@ -352,8 +365,10 @@ Precip <- Precip %>%
 Response <- dcc(
   chrono = Allcrn,  #not the chronology
   climate =  monthly_means,
-  boot = "std",
-  var_names = "MeanFlow")
+  boot = "stationary",
+  method = "response",
+   selection = 1:12,
+  var_names = "Stationary")
 plot(Response)
 
 #Mean Flows STD bootstrap, April is usually significant
@@ -361,16 +376,18 @@ Response <- dcc(
   chrono = AllCorcrn,
   climate =  monthly_means,
   boot = "std",
- # selection = -11:6,
+ selection = 1:12,
   var_names = "MeanFlow")
 plot(Response)
 
+Response$coef
+
 #Mean Precip STD bootstrap
 PrecipResponse <- dcc(
-  chrono = Allcrn,
+  chrono = AllCorcrn,
   climate =  Precip,
-  boot = "exact",
- # selection = -11:6,
+  boot = "stationary",
+  selection = -1:12,
   var_names = "Precip")
 plot(PrecipResponse)
 
@@ -378,7 +395,7 @@ plot(PrecipResponse)
 ResponseTemp <- dcc(
   chrono = AllCorcrn,
   climate =  MeanTemp,
-  boot = "stationary",
+  boot = "std",
   selection = 1:12,
   var_names = "MeanTemp")
 plot(ResponseTemp)
@@ -398,36 +415,11 @@ summary(ResponseSeas)
 ```
 
 
-
 ```{r}
-
-chronologies_list <- list(AllCorcrn, Allcrn) #UBcrn, LBcrn, Childscrn, Sheepcrn)  # Replace with your actual list of chronologies
-
-# Loop through each chronology and run the dcc function
-for (chrono_data in chronologies_list) {
-  Response <- dcc(
-    chrono = chrono_data,  # Use the current chronology
-    climate = monthly_means,
-    #selection = 1:5,  # Adjust as needed
-    var_names = "MeanFlow"
-  )
-  
-  plot(Response)
-}
-
-
-
-chronologies_list <- list(AllCorcrn, Allcrn, UBcrn)  # Your list of chronologies
-for (chrono_data in chronologies_list) {
-  Response <- dcc(
-    chrono = chrono_data,
-    climate = MeanTemp,
-    var_names = "MeanTemp"
-  )
-  plot(Response)
-}
-
+install.packages("dendroTools")
+library(dendroTools)
 ```
+
 
 
 

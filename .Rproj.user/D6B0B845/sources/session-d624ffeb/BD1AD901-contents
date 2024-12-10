@@ -113,6 +113,30 @@ maxflow <- CampVerdeGuage %>%
 ```
 
 
+Monthly means
+```{r}
+
+monthly_means <- CampVerdeGuage %>%
+  mutate(Year = year(Date), Month = month(Date)) %>%
+  group_by(Year, Month) %>%
+  summarise(Monthly_Mean = mean(Discharge, na.rm = TRUE), .groups = "drop")
+
+monthly_means <- monthly_means %>%
+  pivot_wider(names_from = Month, values_from = Monthly_Mean, names_prefix = "Month_") %>%
+  arrange(Year)
+
+# Rename the columns to use month names
+month_names <- c("January", "February", "March", "April", "May", "June", 
+                 "July", "August", "September", "October", "November", "December")
+
+# Assign the month names to the columns (excluding "Year" column)
+colnames(monthly_means)[2:13] <- month_names
+
+
+
+
+```
+
 
 
 
@@ -134,21 +158,48 @@ PDSImean <- PDSI %>%
 
 Mean Yearly Temp Yavapai county
 
+
 ```{r}
-YearlyTemp <- read_csv("AverageMonthlyTemp-YavapaiCounty_1993-2024.csv")
+
+YearlyTemp <- read.csv("AverageMonthlyTemp-YavapaiCounty_1993-2024.csv")
 
 MeanTemp <- YearlyTemp %>%
-  group_by(year = Year) %>%  # If 'Year' is already numeric
-  summarise(mean_value = mean(`Degrees F`, na.rm = TRUE))
+  group_by(Year, Month) %>%
+  summarise(mean_value = mean(`Value`, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(names_from = Month, values_from = mean_value, names_prefix = "Month_") %>%
+  arrange(Year)
+
+# Rename columns to month names
+month_names <- c("January", "February", "March", "April", "May", "June", 
+                 "July", "August", "September", "October", "November", "December")
+
+# Assign the month names to the columns (excluding the "Year" column)
+colnames(MeanTemp)[2:13] <- month_names
+
+# View the resulting data
+print(MeanTemp)
 ```
 
-Precip
+
 ```{r}
 Precip <- read.csv("YavapaiPrecip.csv")
 
-Precip <-  Precip %>%
-  group_by(year = Year) %>%  # If 'Year' is already numeric
-  summarise(total = sum(`Value`, na.rm = TRUE))
+
+Precip <- Precip %>%
+  group_by(Year, Month) %>%
+  summarise(mean_value = mean(`Value`, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(names_from = Month, values_from = mean_value, names_prefix = "Month_") %>%
+  arrange(Year)
+
+# Rename columns to month names
+month_names <- c("January", "February", "March", "April", "May", "June", 
+                 "July", "August", "September", "October", "November", "December")
+
+# Assign the month names to the columns (excluding the "Year" column)
+colnames(Precip)[2:13] <- month_names
+
+# View the resulting data
+print(Precip)
 
 
 ```

@@ -1,6 +1,0 @@
-"0","# Run the ANOVA model for HDR with Visit as a factor"
-"0","BRAPanova_height <- aov(Height ~ Visit, data = brap_data)"
-"0","# Check the summary of the ANOVA model"
-"0","summary(BRAPanova_hdr)"
-"2","Error: object 'BRAPanova_hdr' not found
-"
