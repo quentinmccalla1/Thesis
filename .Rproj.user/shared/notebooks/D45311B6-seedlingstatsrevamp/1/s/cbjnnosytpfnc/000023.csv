@@ -1,4 +1,0 @@
-"0","brap_data %>%"
-"0","  filter(Plot == 8, Visit == 102023) %>%  # Filter for Plot 1 and Visit 102023"
-"0","  group_by(Plot) %>%  # Group by the Variable (e.g., Diameter, Height, HDR)"
-"0","  summarise(mean_value = mean(Diameter, na.rm = TRUE))  # Calculate mean for each Variable"

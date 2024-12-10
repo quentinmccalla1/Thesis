@@ -1,0 +1,16 @@
+"0","brap_data <- read_csv(""BRAPALL.csv"")"
+"2","[1mRows: [22m[34m1014[39m [1mColumns: [22m[34m5[39m"
+"2","[36m──[39m [1mColumn specification[22m [36m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (1): HDR
+[32mdbl[39m (4): Diameter, Height, Plot, Visit"
+"2","
+[36mℹ[39m Use `spec()` to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set `show_col_types = FALSE` to quiet this message."
+"0","brap_data <- brap_data %>%"
+"0","  mutate(across(starts_with(""HDR""), ~ as.numeric(.)))"
+"2","Error: no more error handlers available (recursive errors?); invoking 'abort' restart
+"
+"2","Warning: type 29 is unimplemented in 'type2char'"
+"2","Error: Function versionInfo not found in RStudio
+"

@@ -1,4 +1,0 @@
-"0","Childs <- read.tucson(""ChildsCol1.rwl"")"
-"2","Error in read.tucson(""ChildsCol1.rwl"") : 
-  could not find function ""read.tucson""
-"

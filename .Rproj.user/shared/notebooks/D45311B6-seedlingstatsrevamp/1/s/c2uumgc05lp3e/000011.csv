@@ -1,7 +1,0 @@
-"0","brap_data <- brap_data %>%
-  mutate(across(starts_with(""HDR""), ~ as.numeric(.)))
-"
-"2","Warning: [38;5;232mThere was 1 warning in `mutate()`.[39m
-[38;5;232m[36mℹ[38;5;232m In argument: `across(starts_with(""HDR""), ~as.numeric(.))`.[39m
-Caused by warning:
-[33m![39m NAs introduced by coercion"

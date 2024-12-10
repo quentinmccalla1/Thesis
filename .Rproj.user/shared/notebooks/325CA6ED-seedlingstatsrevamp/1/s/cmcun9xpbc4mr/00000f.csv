@@ -1,0 +1,46 @@
+"0",""
+"0","install.packages(""tidyverse"",repos = ""https://cloud.r-project.org"")"
+"2","trying URL 'https://cloud.r-project.org/bin/windows/contrib/4.4/tidyverse_2.0.0.zip'
+"
+"2","Content type 'application/zip'"
+"2"," length 431716 bytes (421 KB)
+"
+"2","downloaded 421 KB
+
+"
+"1","package ‘tidyverse’ successfully unpacked and MD5 sums checked
+"
+"1","
+"
+"1",""
+"1","The downloaded binary packages are in
+	C:\Users\qm43\AppData\Local\Temp\RtmpuCU4xP\downloaded_packages"
+"1",""
+"1","
+"
+"0","install.packages(""gridExtra"")"
+"2","trying URL 'https://cran.rstudio.com/bin/windows/contrib/4.4/gridExtra_2.3.zip'
+"
+"2","Content type 'application/zip'"
+"2"," length 1109695 bytes (1.1 MB)
+"
+"2","downloaded 1.1 MB
+
+"
+"1","package ‘gridExtra’ successfully unpacked and MD5 sums checked
+"
+"1","
+"
+"1",""
+"1","The downloaded binary packages are in
+	C:\Users\qm43\AppData\Local\Temp\RtmpuCU4xP\downloaded_packages"
+"1",""
+"1","
+"
+"0","install.packages(""grid"")"
+"0","library(grid)"
+"0","library(kableExtra)"
+"0","library(tidyverse)"
+"0","library(knitr)"
+"0",""
+"0",""

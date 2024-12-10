@@ -1,3 +1,0 @@
-"0","meanmin <- CampVerdeGuage %>%"
-"0","  group_by(year = year(Date)) %>%  # Corrected here"
-"0","  summarise(min = min(Discharge, na.rm = TRUE))  # Replace 'Discharge' with your parameter name"
