@@ -1,0 +1,11 @@
+"0","Response <- dcc(
+  chrono = Allcrn,  #not the chronology
+  climate =  monthly_means,
+  boot = ""mbb"",
+  method = ""correlation"",
+   selection = 1:12,
+  var_names = ""Mean Flow"")
+"
+"2","Error in match.arg(boot, c(""stationary"", ""std"", ""exact"")) : 
+  'arg' should be one of “stationary”, “std”, “exact”
+"
