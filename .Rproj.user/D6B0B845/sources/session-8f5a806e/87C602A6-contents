@@ -1,0 +1,160 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+GW PLOTS
+
+```{r}
+library(tidyverse)
+
+library(ggplot2)
+```
+
+Beasley Well 9
+
+Import Data
+```{r}
+Well9JFebtoAug <- read_csv("BRAPWell9_022924to1211.csv")
+Well4FebtoAug <- read_csv("BRAPWell4_02292024to08072024.csv")
+#Well2bFebtoAug <- read_csv("BRAWell2b_02292024to08072024.csv")
+
+
+```
+
+
+
+
+
+
+Plot
+Well 
+```{r}
+# Convert Date if necessary
+Well9JFebtoAug$Date <- as.POSIXct(Well9JFebtoAug$Date, format = "%m/%d/%Y %H:%M")  # Adjust format
+
+# Ensure M column is numeric
+Well9JFebtoAug$M <- as.numeric(Well9JFebtoAug$M)
+
+# Re-run the plot code
+ggplot(Well9JFebtoAug, aes(x = Date, y = M)) +
+  geom_line(color = "black", size = 0.5) +  # Reduce line size
+  labs(title = "Beasley Flat Well 9",
+       x = "Date",
+       y = "Meters above ground surface") +
+  theme_minimal() +
+  geom_hline(yintercept = 0, color = "black", linetype = "dashed") +
+  scale_x_datetime(date_labels = "%Y-%m-%d", date_breaks = "2 month") +
+  scale_y_continuous(limits = c(min(Well9JFebtoAug$M, na.rm = TRUE), max(Well9JFebtoAug$M, na.rm = TRUE))) +
+  theme(axis.text.y = element_text(size = 8))  # Adjust y-axis text size
+
+
+```
+
+```{r}
+#GW 9 stats
+
+summary(Well9JFebtoAug$M)
+
+Well9JFebtoAug %>%
+  filter(M == min(M, na.rm = TRUE)) %>%
+  pull(Date)
+```
+
+
+```{r}
+# Ensure Date is in the correct format
+Well9JFebtoAug <- Well9JFebtoAug %>%
+  mutate(Date = as.POSIXct(Date, format = "%m/%d/%Y %H:%M"))  # Specify the correct format for MM/DD/YYYY HH:MM
+
+# Remove any rows with NA in Date (if necessary)
+Well9JFebtoAug <- Well9JFebtoAug %>%
+  filter(!is.na(Date))
+
+# Add Inundated column based on depth (M > 0)
+Well9JFebtoAug <- Well9JFebtoAug %>%
+  mutate(Inundated = `M` > 0)  # TRUE if M > 0
+
+# Calculate time differences and sum durations of inundation
+total_inundated_time <- Well9JFebtoAug %>%
+  arrange(Date) %>%
+  mutate(Time_Diff = c(0, as.numeric(diff(Date)) / 3600)) %>%  # Convert seconds to hours
+  filter(Inundated == TRUE) %>%
+  summarise(Total_Time_Hours = sum(Time_Diff, na.rm = TRUE))
+
+# Display the result in days
+total_inundated_time / 24
+
+```
+
+
+
+
+```{r}
+calculate_inundation_time <- function(data, date_column, ground_elevation_column, threshold = 0) {
+  # Ensure Date is in datetime format
+  data <- data %>%
+    mutate(!!sym(date_column) := as.POSIXct(!!sym(date_column), format = "%Y-%m-%d %H:%M:%S"))  # Specify the format
+  # Add Inundated column based on ground elevation and threshold
+  data <- data %>%
+    mutate(Inundated = !!sym(ground_elevation_column) <= threshold)  # TRUE if Ground Surface is below threshold
+  # Calculate time differences and sum durations of inundation
+  total_inundated_time <- data %>%
+    arrange(!!sym(date_column)) %>%
+    mutate(Time_Diff = c(0, as.numeric(diff(!!sym(date_column))) / 3600)) %>%  # Convert seconds to hours
+    filter(Inundated == TRUE) %>%
+    summarise(Total_Time_Hours = sum(Time_Diff, na.rm = TRUE))  # Total inundated time in hour
+  return(total_inundated_time)
+}
+
+# Run the function to calculate inundation time for Well9JFebtoAug dataset
+resultLB1 <- calculate_inundation_time(Well9JFebtoAug, "Date", "M", threshold = -.44)
+print(resultLB1)
+
+
+```
+
+
+
+```{r}
+#Well 4
+
+Well4FebtoAug$Date <- as.POSIXct(Well4FebtoAug$Date, format = "%m/%d/%Y %H:%M")  # Adjust format
+Well4FebtoAug <- Well4FebtoAug %>%
+  group_by(Date) %>%
+  summarise(Ft = mean(Ft, na.rm = TRUE))  # Replace with appropriate summary function
+
+# Plot the data
+ggplot(Well4FebtoAug, aes(x = Date, y = Ft)) +
+  geom_line(color = "red", size = 1) +
+  labs(title = "Beasley Flat Well 4",
+       x = "Date",
+       y = "Ft") +
+  theme_minimal() +
+  scale_x_datetime(date_labels = "%Y-%m-%d", date_breaks = "1 month")
+
+
+
+#Well 2b
+Well2bFebtoAug$Date <- as.POSIXct(Well2bFebtoAug$Date, format = "%m/%d/%Y %H:%M")  # Adjust format
+Well2bFebtoAug <- Well2bFebtoAug %>%
+  group_by(Date) %>%
+  summarise(Ft = mean(Ft, na.rm = TRUE))  # Replace with appropriate summary function
+
+# Plot the data
+ggplot(Well2bFebtoAug, aes(x = Date, y = Ft)) +
+  geom_line(color = "gray", size = 1) +
+  labs(title = "Beasley Flat Well 2b",
+       x = "Date",
+       y = "Ft") +
+  theme_minimal() +
+  scale_x_datetime(date_labels = "%Y-%m-%d", date_breaks = "1 month")
+
+
+par(mfrow = c(2, 3))
+
+```
+
+
