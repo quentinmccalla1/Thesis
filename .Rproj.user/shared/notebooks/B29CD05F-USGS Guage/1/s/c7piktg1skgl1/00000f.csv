@@ -1,0 +1,5 @@
+"0","SummerFlows<- CampVerdeGuage %>%"
+"0","  filter(Month %in% c(""06"", ""07"", ""08"", ""09""))"
+"0","SummerFlows <- SummerFlows %>%"
+"0","  group_by(Year) %>%"
+"0","  summarise(SummerFlows = mean(Discharge, na.rm = TRUE)) "

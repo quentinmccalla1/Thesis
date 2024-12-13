@@ -1,0 +1,7 @@
+"0","Sheepcrn$Year <- seq(1988, by = 1, length.out = nrow(Sheepcrn))"
+"0","Childscrn$Year <- seq(1993, by = 1, length.out = nrow(Childscrn))"
+"0","UBcrn$Year <- seq(1994, by= 1, length.out= nrow(UBcrn))"
+"0","LBcrn$Year <- seq(1994, by= 1, length.out = nrow(LBcrn))"
+"0","Allcrn$Year <- seq(1988, by = 1, length.out = nrow(Allcrn))"
+"0","Crosscrn$Year <- seq(1994, by = 1, length.out = nrow(Crosscrn))"
+"0",""
