@@ -639,7 +639,7 @@ for (site in c("Allcrn","AllCorcrn","Sheepcrn","LBcrn","UBcrn","Childscrn")) {  
 }
 
 # Print the results for each site
-print(results)
+kable(results)
 ```
 
 
