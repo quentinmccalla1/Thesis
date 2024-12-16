@@ -1,7 +1,0 @@
-"0","library(dendroTools)
-"
-"2","Warning: package ‘dendroTools’ was built under R version 4.4.2"
-"2","Registered S3 method overwritten by 'data.table':
-  method           from
-  print.data.table     
-"

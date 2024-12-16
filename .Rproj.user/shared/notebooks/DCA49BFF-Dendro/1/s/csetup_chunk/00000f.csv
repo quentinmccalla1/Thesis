@@ -1,8 +1,1 @@
 "0","knitr::opts_chunk$set(echo = TRUE)"
-"2","Warning message:
-"
-"2","In .recacheSubclasses(def@className, def, env) :"
-"2","
- "
-"2"," undefined subclass ""ndiMatrix"" of class ""replValueSp""; definition not updated
-"

@@ -71,18 +71,32 @@
 "
 "2",""
 "2","The downloaded source packages are in
-	‘C:\Users\qrm32\AppData\Local\Temp\RtmpcBbSWd\downloaded_packages’"
+	‘C:\Users\qrm32\AppData\Local\Temp\RtmpoVz8kl\downloaded_packages’"
 "2",""
 "2","
 "
-"0","install.packages(""np"")"
+"0","# Install the package from a local file"
+"0","install.packages(""C:/Users/qm43/Documents/GitHub/Thesis1/treeclim_2.0.6.0.tar.gz"", repos = NULL, type = ""source"")"
 "2","Installing package into ‘C:/Users/qrm32/AppData/Local/R/win-library/4.3’
 (as ‘lib’ is unspecified)
 "
+"1","Warning: invalid package 'C:/Users/qm43/Documents/GitHub/Thesis1/treeclim_2.0.6.0.tar.gz'
+"
+"1","Error: ERROR: no packages specified
+"
+"1","Warning in "
+"1",""
+"1","install.packages"
+"1",""
+"1"," :
+  "
+"1",""
+"1","installation of package ‘C:/Users/qm43/Documents/GitHub/Thesis1/treeclim_2.0.6.0.tar.gz’ had non-zero exit status"
+"1",""
 "1","
 "
-"1",""
-"1","  There is a binary version available but the source version is later"
-"1",""
-"1",":
+"0","# Load the library"
+"0","library(treeclim)"
+"2","Loading required package: Rcpp
 "
+"2","Warning: undefined subclass ""ndiMatrix"" of class ""replValueSp""; definition not updated"
