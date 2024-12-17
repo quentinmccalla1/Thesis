@@ -41,6 +41,21 @@ brap_data <- brap_data %>%
 childs_data <- childs_data %>%
   mutate(across(starts_with("HDR"), ~ as.numeric(.)))
 ```
+```{r}
+mean_value <- childs_data %>%
+  group_by(Visit) %>%  # Group by Visit
+  summarise(
+    mean_Height = mean(Height, na.rm = TRUE),     # Calculate mean Height
+    mean_Diameter = mean(Diameter, na.rm = TRUE),
+    mean_hdr = mean(HDR, na.rm = TRUE ), # Calculate mean Diameter
+    .groups = "drop"  # Ungroup the data after summarisation
+  )
+kable(mean_value,
+      caption = "Childs Means")%>%
+  kable_styling(full_width = FALSE, position = "center", 
+                bootstrap_options = c("striped", "bordered"))
+
+```
 
 
 BRAP plot level means all visits
@@ -394,6 +409,8 @@ for (var_name in column_names) {
 correlation_results <- data.frame(cor_results)
 rownames(correlation_results) <- NULL
 correlation_results <- correlation_results[-4,]
+
+print(correlation_results)
 
 correlation_results %>%
   kable("html", caption = "Variables vs % Change in density from original survey") %>%

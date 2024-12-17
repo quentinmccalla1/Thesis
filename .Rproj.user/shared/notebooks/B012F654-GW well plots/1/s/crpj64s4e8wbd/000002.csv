@@ -1,0 +1,23 @@
+"0","```r
+calculate_inundation_time <- function(data, date_column, ground_elevation_column, threshold = 0) {
+  # Ensure Date is in datetime format
+  data <- data %>%
+    mutate(!!sym(date_column) := as.POSIXct(!!sym(date_column), format = \"%Y-%m-%d %H:%M:%S\"))  # Specify the format
+  # Add Inundated column based on ground elevation and threshold
+  data <- data %>%
+    mutate(Inundated = !!sym(ground_elevation_column) <= threshold)  # TRUE if Ground Surface is below threshold
+  # Calculate time differences and sum durations of inundation
+  total_inundated_time <- data %>%
+    arrange(!!sym(date_column)) %>%
+    mutate(Time_Diff = c(0, as.numeric(diff(!!sym(date_column))) / 3600)) %>%  # Convert seconds to hours
+    filter(Inundated == TRUE) %>%
+    summarise(Total_Time_Hours = sum(Time_Diff, na.rm = TRUE))  # Total inundated time in hour
+  return(total_inundated_time)
+}
+
+# Run the function to calculate inundation time for Well9JFebtoAug dataset
+resultLB1 <- calculate_inundation_time(Well9JFebtoAug, \"Date\", \"M\", threshold = -.44)
+print(resultLB1)
+
+
+```"
