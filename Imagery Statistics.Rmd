@@ -8,20 +8,63 @@ date: "2024-11-04"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+
 ```{r}
-install.packages("readxl")
-library("readxl")
+ImageryAreas <- read.csv("ImageryStatistics150m.csv")
+# View the first few rows and column names
+head(ImageryAreas)
+colnames(ImageryAreas)
+
+# Check the structure of the dataset
+str(ImageryAreas)
 ```
 
+
+
 ```{r}
-ImageryAreas <- read_excel("ImageryStatistics150m.xlsx")
+library(tidyverse)
+
+# Reshape and process the data
+tidy_data <- ImageryAreas %>%
+  # Reshape all year columns into long format
+  pivot_longer(
+    cols = starts_with("X"),  # Select year columns
+    names_to = "Year",        # New column for year
+    values_to = "Area"        # New column for area
+  ) %>%
+  # Identify the class from original column names
+  mutate(
+    Year = as.numeric(gsub("\\D", "", Year)),  # Extract numeric year
+    Class = case_when(
+      str_detect(Year, "\\.1$") ~ "Childs",    # Check for '.1' suffix
+      str_detect(Year, "\\.2$") ~ "Beasley",  # Check for '.2' suffix
+      TRUE ~ "Sheep"                         # Default to Sheep
+    )
+  ) %>%
+  # Remove rows with missing or NA values
+  filter(!is.na(Area)) %>%
+  select(Class, Year, Area)  # Keep only relevant columns
+
+# Create the plot
+ggplot(tidy_data, aes(x = Year, y = Area, color = Class, group = Class)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  labs(
+    title = "Changes in Class Area Over Time",
+    x = "Year",
+    y = "Area",
+    color = "Class"
+  ) +
+  theme_minimal() +
+  theme(
+    text = element_text(size = 12),
+    legend.position = "bottom"
+  )
+
 ```
 
 
 ```{r}
-library(readxl)
-library(dplyr)
-library(ggplot2)
 
 # Load the data
 data <- read_excel("ImageryStatistics150m.xlsx")

@@ -575,7 +575,7 @@ climate_data <- list(
 results <- list()
 #,
 # Loop over the sites,
-for (site in c("Allcrn","AllCorcrn","Sheepcrn","LBcrn","UBcrn","Childscrn")) {  # Replace with your actual site names
+for (site in c("AllCorcrn")) {  # Replace with your actual site names
   site_results <- list()
   
  # List to store the significant months and correlations for each site
@@ -598,7 +598,7 @@ for (site in c("Allcrn","AllCorcrn","Sheepcrn","LBcrn","UBcrn","Childscrn")) {  
       climate = climate,
       boot = "exact",
       method = "response",
-      selection = 1:12,
+      selection = -10:9,
       var_names = var_name
     )
     
