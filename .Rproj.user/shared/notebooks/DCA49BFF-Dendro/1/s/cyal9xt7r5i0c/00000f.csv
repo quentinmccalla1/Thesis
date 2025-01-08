@@ -1,0 +1,5 @@
+"0",""
+"0","# Rename 'date' column in Crosscrn to 'Date' if necessary"
+"0","colnames(annual_means)[colnames(annual_means) == ""year""] <- ""Year"""
+"2","Error: object 'annual_means' not found
+"
