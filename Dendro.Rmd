@@ -36,7 +36,7 @@ library(treeclim)
 
 
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 files <- c("ChildsCol1.rwl", "SheepCol1.rwl", "UBCol1.rwl", 
            "LBCol1.rwl", "All.rwl", "AllCorrelated.rwl", "All.3+.rwl")
 
@@ -95,6 +95,8 @@ plot.crn(Allcrn, add.spline = TRUE, nyears = 5)
 
 plot.crn(Crosscrn, add.spline = TRUE, nyears = 5)
 
+plot(AllCor_bai_crn, add.spline = TRUE, nyears = 5)
+
 
 ```
 
@@ -151,6 +153,10 @@ Cross_bai_crn$Year <- seq(1994, by= 1, length.out= nrow(Crosscrn))
 ```
 
 All bai plot
+```{r}
+ggplot(Cross_bai_crn, aes(x = Year, y = std)) +
+  geom_line(size = 0.5)   # Default line size for dataset lines
+```
 
 
 ```{r}

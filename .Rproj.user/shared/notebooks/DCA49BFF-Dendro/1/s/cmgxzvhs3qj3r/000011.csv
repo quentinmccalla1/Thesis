@@ -23,17 +23,4 @@
 "0",""
 "0","  theme_minimal() +"
 "0","  theme(legend.title = element_blank())  # Optionally remove legend title"
-"2","Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-Please use `linewidth` instead."
-"0","install.packages(""dplR"")"
-"1","Warning in "
-"1",""
-"1","install.packages"
-"1",""
-"1"," :
-  "
-"1",""
-"1","package ‘dplR’ is in use and will not be installed"
-"1",""
-"1","
-"
+"0",""
