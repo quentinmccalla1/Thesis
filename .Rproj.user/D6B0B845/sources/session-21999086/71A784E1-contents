@@ -573,9 +573,9 @@ climate_data <- list(
 
 # List to store results for each site
 results <- list()
-
-# Loop over the sites
-for (site in c("LBcrn","UBcrn","Childscrn","Allcrn","AllCorcrn","Sheepcrn")) {  # Replace with your actual site names
+#,
+# Loop over the sites,
+for (site in c("AllCorcrn")) {  # Replace with your actual site names
   site_results <- list()
   
  # List to store the significant months and correlations for each site
@@ -596,9 +596,9 @@ for (site in c("LBcrn","UBcrn","Childscrn","Allcrn","AllCorcrn","Sheepcrn")) {  
     response <- dcc(
       chrono = get(site),  # Use the site variable dynamically
       climate = climate,
-      boot = "std",
-      method = "correlation",
-      selection = 1:12,
+      boot = "exact",
+      method = "response",
+      selection = -10:9,
       var_names = var_name
     )
     
@@ -639,7 +639,7 @@ for (site in c("LBcrn","UBcrn","Childscrn","Allcrn","AllCorcrn","Sheepcrn")) {  
 }
 
 # Print the results for each site
-print(results)
+kable(results)
 ```
 
 
