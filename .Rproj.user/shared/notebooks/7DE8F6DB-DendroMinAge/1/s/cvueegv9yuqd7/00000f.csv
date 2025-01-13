@@ -1,7 +1,0 @@
-"0","# Step 1: Count the number of observations per site (ID2)"
-"0","site_counts <- DendroMerge %>%"
-"0","  count(`Site ID`),"
-"2","Error: unexpected ',' in:
-""site_counts <- DendroMerge %>%
-  count(`Site ID`),""
-"
