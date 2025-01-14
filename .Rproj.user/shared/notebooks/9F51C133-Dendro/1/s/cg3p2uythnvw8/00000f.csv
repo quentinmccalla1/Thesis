@@ -1,0 +1,2 @@
+"0","ggplot(Cross_bai_crn, aes(x = Year, y = std)) +"
+"0","  geom_line(size = 0.5)   # Default line size for dataset lines"

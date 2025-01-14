@@ -25,10 +25,6 @@ Well4FebtoAug <- read_csv("BRAPWell4_02292024to08072024.csv")
 ```
 
 
-
-
-
-
 Plot
 Well 
 ```{r}

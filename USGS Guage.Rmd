@@ -32,11 +32,13 @@ CampVerdeGuage <- CampVerdeGuage %>%     #Rename column to discharge
 
 
 
-```{r fig.height=8, fig.width=12}
+```{r fig.height=8, fig.width=20}
 #All NAIP
 
 ggplot(data = CampVerdeGuage, mapping = aes(x = Date, y = Discharge), log("y")) + 
-  geom_line()+
+  geom_line()
+
++
   labs(title = "Chlids")+
     geom_vline(xintercept = as.Date("2023-06-15"), color = "red", linetype = "dashed", size = 1)+
   geom_vline(xintercept = as.Date("2021-10-14"), color = "red", linetype = "dashed", size = 1)+ 
@@ -57,8 +59,6 @@ geom_hline(yintercept = 10500, color = "blue", linetype = "dashed", size = 1)+
 
 
 ```
-
-
 
 
 Mean annual values
