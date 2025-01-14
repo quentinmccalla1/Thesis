@@ -94,6 +94,16 @@ names(rwl_list) <- c("Childs", "Sheep", "UB", "LB", "ALL", "ALLCor", "Crossdated
 # Step 1: Read in raw ring-width files
 rwl_list <- lapply(files, read.tucson)
 
+# Step 2: Calculate BAI for each dataset
+bai_list <- lapply(rwl_list, bai.in)
+
+
+ChildsBAI <- chron(bai_list$Childs)
+plot(CrossBAI)
+plot(ChildsBAI)
+write.csv(CrossBAI, "CrossBAI.csv")
+
+
 
 ```
 
