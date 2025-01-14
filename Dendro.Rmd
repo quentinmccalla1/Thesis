@@ -71,6 +71,10 @@ All_bai_crn <- bai_chron_list[["ALL"]]
 AllCor_bai_crn <- bai_chron_list[["ALLCor"]]
 Cross_bai_crn <- bai_chron_list[["Crossdated"]]
 
+AllcorBAI <-bai.in(AllCorcrn)
+write.csv(AllcorBAI, "CrossdatedBAI.csv")
+
+
 Childscrn <- rwl_chron_list[["Childs"]]
 Sheepcrn <- rwl_chron_list[["Sheep"]]
 UBcrn <- rwl_chron_list[["UB"]]
@@ -80,6 +84,18 @@ AllCorcrn <- rwl_chron_list[["ALLCor"]]
 Crosscrn <- rwl_chron_list[["Crossdated"]]
 ```
 
+BAI
+```{r}
+# List of raw ring-width files
+files <- c("ChildsCol1.rwl", "SheepCol1.rwl", "UBCol1.rwl", 
+           "LBCol1.rwl", "All.rwl", "AllCorrelated.rwl", "All.3+.rwl")
+# Assign names to the datasets
+names(rwl_list) <- c("Childs", "Sheep", "UB", "LB", "ALL", "ALLCor", "Crossdated")
+# Step 1: Read in raw ring-width files
+rwl_list <- lapply(files, read.tucson)
+
+
+```
 
 
 RWI Plots
@@ -152,11 +168,6 @@ All_bai_crn$Year <- seq(1988, by = 1 , length.out = nrow(Allcrn))
 Cross_bai_crn$Year <- seq(1994, by= 1, length.out= nrow(Crosscrn))
 ```
 
-All bai plot
-```{r}
-ggplot(Cross_bai_crn, aes(x = Year, y = std)) +
-  geom_line(size = 0.5)   # Default line size for dataset lines
-```
 
 
 ```{r}
