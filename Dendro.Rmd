@@ -46,33 +46,12 @@ rwl_list <- lapply(files, read.tucson)
 # Assign names to the datasets for clarity
 names(rwl_list) <- c("Childs", "Sheep", "UB", "LB", "ALL", "ALLCor", "Crossdated")
 
-# Step 2: Calculate BAI using the raw data
-bai_list <- lapply(rwl_list, bai.in)
-
-# Step 3: Turn BAI datasets into chronologies
-bai_chron_list <- lapply(bai_list, function(bai) {
-  # Convert BAI data to a format suitable for `chron` function
-  bai_detrended <- detrend(rwl = bai, method = "AgeDepSpline")
-  chron(bai_detrended)
-})
 
 # Step 4: Detrend original ring-width data for comparison
 detrended_list <- lapply(rwl_list, function(rwl) detrend(rwl = rwl, method = "AgeDepSpline"))
 
 # Step 5: Create ring-width chronologies
 rwl_chron_list <- lapply(detrended_list, chron)
-
-# Access individual chronologies for both BAI and ring-width data
-Childs_bai_crn <- bai_chron_list[["Childs"]]
-Sheep_bai_crn <- bai_chron_list[["Sheep"]]
-UB_bai_crn <- bai_chron_list[["UB"]]
-LB_bai_crn <- bai_chron_list[["LB"]]
-All_bai_crn <- bai_chron_list[["ALL"]]
-AllCor_bai_crn <- bai_chron_list[["ALLCor"]]
-Cross_bai_crn <- bai_chron_list[["Crossdated"]]
-
-AllcorBAI <-bai.in(AllCorcrn)
-write.csv(AllcorBAI, "CrossdatedBAI.csv")
 
 
 Childscrn <- rwl_chron_list[["Childs"]]
@@ -99,9 +78,7 @@ bai_list <- lapply(rwl_list, bai.in)
 
 
 ChildsBAI <- chron(bai_list$Childs)
-plot(CrossBAI)
-plot(ChildsBAI)
-write.csv(CrossBAI, "CrossBAI.csv")
+
 
 
 
@@ -126,16 +103,6 @@ plot(AllCor_bai_crn, add.spline = TRUE, nyears = 5)
 
 ```
 
-add year
-```{r}
-Sheepcrn$Year <- seq(1988, by = 1, length.out = nrow(Sheepcrn))
-Childscrn$Year <- seq(1993, by = 1, length.out = nrow(Childscrn))
-UBcrn$Year <- seq(1994, by= 1, length.out= nrow(UBcrn))
-LBcrn$Year <- seq(1994, by= 1, length.out = nrow(LBcrn))
-Allcrn$Year <- seq(1988, by = 1, length.out = nrow(Allcrn))
-Crosscrn$Year <- seq(1994, by = 1, length.out = nrow(Crosscrn))
-
-```
 
 RWI ALL plot
 ```{r}
@@ -403,7 +370,7 @@ for (site in c("LBcrn")) {  # Replace with your actual site names
       climate = climate,
       boot = "std",
       method = "correlation",
-      selection = 1:12,
+      selection = -10:9,
       var_names = var_name
     )
     
@@ -555,7 +522,7 @@ for (site in c("AllCorcrn")) {  # Replace with your actual site names
       chrono = get(site),  # Use the site variable dynamically
       climate = climate,
       boot = "exact",
-      method = "response",
+      method = "correlation",
       selection = -10:9,
       var_names = var_name
     )
