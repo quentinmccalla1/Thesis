@@ -60,11 +60,6 @@ geom_hline(yintercept = 10500, color = "blue", linetype = "dashed", size = 1)+
 
 ```
 
-```{r}
-write.csv(CampVerdeGuage, "VerdeGuage.csv", row.names = FALSE)
-```
-
-
 
 Mean annual values
 ```{r}

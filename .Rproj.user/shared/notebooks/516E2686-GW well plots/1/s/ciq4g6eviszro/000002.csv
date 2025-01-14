@@ -1,0 +1,7 @@
+"0","```r
+Well9JFebtoAug <- read_csv(\"BRAPWell9_022924to1211.csv\")
+Well4FebtoAug <- read_csv(\"BRAPWell4_02292024to08072024.csv\")
+#Well2bFebtoAug <- read_csv(\"BRAWell2b_02292024to08072024.csv\")
+
+
+```"
