@@ -3,7 +3,7 @@
     "path": "~/GitHub/Thesis/Thesis1/Dendro.Rmd",
     "project_path": "Dendro.Rmd",
     "type": "r_markdown",
-    "hash": "3621647971",
+    "hash": "0",
     "contents": "",
     "dirty": false,
     "created": 1732924097901.0,
@@ -12,9 +12,9 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "last_setup_crc32": "9cb2806fbb338d19",
+        "last_setup_crc32": "",
         "cursorPosition": "198,24",
-        "scrollLine": "188",
+        "scrollLine": "0",
         "disableDependencyDiscovery": "1"
     },
     "folds": "287|6|340|0|\n393|51|435|0|\n441|34|484|0|\n",
