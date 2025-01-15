@@ -25,7 +25,7 @@ DendroMerge <- DendroMerge %>%
                       ))
 
 DendroMerge <- DendroMerge %>%
-  rename(#`Site ID` = `ID2`)  
+  rename(`Site ID` = `ID2`) 
 
 
 
@@ -48,15 +48,85 @@ scale_x_continuous(
 )+ theme_minimal()
 ```
 
+```{r}
+library(ggplot2)
+library(dplyr)
+
+# Get unique site IDs
+site_ids <- unique(DendroMerge$`Site ID`)
+
+# Loop through each site ID and generate a plot
+for (site in site_ids) {
+  # Filter data for the current site
+  site_data <- DendroMerge %>% filter(`Site ID` == site)
+  
+  # Create the plot
+  p <- ggplot(site_data, aes(x = PithHand, y = `Diameter (CM)`, color = `Site ID`)) +
+    labs(x = "Pith Year", y = "Diameter (cm)", title = paste("Diameter vs Pith Date - Site:", site)) +
+    geom_point(shape = 18, size = 3) +
+    geom_smooth(method = "lm", se = FALSE, size = 1.5) +
+    scale_y_continuous(limits = c(0, 100)) +
+    scale_x_continuous(limits = c(1985, 2020)) +
+    theme_minimal()
+  
+  # Save or print the plot
+  print(p) # To view in the R console
+  ggsave(filename = paste0("plot_site_", site, ".png"), plot = p, width = 8, height = 6) # To save as a file
+}
+
+```
+
+```{r}
+library(dplyr)
+
+# Create an empty list to store model summaries
+lm_results <- list()
+
+# Get all unique site IDs
+site_ids <- unique(DendroMerge$`Site ID`)
+
+# Loop through each site
+for (site in site_ids) {
+  # Filter data for the current site and remove NA values in key columns
+  site_data <- DendroMerge %>%
+    filter(`Site ID` == site) %>%
+    filter(!is.na(PithHand) & !is.na(`Diameter (CM)`))  # Remove rows with NA in PithHand or Diameter
+  
+  # Check if there's enough data after filtering
+  if (nrow(site_data) > 1) {
+    # Fit the linear model
+    lm_model <- lm(`Diameter (CM)` ~ PithHand, data = site_data)
+    
+    # Extract summary details
+    model_summary <- summary(lm_model)
+    
+    # Store results in the list
+    lm_results[[site]] <- list(
+      Coefficients = coef(model_summary),      # Coefficients (Intercept and Slope)
+      R_squared = model_summary$r.squared,    # R-squared value
+      Adj_R_squared = model_summary$adj.r.squared, # Adjusted R-squared value
+      P_value = coef(model_summary)[2, 4]     # P-value for the slope
+    )
+  } else {
+    # If there is not enough data, store a message
+    lm_results[[site]] <- "Not enough data for linear model"
+  }
+}
+
+# Print results for a specific site (e.g., "Childs")
+lm_results[["Lower Beasley"]]
+
+```
+
 
 Age vs Size correlation
 ```{r}
 model <- lm(DendroMerge$`Diameter (CM)` ~ DendroMerge$PithHand, data = DendroMerge)
 c
 summary(model)
-
-
 ```
+
+
 
 ```{r}
 # Step 1: Count the number of observations per site (ID2)

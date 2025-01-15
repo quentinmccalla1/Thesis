@@ -47,7 +47,7 @@ childs_data <- childs_data %>%
 custom_order <- c("102023", "62024", "122024")  # Replace with your actual visit names or IDs
 
 
-mean_value_by_visit <- childs_data %>%
+mean_value_by_visit <- brap_data %>%
   mutate(Visit = factor(Visit, levels = custom_order)) %>%  # Set custom order
   group_by(Visit) %>%  # Group by Visit
   summarise(

@@ -1,0 +1,5 @@
+"0","kable(results)
+"
+"2","Error in as.data.frame.default(x) : 
+  cannot coerce class ‘""call""’ to a data.frame
+"
