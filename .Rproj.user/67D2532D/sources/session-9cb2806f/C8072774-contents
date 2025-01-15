@@ -82,28 +82,39 @@ library(dplyr)
 # Create an empty list to store model summaries
 lm_results <- list()
 
+# Get all unique site IDs
+site_ids <- unique(DendroMerge$`Site ID`)
+
 # Loop through each site
 for (site in site_ids) {
-  # Filter data for the current site
-  site_data <- DendroMerge %>% filter(`Site ID` == site)
+  # Filter data for the current site and remove NA values in key columns
+  site_data <- DendroMerge %>%
+    filter(`Site ID` == site) %>%
+    filter(!is.na(PithHand) & !is.na(`Diameter (CM)`))  # Remove rows with NA in PithHand or Diameter
   
-  # Fit the linear model
-  lm_model <- lm(`Diameter (CM)` ~ PithHand, data = site_data)
-  
-  # Extract summary details
-  model_summary <- summary(lm_model)
-  
-  # Store results in the list
-  lm_results[[site]] <- list(
-    Coefficients = coef(model_summary),      # Coefficients (Intercept and Slope)
-    R_squared = model_summary$r.squared,    # R-squared value
-    Adj_R_squared = model_summary$adj.r.squared, # Adjusted R-squared value
-    P_value = coef(model_summary)[2, 4]     # P-value for the slope
-  )
+  # Check if there's enough data after filtering
+  if (nrow(site_data) > 1) {
+    # Fit the linear model
+    lm_model <- lm(`Diameter (CM)` ~ PithHand, data = site_data)
+    
+    # Extract summary details
+    model_summary <- summary(lm_model)
+    
+    # Store results in the list
+    lm_results[[site]] <- list(
+      Coefficients = coef(model_summary),      # Coefficients (Intercept and Slope)
+      R_squared = model_summary$r.squared,    # R-squared value
+      Adj_R_squared = model_summary$adj.r.squared, # Adjusted R-squared value
+      P_value = coef(model_summary)[2, 4]     # P-value for the slope
+    )
+  } else {
+    # If there is not enough data, store a message
+    lm_results[[site]] <- "Not enough data for linear model"
+  }
 }
 
-# View the results for a specific site (e.g., "Childs")
-lm_results[["Childs"]]
+# Print results for a specific site (e.g., "Childs")
+lm_results[["Lower Beasley"]]
 
 ```
 
