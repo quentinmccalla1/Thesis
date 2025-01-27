@@ -1,0 +1,227 @@
+---
+title: "USGS Flow stats"
+output: html_document
+date: "2024-09-17"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#install.packages("dataRetrieval")
+library(dataRetrieval)
+library(ggplot2)
+library(dplyr)
+library(lubridate)
+```
+
+
+Download USGS
+```{r}
+CampVerdeGuage <- readNWISdv(    #Daily
+  "09506000",                  #Below camp verde guage
+  "00060",                      #Discharge
+  startDate = "1989-01-01",      #From first complete year
+  endDate = "",                 #Till now
+  statCd = "00003"
+)
+CampVerdeGuage <- CampVerdeGuage %>%     #Rename column to discharge
+  rename(Discharge = X_00060_00003)
+```
+
+
+
+```{r fig.height=8, fig.width=20}
+#All NAIP
+
+ggplot(data = CampVerdeGuage, mapping = aes(x = Date, y = Discharge), log("y")) + 
+  geom_line()
+
++
+  labs(title = "Chlids")+
+    geom_vline(xintercept = as.Date("2023-06-15"), color = "red", linetype = "dashed", size = 1)+
+  geom_vline(xintercept = as.Date("2021-10-14"), color = "red", linetype = "dashed", size = 1)+ 
+  geom_vline(xintercept = as.Date("2019-06-08"), color = "red", linetype = "dashed", size = 1)+
+    geom_vline(xintercept = as.Date("2017-06-04"), color = "red", linetype = "dashed", size = 1)+ 
+  geom_vline(xintercept = as.Date("2015-06-01"), color = "red", linetype = "dashed", size = 1)+
+  geom_vline(xintercept = as.Date("2013-06-05"), color = "red", linetype = "dashed", size = 1)+
+    geom_vline(xintercept = as.Date("2010-06-15"), color = "red", linetype = "dashed", size = 1)+
+geom_hline( yintercept = 52700, color= "blue", linetype = "dashed", size =1)+
+   annotate("text", x = as.Date("1990-04-01"), y = 52700, 
+           label = "Restructuring Flow", color = "black", vjust = -1, size = 3)+
+  
+geom_hline(yintercept = 10500, color = "blue", linetype = "dashed", size = 1)+
+    annotate("text" ,x = as.Date("1990-04-01"), y = 10500, label ="Rejuvenating  flow"
+             , color ="black", vjust =-1, size = 3)
+  
+
+
+
+```
+
+
+Mean annual values
+```{r}
+# Calculate mean annual values
+annual_means <- CampVerdeGuage %>%
+  group_by(year = year(Date)) %>%  # Corrected here
+  summarise(mean_value = mean(Discharge, na.rm = TRUE))  # Replace 'Discharge' with your parameter name
+
+annual_means <- setNames(annual_means, c("Year", "Mean"))
+```
+
+
+
+Mean Winter flows November-march
+```{r}
+# Extract year and month
+CampVerdeGuage$Year <- format(CampVerdeGuage$Date, "%Y")
+CampVerdeGuage$Month <- format(CampVerdeGuage$Date, "%m")
+
+# Filter for months between November and March
+winter_data <- CampVerdeGuage %>%
+  filter(Month %in% c("11", "12", "01", "02", "03"))
+mean_winter_flow <- winter_data %>%
+  group_by(Year) %>%
+  summarise(mean_winter_flow = mean(Discharge, na.rm = TRUE)) 
+
+```
+
+Summer flows
+```{r}
+SummerFlows<- CampVerdeGuage %>%
+  filter(Month %in% c("06", "07", "08", "09"))
+SummerFlows <- SummerFlows %>%
+  group_by(Year) %>%
+  summarise(SummerFlows = mean(Discharge, na.rm = TRUE)) 
+```
+
+
+min flow
+```{r}
+meanmin <- CampVerdeGuage %>%
+  group_by(year = year(Date)) %>%  # Corrected here
+  summarise(min = min(Discharge, na.rm = TRUE))  # Replace 'Discharge' with your parameter name
+```
+
+Max flow
+```{r}
+maxflow <- CampVerdeGuage %>%
+  group_by(year = year(Date)) %>%  # Corrected here
+  summarise(max = max(Discharge, na.rm = TRUE))
+```
+
+
+Monthly means
+```{r}
+
+monthly_means <- CampVerdeGuage %>%
+  mutate(Year = year(Date), Month = month(Date)) %>%
+  group_by(Year, Month) %>%
+  summarise(Monthly_Mean = mean(Discharge, na.rm = TRUE), .groups = "drop")
+
+monthly_means <- monthly_means %>%
+  pivot_wider(names_from = Month, values_from = Monthly_Mean, names_prefix = "Month_") %>%
+  arrange(Year)
+
+# Rename the columns to use month names
+month_names <- c("January", "February", "March", "April", "May", "June", 
+                 "July", "August", "September", "October", "November", "December")
+
+# Assign the month names to the columns (excluding "Year" column)
+colnames(monthly_means)[2:13] <- month_names
+
+
+
+
+```
+
+
+
+
+
+
+Mean PDSI Yavapai County Yearly
+
+```{r}
+PDSI <- read_csv("PDSI-AZ-1994to2023.csv")
+
+PDSImean <- PDSI %>%
+  group_by(Year, Month) %>%
+  summarise(mean_value = mean(`Value`, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(names_from = Month, values_from = mean_value, names_prefix = "Month_") %>%
+  arrange(Year)
+
+# Rename columns to month names
+month_names <- c("January", "February", "March", "April", "May", "June", 
+                 "July", "August", "September", "October", "November", "December")
+
+# Assign the month names to the columns (excluding the "Year" column)
+colnames(PDSImean)[2:13] <- month_names
+
+remove(PDSI)
+
+```
+
+
+Mean Yearly Temp Yavapai county
+
+
+```{r}
+
+YearlyTemp <- read.csv("AverageMonthlyTemp-YavapaiCounty_1993-2024.csv")
+
+MeanTemp <- YearlyTemp %>%
+  group_by(Year, Month) %>%
+  summarise(mean_value = mean(`Value`, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(names_from = Month, values_from = mean_value, names_prefix = "Month_") %>%
+  arrange(Year)
+
+# Rename columns to month names
+month_names <- c("January", "February", "March", "April", "May", "June", 
+                 "July", "August", "September", "October", "November", "December")
+
+# Assign the month names to the columns (excluding the "Year" column)
+colnames(MeanTemp)[2:13] <- month_names
+
+# View the resulting data
+print(MeanTemp)
+
+remove(YearlyTemp)
+```
+
+
+```{r}
+Precip <- read.csv("YavapaiPrecip.csv")
+
+
+Precip <- Precip %>%
+  group_by(Year, Month) %>%
+  summarise(mean_value = mean(`Value`, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(names_from = Month, values_from = mean_value, names_prefix = "Month_") %>%
+  arrange(Year)
+
+# Rename columns to month names
+month_names <- c("January", "February", "March", "April", "May", "June", 
+                 "July", "August", "September", "October", "November", "December")
+
+# Assign the month names to the columns (excluding the "Year" column)
+colnames(Precip)[2:13] <- month_names
+
+# View the resulting data
+print(Precip)
+
+
+```
+
+Min temp
+
+
+
+
+
+
+
+
+
