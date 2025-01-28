@@ -1,0 +1,7 @@
+"0",""
+"0","correlation_results %>%"
+"0","  kable(""html"", caption = ""Variables vs % Change in density from original survey"") %>%"
+"0","  kable_styling(full_width = FALSE) %>%"
+"0","  row_spec(which(correlation_results$P_Value < 0.05), background = ""lightgreen"")%>%"
+"0"," save_kable(""my_table.html"")"
+"0",""
