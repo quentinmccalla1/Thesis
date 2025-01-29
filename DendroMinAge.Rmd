@@ -71,7 +71,6 @@ for (site in site_ids) {
   
   # Save or print the plot
   print(p) # To view in the R console
-  ggsave(filename = paste0("plot_site_", site, ".png"), plot = p, width = 8, height = 6) # To save as a file
 }
 
 ```
@@ -131,16 +130,16 @@ summary(model)
 ```{r}
 # Step 1: Count the number of observations per site (ID2)
 site_counts <- DendroMerge %>%
-  count(`Site ID`),
+  count(`Site ID`)
 
 # Step 2: Calculate mean diameter per site
 mean_diameters_all_sites <- DendroMerge %>%
   group_by(`Site ID`) %>%
-  summarise(mean_diameter = mean(`Diameter (CM)`, na.rm = TRUE)),  # Calculate mean diameter
+  summarise(mean_diameter = mean(`Diameter (CM)`, na.rm = TRUE))  # Calculate mean diameter
 
 # Step 3: Combine count and mean diameter into one table
 combined_table <- site_counts %>%
-  left_join(mean_diameters_all_sites, by = "Site ID"),
+  left_join(mean_diameters_all_sites, by = "Site ID")
 
 # Print the result
 combined_table %>%

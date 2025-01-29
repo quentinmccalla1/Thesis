@@ -463,9 +463,9 @@ rownames(correlation_results) <- NULL
 
 correlation_results %>%
   kable("html", caption = "Variables vs %Change in original density") %>%
-  kable_styling(full_width = FALSE) %>%
-  row_spec(which(correlation_results$P_Value < 0.05), background = "lightgreen")%>%
- save_kable("my_table.html")
+  kable_styling(full_width = FALSE) 
+%>%
+  #row_spec(which(correlation_results$P_Value < 0.05), background = "lightgreen")
 
 ```
 

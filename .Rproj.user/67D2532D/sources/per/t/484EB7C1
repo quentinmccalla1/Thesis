@@ -3,9 +3,9 @@
     "path": "~/GitHub/Thesis/Thesis1/seedlingstatsrevamp.Rmd",
     "project_path": "seedlingstatsrevamp.Rmd",
     "type": "r_markdown",
-    "hash": "0",
+    "hash": "2523566951",
     "contents": "",
-    "dirty": true,
+    "dirty": false,
     "created": 1733782866195.0,
     "source_on_save": false,
     "relative_order": 6,
@@ -18,11 +18,11 @@
         "last_setup_crc32": "141c77b2bb338d19"
     },
     "folds": "",
-    "lastKnownWriteTime": 1738014076,
+    "lastKnownWriteTime": 1738194974,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1738014326151,
+    "last_content_update": 1738194974474,
     "read_only": false,
     "read_only_alternatives": []
 }
