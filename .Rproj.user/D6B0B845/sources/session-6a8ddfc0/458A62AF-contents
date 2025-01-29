@@ -1,0 +1,121 @@
+---
+title: "Imagery Statistics"
+output: html_document
+date: "2024-11-04"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+ImageryAreas <- read.csv("ImageryStatistics150m.csv")
+# View the first few rows and column names
+head(ImageryAreas)
+colnames(ImageryAreas)
+
+# Check the structure of the dataset
+str(ImageryAreas)
+```
+
+
+
+```{r}
+library(tidyverse)
+
+# Reshape and process the data
+tidy_data <- ImageryAreas %>%
+  # Reshape all year columns into long format
+  pivot_longer(
+    cols = starts_with("X"),  # Select year columns
+    names_to = "Year",        # New column for year
+    values_to = "Area"        # New column for area
+  ) %>%
+  # Identify the class from original column names
+  mutate(
+    Year = as.numeric(gsub("\\D", "", Year)),  # Extract numeric year
+    Class = case_when(
+      str_detect(Year, "\\.1$") ~ "Childs",    # Check for '.1' suffix
+      str_detect(Year, "\\.2$") ~ "Beasley",  # Check for '.2' suffix
+      TRUE ~ "Sheep"                         # Default to Sheep
+    )
+  ) %>%
+  # Remove rows with missing or NA values
+  filter(!is.na(Area)) %>%
+  select(Class, Year, Area)  # Keep only relevant columns
+
+# Create the plot
+ggplot(tidy_data, aes(x = Year, y = Area, color = Class, group = Class)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  labs(
+    title = "Changes in Class Area Over Time",
+    x = "Year",
+    y = "Area",
+    color = "Class"
+  ) +
+  theme_minimal() +
+  theme(
+    text = element_text(size = 12),
+    legend.position = "bottom"
+  )
+
+```
+
+
+```{r}
+
+# Load the data
+data <- read_excel("ImageryStatistics150m.xlsx")
+
+# Inspect the structure (adjust column names if necessary)
+str(data)
+
+# Summarize land use by year and category
+summary_data <- data %>%
+  group_by(Year, LandUseCategory) %>%
+  summarize(TotalArea = sum(Area, na.rm = TRUE), .groups = "drop")
+
+# Visualize land use changes over years
+ggplot(summary_data, aes(x = Year, y = TotalArea, fill = LandUseCategory)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Land Use Comparison Between Years", x = "Year", y = "Total Area") +
+  theme_minimal()
+
+# Perform a chi-squared test (pivot data to a contingency table format)
+contingency_table <- summary_data %>%
+  pivot_wider(names_from = LandUseCategory, values_from = TotalArea, values_fill = 0) %>%
+  select(-Year) %>%
+  as.matrix()
+
+chisq_test <- chisq.test(contingency_table)
+print(chisq_test)
+
+```
+
+```{r}
+# Reshape data for ANOVA
+library(tidyr)
+library(dplyr)
+ImageryAreas <- read_excel("ImageryStatistics150m.xlsx")
+colnames(ImageryAreas)
+ImageryAreas_long <- ImageryAreas %>%
+  pivot_longer(cols = -1, names_to = "Year", values_to = "Area")
+
+# Convert Year to a factor
+ImageryAreas_long$Year <- as.factor(ImageryAreas_long$Year)
+
+# Run ANOVA
+anova_result <- aov(Area ~ Year + Error(1/Year), data = ImageryAreas_long)
+summary(anova_result)
+
+```
+
+```{r}
+# Example of linear regression with year as a numeric variable
+trend_result <- lm(Area ~ as.numeric(Year), data = ImageryAreas_long)
+summary(trend_result)
+
+```
+
