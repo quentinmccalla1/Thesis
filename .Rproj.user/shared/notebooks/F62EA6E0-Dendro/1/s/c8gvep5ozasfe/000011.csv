@@ -1,0 +1,103 @@
+"1","
+"
+"2","installing the source package ‘RcppArmadillo’
+
+"
+"2","trying URL 'https://cran.rstudio.com/src/contrib/RcppArmadillo_14.2.2-1.tar.gz'
+"
+"2","Content type 'application/x-gzip'"
+"2"," length 1397189 bytes (1.3 MB)
+"
+"2","downloaded 1.3 MB
+
+"
+"1","* installing *source* package 'RcppArmadillo' ...
+"
+"1","** package 'RcppArmadillo' successfully unpacked and MD5 sums checked
+"
+"1","** using staged installation
+"
+"1","
+"
+"1","   **********************************************
+"
+"1","   WARNING: this package has a configure script
+"
+"1","         It probably needs manual configuration
+"
+"1","   **********************************************
+"
+"1","
+"
+"1","
+"
+"1","** libs
+"
+"1","using C++ compiler: 'G__~1.EXE (GCC) 12.3.0'
+"
+"1","g++ -std=gnu++17  -I""C:/PROGRA~1/R/R-43~1.2/include"" -DNDEBUG  -I'C:/Users/qrm32/AppData/Local/R/win-library/4.3/Rcpp/include'   -I""C:/rtools43/x86_64-w64-mingw32.static.posix/include""  -I../inst/include -I. -fopenmp   -O2 -Wall  -mfpmath=sse -msse2 -mstackrealign  -c RcppArmadillo.cpp -o RcppArmadillo.o
+"
+"1","g++ -std=gnu++17  -I""C:/PROGRA~1/R/R-43~1.2/include"" -DNDEBUG  -I'C:/Users/qrm32/AppData/Local/R/win-library/4.3/Rcpp/include'   -I""C:/rtools43/x86_64-w64-mingw32.static.posix/include""  -I../inst/include -I. -fopenmp   -O2 -Wall  -mfpmath=sse -msse2 -mstackrealign  -c RcppExports.cpp -o RcppExports.o
+"
+"1","g++ -std=gnu++17  -I""C:/PROGRA~1/R/R-43~1.2/include"" -DNDEBUG  -I'C:/Users/qrm32/AppData/Local/R/win-library/4.3/Rcpp/include'   -I""C:/rtools43/x86_64-w64-mingw32.static.posix/include""  -I../inst/include -I. -fopenmp   -O2 -Wall  -mfpmath=sse -msse2 -mstackrealign  -c fastLm.cpp -o fastLm.o
+"
+"1","g++ -std=gnu++17 -shared -s -static-libgcc -o RcppArmadillo.dll tmp.def RcppArmadillo.o RcppExports.o fastLm.o -fopenmp -LC:/PROGRA~1/R/R-43~1.2/bin/x64 -lRlapack -LC:/PROGRA~1/R/R-43~1.2/bin/x64 -lRblas -lgfortran -lm -lquadmath -LC:/rtools43/x86_64-w64-mingw32.static.posix/lib/x64 -LC:/rtools43/x86_64-w64-mingw32.static.posix/lib -LC:/PROGRA~1/R/R-43~1.2/bin/x64 -lR
+"
+"1","installing to C:/Users/qrm32/AppData/Local/R/win-library/4.3/00LOCK-RcppArmadillo/00new/RcppArmadillo/libs/x64
+"
+"1","** R
+"
+"1","** inst
+"
+"1","** byte-compile and prepare package for lazy loading
+"
+"1","** help
+"
+"1","*** installing help indices
+"
+"1","** building package indices
+"
+"1","** installing vignettes
+"
+"1","** testing if installed package can be loaded from temporary location
+"
+"1","** testing if installed package can be loaded from final location
+"
+"1","** testing if installed package keeps a record of temporary installation path
+"
+"1","* DONE (RcppArmadillo)
+"
+"2","
+"
+"2",""
+"2","The downloaded source packages are in
+	‘C:\Users\qrm32\AppData\Local\Temp\RtmpolP7hd\downloaded_packages’"
+"2",""
+"2","
+"
+"0","# Install the package from a local file"
+"0","install.packages(""C:/Users/qm43/Documents/GitHub/Thesis1/treeclim_2.0.6.0.tar.gz"", repos = NULL, type = ""source"")"
+"2","Installing package into ‘C:/Users/qrm32/AppData/Local/R/win-library/4.3’
+(as ‘lib’ is unspecified)
+"
+"1","Warning: invalid package 'C:/Users/qm43/Documents/GitHub/Thesis1/treeclim_2.0.6.0.tar.gz'
+"
+"1","Error: ERROR: no packages specified
+"
+"1","Warning in "
+"1",""
+"1","install.packages"
+"1",""
+"1"," :
+  "
+"1",""
+"1","installation of package ‘C:/Users/qm43/Documents/GitHub/Thesis1/treeclim_2.0.6.0.tar.gz’ had non-zero exit status"
+"1",""
+"1","
+"
+"0","# Load the library"
+"0","library(treeclim)"
+"2","Warning: package ‘treeclim’ was built under R version 4.3.3"
+"2","Loading required package: Rcpp
+"
+"2","Warning: undefined subclass ""ndiMatrix"" of class ""replValueSp""; definition not updated"

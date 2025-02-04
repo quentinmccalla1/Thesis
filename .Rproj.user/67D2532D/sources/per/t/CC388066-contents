@@ -523,7 +523,7 @@ for (site in c("AllCorcrn")) {  # Replace with your actual site names
       chrono = get(site),  # Use the site variable dynamically
       climate = climate,
       boot = "exact",
-      method = "response",
+      method = "correlation",
       selection = -10:9,
       var_names = var_name
     )
