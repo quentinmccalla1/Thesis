@@ -294,7 +294,7 @@ final_results <- bind_rows(formatted_results)
 final_results %>%
   kable("html", caption = "Tukey's HSD Results for BRAP") %>%
   kable_styling(full_width = FALSE) %>%
-  row_spec(which(final_results$P_Value < 0.05), background = "lightgreen")
+ # row_spec(which(final_results$P_Value < 0.05), background = "lightgreen")
 
 ```
 
@@ -370,7 +370,7 @@ Childsfinal_results <- bind_rows(Childsformatted_results)
 Childsfinal_results %>%
   kable("html", caption = "Tukey's HSD Results for Childs Site Variables") %>%
   kable_styling(full_width = FALSE) %>%
-  row_spec(which(Childsfinal_results$P_Value < 0.05), background = "lightgreen")
+  #row_spec(which(Childsfinal_results$P_Value < 0.05), background = "lightgreen")
 
 
 ```

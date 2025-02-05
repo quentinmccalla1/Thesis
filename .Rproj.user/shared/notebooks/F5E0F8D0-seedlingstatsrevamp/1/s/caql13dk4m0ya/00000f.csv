@@ -1,0 +1,35 @@
+"0",""
+"0","# Choose the variable of interest (Height in this case)"
+"0","variable_of_interest <- ""Height"""
+"0",""
+"0","# Calculate the mean height for each plot and visit"
+"0","mean_height <- childs_data %>%"
+"0","  group_by(Plot, Visit) %>%  # Group by Plot and Visit"
+"0","  summarise(mean_height = mean(.data[[variable_of_interest]], na.rm = TRUE), .groups = ""drop"")  # Calculate mean height, remove NA"
+"0",""
+"0","# Create a bar plot with more space between bars"
+"0","ggplot(mean_height, aes(x = factor(Plot), y = mean_height, fill = Visit)) +"
+"0","  geom_bar(stat = ""identity"", position = position_dodge(width = .8)) +  # Increase spacing between bars"
+"0","  labs(title = ""Mean Height by Plot and Visit"","
+"0","       x = ""Plot"","
+"0","       y = ""Mean Height"") +"
+"0","  theme_minimal() +"
+"0","  scale_fill_manual(values = c(""skyblue"", ""lightgreen"", ""orange"", ""pink"")) +  # Customize colors"
+"0","  scale_x_discrete(expand = expansion(add = c(2,2))) +  # Add more space around bars on x-axis"
+"0","  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for better readability"
+"1","[1m[33mError[39m in `scale_fill_manual()`:[22m
+[38;5;232m[33m![38;5;232m Continuous values supplied to discrete scale.
+[36mℹ[38;5;232m Example values: [34m62024[38;5;232m, [34m102023[38;5;232m, [34m122024[38;5;232m, [34m62024[38;5;232m, and [34m102023[38;5;232m[39m
+Backtrace:
+[90m  1. [39m[1mbase[22m (local) `<fn>`(x)
+[90m  2. [39mggplot2:::print.ggplot(x)
+[90m  4. [39mggplot2:::ggplot_build.ggplot(x)
+[90m  5. [39m[1mbase[22m::lapply(data, npscales$train_df)
+[90m  6. [39mggplot2 (local) FUN(X[[i]], ...)
+     ...
+[90m  9. [39mggplot2 (local) FUN(X[[i]], ...)
+[90m 10. [39mscale$train_df(df = df)
+[90m 11. [39mggplot2 (local) train_df(..., self = self)
+[90m 12. [39mself$train(df[[aesthetic]])
+[90m 13. [39mggplot2 (local) train(..., self = self)
+"
