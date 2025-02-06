@@ -1,7 +1,0 @@
-"0",""
-"0","kable("
-"0","  results$AllCorcrn,"
-"0","  format = ""latex"","
-"0","  booktabs = TRUE,"
-"0","  caption = ""Results for AllCorcrn"""
-"0",")"
