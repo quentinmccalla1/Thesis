@@ -36,7 +36,7 @@ DendroMerge <- DendroMerge %>%
 
 Age vs size plot
 ```{r}
-ggplot(DendroMerge, aes(x = PithHand, y = `Diameter (CM)`, color= `Site ID`)) +
+ggplot(DendroMerge, aes(x = PithHand, y = `Diameter (CM)`)) +
   labs( x= "Pith Year", y = "Diameter (cm)", title = "Diameter vs Pith Date") +
   geom_point(shape=18, size= 3)+
   geom_smooth( method = "lm", se = FALSE, size = 1.5)+
@@ -46,6 +46,10 @@ ggplot(DendroMerge, aes(x = PithHand, y = `Diameter (CM)`, color= `Site ID`)) +
 scale_x_continuous(
   limits = c(1985,2020)
 )+ theme_minimal()
+
+p <-lm(data = DendroMerge, PithHand ~ `Diameter (CM)`)
+
+
 ```
 
 ```{r}
@@ -112,8 +116,7 @@ for (site in site_ids) {
   }
 }
 
-# Print results for a specific site (e.g., "Childs")
-lm_results[["Lower Beasley"]]
+
 
 ```
 

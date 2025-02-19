@@ -1,4 +1,0 @@
-"0","Old_bai_crn$Year <- seq(1915, by = 1, length.out= nrow(Oldcrn))
-"
-"2","Error: object 'Old_bai_crn' not found
-"
