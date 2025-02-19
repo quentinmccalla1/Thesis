@@ -30,6 +30,16 @@ CampVerdeGuage <- CampVerdeGuage %>%     #Rename column to discharge
   rename(Discharge = X_00060_00003)
 ```
 
+```{r}
+# Get the top 5 highest flows
+top_flows <- CampVerdeGuage %>%
+  arrange(desc(Discharge)) %>%  # Sort by flow (descending)
+  slice(1:10)  # Select top 5 rows
+
+# Print results
+print(top_flows)
+
+```
 
 
 ```{r fig.height=8, fig.width=20}

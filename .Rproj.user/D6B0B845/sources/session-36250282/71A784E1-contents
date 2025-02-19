@@ -39,13 +39,13 @@ library(treeclim)
 
 ```{r message=FALSE, warning=FALSE}
 files <- c("ChildsCol1.rwl", "SheepCol1.rwl", "UBCol1.rwl", 
-           "LBCol1.rwl", "All.rwl", "AllCorrelated.rwl", "All.3+.rwl")
+           "LBCol1.rwl", "All.rwl", "AllCorrelated.rwl", "All.3+.rwl", "Old.rwl")
 
 # Step 1: Read in raw ring-width files
 rwl_list <- lapply(files, read.tucson)
 
 # Assign names to the datasets for clarity
-names(rwl_list) <- c("Childs", "Sheep", "UB", "LB", "ALL", "ALLCor", "Crossdated")
+names(rwl_list) <- c("Childs", "Sheep", "UB", "LB", "ALL", "ALLCor", "Crossdated", "Old")
 
 
 # Step 4: Detrend original ring-width data for comparison
@@ -62,25 +62,21 @@ LBcrn <- rwl_chron_list[["LB"]]
 Allcrn <- rwl_chron_list[["ALL"]]
 AllCorcrn <- rwl_chron_list[["ALLCor"]]
 Crosscrn <- rwl_chron_list[["Crossdated"]]
+Oldcrn <- rwl_chron_list[["Old"]]
 ```
 
 BAI
 ```{r}
 # List of raw ring-width files
 files <- c("ChildsCol1.rwl", "SheepCol1.rwl", "UBCol1.rwl", 
-           "LBCol1.rwl", "All.rwl", "AllCorrelated.rwl", "All.3+.rwl")
+           "LBCol1.rwl", "All.rwl", "AllCorrelated.rwl", "All.3+.rwl", "Old.rwl")
 # Assign names to the datasets
-names(rwl_list) <- c("Childs", "Sheep", "UB", "LB", "ALL", "ALLCor", "Crossdated")
+names(rwl_list) <- c("Childs", "Sheep", "UB", "LB", "ALL", "ALLCor", "Crossdated", "Old")
 # Step 1: Read in raw ring-width files
 rwl_list <- lapply(files, read.tucson)
 
 # Step 2: Calculate BAI for each dataset
 bai_list <- lapply(rwl_list, bai.in)
-
-
-ChildsBAI <- chron(bai_list$Childs)
-
-
 
 
 ```
@@ -98,8 +94,6 @@ plot.crn(AllCorcrn, add.spline = TRUE, nyears = 5)
 plot.crn(Allcrn, add.spline = TRUE, nyears = 5)
 
 plot.crn(Crosscrn, add.spline = TRUE, nyears = 5)
-
-plot(AllCor_bai_crn, add.spline = TRUE, nyears = 5)
 
 
 ```
@@ -144,6 +138,7 @@ UB_bai_crn$Year <- seq(1994, by= 1, length.out= nrow(UBcrn))
 LB_bai_crn$Year <- seq(1994, by= 1, length.out = nrow(LBcrn))
 All_bai_crn$Year <- seq(1988, by = 1 , length.out = nrow(Allcrn))
 Cross_bai_crn$Year <- seq(1994, by= 1, length.out= nrow(Crosscrn))
+Old_bai_crn$Year <- seq(1915, by = 1, length.out= nrow(Oldcrn))
 ```
 
 
@@ -177,11 +172,8 @@ ggplot(combinedBAI_data, aes(x = Year, y = std, color = Dataset, linetype = Data
 
 
 
-
-Remove autocorrelation
-
-
 Correlate to Verde Flows
+Prob not necessary with response function analysis
 
 ```{r}
 
@@ -228,17 +220,8 @@ AllMerged <- subset(AllMerged, Year >= 1994 & Year <= 2023)
 
 
 Response Function Analysis
-Comparing tree ring growth to...
-Streamflow (Downloaded)(Filtered by year)
-Temperature (Downloaded)
-VPD?
-RH?
-PDSI (downloaded)
 
 https://www.ncei.noaa.gov/access/monitoring/climate-at-a-glance/county/time-series/AZ-025/tavg/1/0/1993-2023?base_prd=true&begbaseyear=1901&endbaseyear=2000
-
-
-
 
 Clean datasets for climate analysis
 ```{r}
@@ -341,54 +324,6 @@ plot(CorrPDSI)
 
 ```
 
-
-
-Loop that runs each site(s) against my climate variable for correlation
-```{r}
-# Define a list of climate variables and their corresponding names
-climate_data <- list(
-  MeanFlow = list(data = monthly_means, var_name = "Mean Flow"),
-  Precip = list(data = Precip, var_name = "Precip"),
-  MeanTemp = list(data = MeanTemp, var_name = "MeanTemp"),
-  PDSI = list(data = PDSImean, var_name = "PDSI")
-)
-
-# List to store results for each site
-results <- list()
-
-# Loop over the sites
-for (site in c("LBcrn")) {  # Replace with your actual site names
-  site_results <- list()
-  
-  # Loop over climate variables
-  for (climate_var in names(climate_data)) {
-    climate <- climate_data[[climate_var]]$data
-    var_name <- climate_data[[climate_var]]$var_name
-    
-    # Perform dcc analysis
-    response <- dcc(
-      chrono = get(site),  # Use the site variable dynamically
-      climate = climate,
-      boot = "std",
-      method = "correlation",
-      selection = -10:9,
-      var_names = var_name
-    )
-    
-    # Store results
-    site_results[[climate_var]] <- list(
-      response = response,
-      coefficients = response$coef
-    )
-    
-    # Plot response and explicitly print
-    print(plot(response, main = paste("Site:", site, "-", var_name)))
-  }
-  
-  # Add site results to the main list
-  results[[site]] <- site_results
-}
-```
 
 
 Loop that creates a single plot for each site from the climate variable loop correlation
@@ -523,7 +458,7 @@ for (site in c("AllCorcrn")) {  # Replace with your actual site names
       chrono = get(site),  # Use the site variable dynamically
       climate = climate,
       boot = "exact",
-      method = "response",
+      method = "correlation",
       selection = -10:9,
       var_names = var_name
     )

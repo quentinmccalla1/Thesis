@@ -8,3 +8,32 @@ counts <- c(1, 0, 2, 1, 8, 6, 6, 2, 13, 13, 10, 6, 9, 7, 7, 1, 4, 5, 5, 2,
 expanded_data <- rep(years, counts)
 
 shapiro.test(expanded_data)
+
+
+
+
+
+#install.packages("dataRetrieval")
+library(dataRetrieval)
+library(ggplot2)
+library(dplyr)
+library(lubridate)
+
+
+
+#Download USGS
+```{r}
+CampVerdeGuage <- readNWISdv(    #Daily
+  "09506000",                  #Below camp verde guage
+  "00060",                      #Discharge
+  startDate = "2023-01-01",      #From first complete year
+  endDate = "2023-12-31",                 #Till now
+  statCd = "00003"
+)
+CampVerdeGuage <- CampVerdeGuage %>%     #Rename column to discharge
+  rename(Discharge = X_00060_00003)
+
+ggplot(data = CampVerdeGuage, mapping = aes(x = Date, y = Discharge), log("y")) + 
+  geom_line()
+
+write.csv(CampVerdeGuage, "2023Verde.csv", row.names = FALSE)
