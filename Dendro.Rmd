@@ -143,81 +143,6 @@ Old_bai_crn$Year <- seq(1915, by = 1, length.out= nrow(Oldcrn))
 
 
 
-```{r}
-# Plot with ggplot2
-# Combine all datasets into one
-Sheep_bai_crn$Dataset <- "Sheep Bridge"
-Childs_bai_crn$Dataset <- "Childs"
-UB_bai_crn$Dataset <- "Upper Beasley"
-LB_bai_crn$Dataset <- "Lower Beasley"
-All_bai_crn$Dataset <- "All"
-Cross_bai_crn$Dataset <- "Correlated"
-
-# Combine datasets
-combinedBAI_data <- rbind(Sheep_bai_crn, Childs_bai_crn, UB_bai_crn, LB_bai_crn, All_bai_crn, Cross_bai_crn)
-
-ggplot(combinedBAI_data, aes(x = Year, y = std, color = Dataset, linetype = Dataset)) +
-  geom_line(size = 0.5) +  # Default line size for dataset lines
-  geom_line(data = Cross_bai_crn, aes(x = Year, y = std), color = "black", size = 1) +  # Thicker black line
-  labs(x = "Year", y = "BAI (mm/yr2)", title = "Basal Area Increment for all sites") +
-  scale_color_manual(values = c("Sheep Bridge" = "lightgreen", 
-                                "Childs" = "red", 
-                                "Upper Beasley" = "blue", 
-                                "Lower Beasley" = "orange")) +  # Custom colors
-  theme_minimal() +
-  theme(legend.title = element_blank())  # Optionally remove legend title
-
-```
-
-
-
-
-Correlate to Verde Flows
-Prob not necessary with response function analysis
-
-```{r}
-
-# Rename 'date' column in Crosscrn to 'Date' if necessary
-colnames(annual_means)[colnames(annual_means) == "year"] <- "Year"
-colnames(meanmin)[colnames(meanmin) == "year"] <- "Year"
-colnames(PDSImean)[colnames(PDSImean) == "year"] <- "Year"
-colnames(MeanTemp)[colnames(MeanTemp) == "year"] <- "Year"
-colnames(Crosscrn)[colnames(Crosscrn) == "year"] <- "Year"
-colnames(Precip)[colnames(Precip) == "year"] <- "Year"
-colnames(maxflow)[colnames(maxflow) == "year"] <- "Year"
-
-
- 
-annual_means$year <- as.numeric(as.character(annual_means$Year))
-mean_winter_flow$Year <- as.numeric(as.character(mean_winter_flow$Year))
-meanmin$Year <- as.numeric(as.character(meanmin$Year))
-PDSImean$Year <-as.numeric(as.character(PDSImean$Year))
-MeanTemp$Year <- as.numeric(as.character(MeanTemp$Year))
-Crosscrn$Year <- as.numeric(Crosscrn$Year)
-Precip$Year <- as.numeric(Precip$Year) 
-maxflow$Year <- as.numeric(maxflow$Year) 
-
-
-# Corrected syntax
-# Standardize 'Year' column and remove duplicate 'annual_means'
-AllMerged <- Reduce(function(x, y) merge(x, y, by = "Year", all = TRUE), 
-                    list(annual_means, mean_winter_flow, meanmin, PDSImean, MeanTemp, Crosscrn,Precip))
-
-AllMerged <- AllMerged[,-3]
-AllMerged <- AllMerged[,-9]
-
-
-
-colnames(AllMerged) <- c("Year", "MeanYear","MeanWinter", "MeanMin","PDSI","Ferenheit","RWI","Sample Depth","TotalPrecip")
-AllMerged <- subset(AllMerged, Year >= 1994 & Year <= 2023)
-
-
-  
-  
-```
-
-
-
 
 Response Function Analysis
 
@@ -229,7 +154,7 @@ Clean datasets for climate analysis
 common_years <- Reduce(intersect, list(Allcrn$Year, monthly_means$Year))
 
 # Clean and prepare the `Allcrn` dataset
-Allcrn <- Allcrn %>%
+AllCorcrn <- AllCorcrn %>%
   as.data.frame() %>%                       # Ensure it is a data frame
   mutate(across(-Year, as.numeric)) %>%     # Convert all columns except 'Year' to numeric
   filter(Year %in% common_years) %>%        # Filter by common years
@@ -267,158 +192,6 @@ PDSImean <- PDSImean %>%
 
 ```
 
-
-Correlations 
-```{r}
-#Mean flows, Exact Bootstrap
-Response <- dcc(
-  chrono = Allcrn,  #not the chronology
-  climate =  monthly_means,
-  boot = "std",
-  method = "correlation",
-   selection = 1:12,
-  var_names = "Mean Flow")
-plot(Response)
-
-#Mean Flows STD bootstrap, April is usually significant
-Response <- dcc(
-  chrono = AllCorcrn,
-  climate =  monthly_means,
-    method = "correlation",
-  boot = "std",
- selection = 1:12,
-  var_names = "MeanFlow")
-plot(Response)
-
-Response$coef
-
-#Mean Precip STD bootstrap
-PrecipResponse <- dcc(
-  chrono = AllCorcrn,
-  climate =  Precip,
-    method = "correlation",
-  boot = "std",
-  selection = 1:12,
-  var_names = "Precip")
-plot(PrecipResponse)
-
-#Temp
-ResponseTemp <- dcc(
-  chrono = AllCorcrn,
-  climate =  MeanTemp,
-    method = "correlation",
-  boot = "std",
-  selection = 1:12,
-  var_names = "MeanTemp")
-plot(ResponseTemp)
-
-#PDSI
-CorrPDSI <- dcc(
-  chrono = AllCorcrn,
-  climate =  PDSImean,
-    method = "correlation",
-  boot = "std",
-  selection = 1:12,
-  var_names = "PDSI")
-plot(CorrPDSI)
-
-```
-
-
-
-Loop that creates a single plot for each site from the climate variable loop correlation
-```{r fig.height=10, fig.width=10, fig.show='hold'}
-library(gridExtra)
-
-# Define a list of climate variables and their corresponding names
-climate_data <- list(
-  MeanFlow = list(data = monthly_means, var_name = "Mean Flow"),
-  Precip = list(data = Precip, var_name = "Precip"),
-  MeanTemp = list(data = MeanTemp, var_name = "MeanTemp"),
-  PDSI = list(data = PDSImean, var_name = "PDSI")
-)
-
-# Store plots for each site
-plot_list <- list()
-
-for (site in c( "Sheepcrn")) {  # Replace with your actual site names
-  for (climate_var in names(climate_data)) {
-    climate <- climate_data[[climate_var]]$data
-    var_name <- climate_data[[climate_var]]$var_name
-    
-    # Perform dcc analysis
-    response <- dcc(
-      chrono = get(site),
-      climate = climate,
-      boot = "exact",
-      method = "correlation",
-      selection = 1:12,
-      var_names = var_name
-    )
-    
-    # Generate plot and store in list
-    p <- plot(response, main = paste("Site:", site, "-", var_name))
-    plot_list[[paste(site, climate_var, sep = "_")]] <- p
-  }
-}
-
-# Combine plots (adjust ncol to set the number of columns)
-grid.arrange(
-  grobs = plot_list,
-  ncol = 2,                  # Number of columns
-  padding = unit(100, "lines") # Space between plots
-)
-
-```
-
-
-
-
-Response plots
-```{r fig.height=10, fig.width=10}
-library(gridExtra)
-
-# Define a list of climate variables and their corresponding names
-climate_data <- list(
-  MeanFlow = list(data = monthly_means, var_name = "Mean Flow"),
-  Precip = list(data = Precip, var_name = "Precip"),
-  MeanTemp = list(data = MeanTemp, var_name = "MeanTemp"),
-  PDSI = list(data = PDSImean, var_name = "PDSI")
-)
-
-# Store plots for each site
-plot_list <- list()
-
-for (site in c( "LBcrn")) {  # Replace with your actual site names
-  for (climate_var in names(climate_data)) {
-    climate <- climate_data[[climate_var]]$data
-    var_name <- climate_data[[climate_var]]$var_name
-    
-    # Perform dcc analysis
-    response <- dcc(
-      chrono = get(site),
-      climate = climate,
-      boot = "exact",
-      method = "response",
-      selection = 1:12,
-      var_names = var_name
-    )
-    
-    # Generate plot and store in list
-    p <- plot(response, main = paste("Site:", site, "-", var_name))
-    plot_list[[paste(site, climate_var, sep = "_")]] <- p
-  }
-}
-
-# Combine plots (adjust ncol to set the number of columns)
-reponseplot <- grid.arrange(
-  grobs = plot_list,
-  ncol = 2,                  # Number of columns
-  padding = unit(100, "lines") # Space between plots
-)
-
-
-```
 
 
 Response table with all significant plots
@@ -458,7 +231,7 @@ for (site in c("AllCorcrn")) {  # Replace with your actual site names
       chrono = get(site),  # Use the site variable dynamically
       climate = climate,
       boot = "exact",
-      method = "correlation",
+      method = "response",
       selection = -10:9,
       var_names = var_name
     )
@@ -522,11 +295,6 @@ kable(
 kable(results$AllCorcrn, format = "html", caption = "Results for AllCorcrn")
 
 ```
-
-
-
-
-
 
 
 

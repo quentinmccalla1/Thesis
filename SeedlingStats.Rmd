@@ -1,474 +1,403 @@
 ---
-title: "Seedling Statistics"
+title: "Seedling revamp"
 output: html_document
-date: "2024-09-04"
-editor_options: 
-  markdown: 
-    wrap: 72
+date: "2024-12-09"
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Stats
 
-```{r}
-library(dplyr) 
+
+```{r Library, message=FALSE, warning=FALSE}
+
+install.packages("tidyverse",repos = "https://cloud.r-project.org")
+install.packages("gridExtra")
+install.packages("grid")
+install.packages("knitr")
+install.packages("kableExtra")
+
+
+library(grid)
+library(kableExtra)
 library(tidyverse)
-#install.packages("ggplot2")
-#remove(HDR)
-```
-
-All seedling
-
-```{r}
-BRAP10_2023 <- read_csv("BRAP10_2023.csv")
-BRAP06_2024 <- read_csv("BRAP06_2024.csv")
-BRAP10_2024 <- read_csv("Brap10_2024.csv")
-
-Childs10_2023 <- read_csv("Childs10-2023.csv")
-Childs06_2024 <- read_csv("Childs06-2024.csv")
-
-
-BRAP06_2024 <- na.omit(BRAP06_2024)
-BRAP10_2023 <- na.omit(BRAP10_2023)
-BRAP10_2024 <- na.omit(BRAP10_2024)
-
-Childs10_2023 <- na.omit(Childs10_2023)
-Childs06_2024 <- na.omit(Childs06_2024)
+library(knitr)
 
 ```
 
 ```{r}
-#Make Values numeric
-#Beasley
- BRAP06_2024 <- BRAP06_2024 %>%
-  mutate(
-    Height = as.numeric(Height),
-    Diameter = as.numeric(Diameter),
-    HDR = as.numeric(HDR)
-  )
-
- BRAP10_2023 <- BRAP10_2023 %>%
-  mutate(
-    Height = as.numeric(Height),
-    Diameter = as.numeric(Diameter),
-    HDR = as.numeric(HDR)
-  )
- 
-  BRAP10_2024 <- BRAP10_2024 %>%
-  mutate(
-    Height = as.numeric(Height),
-    Diameter = as.numeric(Diameter),
-    HDR = as.numeric(HDR)
-  )
- 
-#Childs
- 
-Childs10_2023 <- Childs10_2023 %>%
-  mutate(
-    Height = as.numeric(Height),
-    Diameter = as.numeric(Diameter),
-    HDR = as.numeric(HDR)
-  )
-
-Childs06_2024 <- Childs06_2024 %>%
-  mutate(
-    Height = as.numeric(`Height`),
-    Diameter = as.numeric(`Diameter`),
-    HDR = as.numeric(`HDR`)
-  )
- 
-```
-
-Stats
-
-# Plots
-
-Clean data
-
-```{r}
-# Extract the columns you need
-ChildsHDR2023 <- Childs10_2023[, 3]
-ChildsHDR2024 <- Childs06_2024[, 3]
-
-BRAPHDR2023 <- BRAP10_2023[,4]
-BRAPHDR06_2024 <- BRAP06_2024[,4]
-BRAPHDR10_2024 <- BRAP10_2024[,4]
-
-
-#Clean Data Childs
-
-ChildsHDR2024 <- unlist(ChildsHDR2024)
-ChildsHDR2024 <- na.omit(ChildsHDR2024)
-ChildsHDR2023 <- unlist(ChildsHDR2023)
-ChildsHDR2023<- na.omit(ChildsHDR2023)
-
-BRAPHDR2023 <- na.omit(BRAPHDR2023)
-BRAPHDR2023 <- unlist(BRAPHDR2023)
-BRAPHDR06_2024 <- na.omit(BRAPHDR06_2024)
-BRAPHDR06_2024 <- unlist(BRAPHDR06_2024)
-BRAPHDR10_2024 <- unlist(BRAPHDR10_2024)
-BRAPHDR10_2024 <- na.omit(BRAPHDR10_2024)
-
-
-```
-
-Hist Childs
-```{r}
-
-par(mfrow = c(2, 2))
-
-# Create the first histogram
-hist(ChildsHDR2023,  main = "Histogram of Childs HDR 2023",  xlab = "Height to Diameter Ratio",  col = "grey",  breaks = "Sturges")
-
-# Create the second histogram
-hist(ChildsHDR2024, main = "Histogram of Childs HDR 2024", xlab = "Height to Diameter Ratio", col = "grey", breaks = "Sturges")
+brap_data <- read_csv("BRAPALL.csv")
+childs_data <- read_csv("ChildsAll.csv")
 
 
 ```
 
 
-
-
 ```{r}
-# Set up the plotting area to have 1 row and 2 columns
-par(mfrow = c(2, 2))
-# Create the first histogram
-hist(BRAPHDR2023, 
-     main = "Histogram of BRAPHDR2023", 
-     xlab = "Height to Diameter Ratio", 
-     col = "grey22", 
-     breaks = "Sturges")
+brap_data <- brap_data %>%
+  mutate(across(starts_with("HDR"), ~ as.numeric(.)))
 
-# Create the second histogram
-hist(BRAPHDR06_2024, 
-     main = "Histogram of BRAPHDR06_2024", 
-     xlab = "Height to Diameter Ratio", 
-     col = "grey22", 
-     breaks = "Sturges")
-
-hist(BRAPHDR10_2024, 
-     main = "Histogram of BRAPHDR10_2024", 
-     xlab = "Height to Diameter Ratio", 
-     col = "grey22", 
-     breaks = "Sturges")
-
-
-# Reset plotting area to default
-par(mfrow = c(2, 3))
-
-
-
-
+childs_data <- childs_data %>%
+  mutate(across(starts_with("HDR"), ~ as.numeric(.)))
 ```
 
-Summary Stats
-
-Tables
 
 ```{r}
-#Beasley Table
-library(dplyr)
+custom_order <- c("102023", "62024", "122024")  # Replace with your actual visit names or IDs
 
-# Summarize and calculate means for specific columns
-BRAP06_2024_table <- BRAP06_2024 %>%
+
+mean_value_by_visit <- childs_data %>%
+  mutate(Visit = factor(Visit, levels = custom_order)) %>%  # Set custom order
+  group_by(Visit) %>%  # Group by Visit
   summarise(
-    Height = mean(Height, na.rm = TRUE),
-    Diameter = mean(Diameter, na.rm = TRUE),
-    HDR = mean(HDR, na.rm = TRUE),
-    )
+    mean_Height = mean(Height, na.rm = TRUE),      # Calculate mean Height
+    mean_Diameter = mean(Diameter, na.rm = TRUE),  # Calculate mean Diameter
+    mean_hdr = mean(HDR, na.rm = TRUE),            # Calculate mean HDR
+    .groups = "drop"  # Ungroup the data after summarization
+  ) %>%
+  arrange(Visit)  # Arrange based on custom order
 
-BRAP2023_table <- BRAP10_2023 %>%
-  summarise(
-    Height = mean(Height, na.rm = TRUE),
-    Diameter = mean(Diameter, na.rm = TRUE),
-    HDR = mean(HDR, na.rm = TRUE),
-     
-    )
+# Display the table
+kable(mean_value_by_visit, caption = "Childs Means by Visit") %>%
+  kable_styling(full_width = FALSE, position = "center", 
+                bootstrap_options = c("striped", "bordered"))
 
-BRAP10_2024_table <- BRAP10_2024 %>%
- summarise(
-    Height = mean(Height, na.rm = TRUE),
-    Diameter = mean(Diameter, na.rm = TRUE),
-    HDR = mean(HDR, na.rm = TRUE),
-   )
-   
-BRAP_TABLE <- rbind(BRAP2023_table,BRAP06_2024_table,BRAP10_2024_table)
 
-BRAP_TABLE <- BRAP_TABLE %>%
-  mutate(Visit = c("Oct 2023", "June 2024", "Oct 2024"))
-BRAP_TABLE <- BRAP_TABLE[, c(4, 1, 2, 3)]
-print(BRAP_TABLE)
 ```
 
-Childs tables
 
+BRAP plot level means all visits
 ```{r}
-# Summarize and calculate means for specific columns
-CHILDS06_2024_table <- Childs06_2024 %>%
-  summarise(
-    Height = mean(Height, na.rm = TRUE),
-    Diameter = mean(Diameter, na.rm = TRUE),
-    HDR = mean(HDR, na.rm = TRUE)  )
+variables <- c("Diameter", "Height", "HDR")  # List of variables
+visits <- unique(brap_data$Visit)  # Get all unique Visit values
+results <- data.frame()  # Empty data frame to store the results
 
-
-CHILDS2023_table <- Childs10_2023 %>%
-  summarise(
-    Height = mean(Height, na.rm = TRUE),
-    Diameter = mean(Diameter, na.rm = TRUE),
-    HDR = mean(HDR, na.rm = TRUE),
-    #P_values = "<.001"
-    )
-
-Childs_TABLE <- rbind(CHILDS2023_table,CHILDS06_2024_table)
-
-Childs_TABLE <- Childs_TABLE %>%
-  mutate(Visit = c("Oct 2023", "June 2024"))
-
-print(Childs_TABLE)
-```
-
-Percent Change Function
-
-```{r}
-PercentChange <- function(old,new) {
-  if (old == 0) {
-    return(NA)  # Return NA if the old value is 0 (to avoid division by zero)
+for (var in variables) {
+  for (visit in visits) {  # Loop through each visit
+    # Calculate the mean for each plot and visit
+    mean_value <- brap_data %>%
+      filter(Visit == visit) %>%  # Filter for the current visit
+      group_by(Plot) %>%  # Group by Plot
+      summarise(mean_value = mean(.data[[var]], na.rm = TRUE), .groups = "drop")  # Calculate mean, remove NA
+    
+    # Add the variable name and visit to the result
+    mean_value$Variable <- var
+    mean_value$Visit <- visit
+    
+    # Bind to the results
+    results <- bind_rows(results, mean_value)
   }
-  
-  change <- ((new- old) / abs(old)) * 100
-  return(change)
 }
 
+# View the final results
+print(results)
 
 ```
 
-Statistical tests Variables
 
-Nominal= classify observations into discrete categories. Usually
-expressed by a work, not a number. Examples: sex (male, female),
-condition (good, poor, fair, etc), LOCATION
-Measurement/numeric/quantitative/Continuous variables= things you can
-measure, ex. Time
-
-Beasley plots over all 3 times = 2 continuous variables (time,
-height/diameter) and 1 nominal (location)
-
-Beasley vs Childs= 2 nominal (2 locations)
-
-<https://www.biostathandbook.com/testchoice.html>
-
-Diameters and heigths are NOT normally distributed HDR values are
-normally distributed
-
-Median= more useful for very skewed data
-
-T-tests for: seedling heights and diameters between visits. But only can
-compare TWO sets of data at a time ANOVA for : used to compare three
-categorical data sets
-
-Welch t test Use when: means of two groups with unequal sample sizes and
-possible unequal variances Assumptions: normality of data
-
+Childs plot level means all visits
 ```{r}
+variables <- c("Diameter", "Height", "HDR")  # List of variables
+visits <- unique(brap_data$Visit)  # Get all unique Visit values
+Childsresults <- data.frame()  # Empty data frame to store the results
 
-#Childs HDR P-values <.001
-t.test(ChildsHDR2023, ChildsHDR2024, var.equal = FALSE)
+for (var in variables) {
+  for (visit in visits) {  # Loop through each visit
+    # Calculate the mean for each plot and visit
+    mean_value <- brap_data %>%
+      filter(Visit == visit) %>%  # Filter for the current visit
+      group_by(Plot) %>%  # Group by Plot
+      summarise(mean_value = mean(.data[[var]], na.rm = TRUE), .groups = "drop")  # Calculate mean, remove NA
+    
+    # Add the variable name and visit to the result
+    mean_value$Variable <- var
+    mean_value$Visit <- visit
+    
+    # Bind to the results
+    Childsresults <- bind_rows(Childsresults, mean_value)
+  }
+}
 
-#BRAP HDR P-Values
-t.test(BRAP10_2023$HDR,BRAP10_2024$HDR)
-#<.001
-t.test(BRAP06_2024$HDR,BRAP10_2024$HDR)
+# View the final results
+print(Childsresults)
 
 ```
 
-Mann-Whitney U Test (Non-parametric) Use when: You are comparing two
-groups but your data are not normally distributed, and the groups have
-unequal sizes. Example: Comparing seedling growth rates between two
-treatments, where one group has more observations and the data are
-skewed. Why: It's a non-parametric test that compares the ranks of the
-data instead of the means.
 
+BRAP Specific variable plot
 ```{r}
-#hist(Childs06_2024$Diameter)
-wilcox.test(BRAP06_2024$Height,BRAP10_2024$Height)
+# Initialize an empty data frame to store the results
+Childsresults <- data.frame()
 
-#Stats for childs diameters. <.001
-wilcox.test(Childs10_2023$Diameter, Childs06_2024$Diameter)
+# Choosevariable
+variable_of_interest <- "HDR"
 
-#P value for childs heights. <.001
-wilcox.test(Childs10_2023$Height, Childs06_2024$Height)
+for (visit in visits) {  # Loop through each visit
+  # Calculate the mean for each plot and visit for the "Diameter" variable
+  mean_value <- childs_data %>%
+    filter(Visit == visit) %>%  # Filter for the current visit
+    group_by(Plot) %>%  # Group by Plot
+    summarise(mean_value = mean(.data[[variable_of_interest]], na.rm = TRUE), .groups = "drop")  # Calculate mean, remove NA
+  
+  # Add the variable name and visit to the result
+  mean_value$Variable <- variable_of_interest
+  mean_value$Visit <- visit
+  
+  # Bind to the results
+  Childsresults <- bind_rows(Childsresults, mean_value)
+}
 
+# Pivot the data so that each visit is a separate column
+Childsresults_wide <- Childsresults %>%
+  pivot_wider(names_from = Visit, values_from = mean_value)
 
+# View the final results in a table format using kable
+Childsresults_wide %>%
+  kable("html", caption = "Mean HDR Values by Visit for Childs") %>%
+  kable_styling(full_width = FALSE)
 
 ```
 
-ANOVA w/ Unequal sample size Use when: You have more than two groups
-with unequal sample sizes, and you want to compare their means.
-
-Example: Comparing the average height of seedlings across multiple
-treatment groups, each with a different number of samples.
-
-Why: ANOVA can handleunequal sample sizes but assumes equal variances
-across groups (you can relax this assumption with a modified version
-like Welch's ANOVA).
-
+Childs plot specific means
 ```{r}
-BRAP_TABLE$Visit <- as.factor(BRAP_TABLE$Visit)
-BRAP_TABLE <- na.omit(BRAP_TABLE)
+# Initialize an empty data frame to store the results
+Childsresults <- data.frame()
 
-# Convert Visit to a factor if it isn't already
-BRAP_TABLE$Visit <- as.factor(BRAP_TABLE$Visit)
+# Choose the variable of interest
+variable_of_interest <- "Height"
 
-# Ensure Height is numeric
-BRAP_TABLE$Height <- as.numeric(BRAP_TABLE$Height)
+# Define the visits explicitly, ensuring that '122024' is included
+visits <- c("62024", "102023", "102024", "122024")  # List all the visits you want to include
 
-anova_height <- aov(Visit ~ Height, data = BRAP_TABLE)
-welch_anova <- oneway.test(Diameter ~ Visit, data = BRAP_TABLE)
-print(welch_anova)
+for (visit in visits) {  # Loop through each visit
+  # Calculate the mean for each plot and visit for the chosen variable
+  mean_value <- childs_data %>%
+    filter(Visit == visit) %>%  # Filter for the current visit
+    group_by(Plot) %>%  # Group by Plot
+    summarise(mean_value = mean(.data[[variable_of_interest]], na.rm = TRUE), .groups = "drop")  # Calculate mean, remove NA
+  
+  # Add the variable name and visit to the result
+  mean_value$Variable <- variable_of_interest
+  mean_value$Visit <- visit
+  
+  # Bind to the results
+  Childsresults <- bind_rows(Childsresults, mean_value)
+}
 
+# Pivot the data so that each visit is a separate column
+Childsresults_wide <- Childsresults %>%
+  pivot_wider(names_from = Visit, values_from = mean_value)
 
-```
-
-
-
-
-```{r}
-BRAPsurvey <- read.csv("WellSurvey.csv")
-
-
-library(ggplot2)
-
-# Distance to river vs survivorship
-ggplot(BRAPsurvey, aes(x = BRAPsurvey$Distance.to.river..m., y = BRAPsurvey$X..Change.from.original.survey)) +
-    geom_point() +
-    geom_smooth(method = "lm") +
-    labs(title = "Seedling Survivorship vs Distance to River", x = "Distance to River (m)", y = "Survivorship (%)")
-
-# Distance above groundwater vs survivorship
-ggplot(BRAPsurvey, aes(x = BRAPsurvey$Difference.between.plot.and.river.stage..m., y = BRAPsurvey$X..Change.from.original.survey)) +
-    geom_point() +
-    geom_smooth(method = "lm") +
-    labs(title = "Seedling Survivorship vs Distance Above Groundwater", x = "Distance Above Groundwater (m)", y = "Survivorship (%)")
-
-# Distance above groundwater vs survivorship
-ggplot(BRAPsurvey, aes(x = Difference.between.plot.and.GW.level.m., y = X..Change.from.original.survey)) +
-    geom_point() +
-      geom_smooth(method = "lm") +
-    labs(title = "Seedling Survivorship vs Distance Above Groundwater", 
-         x = "Distance Above Groundwater (m)", 
-         y = "Survivorship (%)")
-```
-
-```{r}
-survivalmodel <- glm(X..Change.from.original.survey ~ BRAPsurvey$Difference.between.plot.and.river.stage..m., data = BRAPsurvey)
-summary(survivalmodel)
-
-```
-
-
-
-```{r}
-brap_data <- read.csv("BRAPALL.csv")
-WellSurvey <- read_csv("WellSurvey.csv")
-
-# Reshape to long format
-long_data <- brap_data %>%
-  pivot_longer(cols = starts_with("Diameter") | starts_with("Height") | starts_with("HDR"),
-               names_to = c("Variable", "Date"),
-               names_sep = "(?<=[A-Za-z])(?=\\d)",  # Separate based on letter and number
-               values_to = "Value")
-long_data$Variable <- as.factor(long_data$Variable)
-long_data$Date <- as.factor(long_data$Date)
-```
-
-
-```{r Table 1, message=FALSE, warning=FALSE}
-
-# Calculate mean for each Variable and Date
-mean_values <- long_data %>%
-  mutate(Date = dmy(paste("15", Date))) %>%  
-  group_by(Variable, Date) %>%  # Group by Variable and Date
-  summarise(Mean_Value = mean(Value, na.rm = TRUE), .groups = "drop") %>%  
-  arrange(Variable, Date) %>%  # Ensure data is sorted by Variable and Date
-  group_by(Variable) %>%  # Regroup by Variable
-  mutate(Percentage_Change = (Mean_Value - lag(Mean_Value)) / lag(Mean_Value) * 100) %>%  
-  ungroup() %>%  # Remove grouping
-  arrange(Variable, Date)  # Final sort by Variable and Date for display
-
-
-mean_values %>%
-  kable("html", caption = "Changes in seedling growth") %>%
+# View the final results in a table format using kable
+Childsresults_wide %>%
+  kable("html", caption = "Mean Height Values by Visit for Childs") %>%
   kable_styling(full_width = FALSE)
 
 ```
 
 
-```{r Size Plots, message=FALSE, warning=FALSE}
-ggplot(long_data, aes(x = Value, fill = Variable)) +
-  geom_histogram(bins = 20, alpha = 0.7, position = "identity") +
-  facet_wrap(~ Variable, scales = "free") +
-  labs(
-    title = "Histograms of Diameter, Height, and HDR",
-    x = "Value",
-    y = "Count"
-  ) +
-  theme_minimal()
+Plot graphs
+```{r}
+
+# Choose the variable of interest (Height in this case)
+variable_of_interest <- "Height"
+
+# Calculate the mean height for each plot and visit
+mean_height <- childs_data %>%
+  group_by(Plot, Visit) %>%  # Group by Plot and Visit
+  summarise(mean_height = mean(.data[[variable_of_interest]], na.rm = TRUE), .groups = "drop")  # Calculate mean height, remove NA
+
+# Create a bar plot with more space between bars
+ggplot(mean_height, aes(x = factor(Plot), y = mean_height, fill = Visit)) +
+  geom_bar(stat = "identity", position = position_dodge(width = .8)) +  # Increase spacing between bars
+  labs(title = "Mean Height by Plot and Visit",
+       x = "Plot",
+       y = "Mean Height") +
+  theme_minimal() +
+  scale_fill_manual(values = c("skyblue", "lightgreen", "orange", "pink")) +  # Customize colors
+  scale_x_discrete(expand = expansion(add = c(2,2))) +  # Add more space around bars on x-axis
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for better readability
+
 ```
+
+
+
+
+Factor Visit
+```{r}
+brap_data$Visit <- as.factor(brap_data$Visit)
+childs_data$Visit <- as.factor(childs_data$Visit)
+
+```
+Brap ANovA
+
+```{r}
+# List of variables to analyze
+variables <- c("Diameter", "Height", "HDR") 
+# Initialize an empty list to store results
+anova_results <- list()
+tukey_results <- list()
+# Loop through each variable
+for (var in variables) {
+  # Run ANOVA
+  anova_model <- aov(as.formula(paste(var, "~ Visit")), data = brap_data)
+  anova_results[[var]] <- summary(anova_model)
+  
+  # Check for significance in the ANOVA model
+  p_value <- summary(anova_model)[[1]][["Pr(>F)"]][1]
+  if (!is.na(p_value) && p_value < 0.05) {
+    # If significant, run Tukey's HSD
+    tukey_test <- TukeyHSD(anova_model)
+    tukey_results[[var]] <- tukey_test
+  } else {
+    tukey_results[[var]] <- NULL
+  }
+}
+# View Tukey's HSD results
+for (var in variables) {
+  if (!is.null(tukey_results[[var]])) {
+    cat("\nTukey's HSD for", var, ":\n")
+    print(tukey_results[[var]])
+  } else {
+    cat("\nNo significant results for", var, "in ANOVA.\n")
+  }
+}
+
+```
+
+BRAP Anova Table
+```{r}
+# Initialize an empty list to store formatted Tukey results
+formatted_results <- list()
+
+# Loop through each variable's Tukey results
+for (var in variables) {
+  if (!is.null(tukey_results[[var]])) {
+    # Extract Tukey results for Visit comparisons
+    tukey_data <- as.data.frame(tukey_results[[var]]$Visit)
+    tukey_data$Comparison <- rownames(tukey_data)
+    rownames(tukey_data) <- NULL
+    tukey_data$Variable <- var
+    # Reorder columns
+    tukey_data <- tukey_data %>%
+      select(Variable, Comparison, diff, lwr, upr, `p adj`) %>%
+      rename(Mean_Diff = diff, Lower_CI = lwr, Upper_CI = upr, P_Value = `p adj`)
+    # Append to formatted results
+    formatted_results[[var]] <- tukey_data
+  }
+}
+
+# Combine all results into one data frame
+final_results <- bind_rows(formatted_results)
+# Display as a styled table
+final_results %>%
+  kable("html", caption = "Tukey's HSD Results for BRAP") %>%
+  kable_styling(full_width = FALSE) %>%
+ # row_spec(which(final_results$P_Value < 0.05), background = "lightgreen")
+
+```
+
+
+Childs ANOVA
+
+```{r}
+# List of variables to analyze
+Childsvariables <- c("Diameter", "Height", "HDR") 
+
+# Initialize empty lists to store results
+Childsanova_results <- list()
+Childstukey_results <- list()
+
+# Loop through each variable
+for (var in Childsvariables) {
+  # Run ANOVA
+  Childsanova_model <- aov(as.formula(paste(var, "~ Visit")), data = childs_data)
+  Childsanova_results[[var]] <- summary(Childsanova_model)
+  
+  # Check for significance in the ANOVA model
+  p_value <- summary(Childsanova_model)[[1]][["Pr(>F)"]][1]
+  if (!is.na(p_value) && p_value < 0.05) {
+    # If significant, run Tukey's HSD
+    tukey_test <- TukeyHSD(Childsanova_model)
+    Childstukey_results[[var]] <- tukey_test
+  } else {
+    Childstukey_results[[var]] <- NULL
+  }
+}
+
+# View Tukey's HSD results
+for (var in Childsvariables) {
+  if (!is.null(Childstukey_results[[var]])) {
+    cat("\nTukey's HSD for", var, ":\n")
+    print(Childstukey_results[[var]])
+  } else {
+    cat("\nNo significant results for", var, "in ANOVA.\n")
+  }
+}
+
+
+```
+
+Childs Anova Table
+```{r}
+# Initialize an empty list to store formatted Tukey results for Childs site
+Childsformatted_results <- list()
+
+# Loop through each variable's Tukey results
+for (var in Childsvariables) {  # Use Childsvariables to ensure proper referencing
+  if (!is.null(Childstukey_results[[var]])) {  # Access Childstukey_results for Tukey data
+    # Extract Tukey results for Visit comparisons
+    tukey_data <- as.data.frame(Childstukey_results[[var]]$Visit)
+    tukey_data$Comparison <- rownames(tukey_data)
+    rownames(tukey_data) <- NULL
+    tukey_data$Variable <- var
+    
+    # Reorder columns and rename for clarity
+    tukey_data <- tukey_data %>%
+      select(Variable, Comparison, diff, lwr, upr, `p adj`) %>%
+      rename(Mean_Diff = diff, Lower_CI = lwr, Upper_CI = upr, P_Value = `p adj`)
+    
+    # Append to formatted results
+    Childsformatted_results[[var]] <- tukey_data
+  }
+}
+
+# Combine all formatted results into one data frame
+Childsfinal_results <- bind_rows(Childsformatted_results)
+
+# Display the results as a styled table
+Childsfinal_results %>%
+  kable("html", caption = "Tukey's HSD Results for Childs Site Variables") %>%
+  kable_styling(full_width = FALSE) %>%
+  #row_spec(which(Childsfinal_results$P_Value < 0.05), background = "lightgreen")
+
+
+```
+
+
+
+
+VARIABLE CORR
 
 
 ```{r}
-# Run ANOVA model
-anova_model <- aov(Value ~ Variable * Date, data = long_data)
-tukey_results <- TukeyHSD(anova_model)
-
-# Function to extract Tukey's results into a data frame
-extract_tukey_results <- function(tukey_result, comparison_name) {
-  if (comparison_name %in% names(tukey_result)) {
-    tukey_df <- as.data.frame(tukey_result[[comparison_name]])
-    if (nrow(tukey_df) > 0) {
-      tukey_df$Comparison <- rownames(tukey_df)
-      rownames(tukey_df) <- NULL
-      colnames(tukey_df) <- c("Estimate", "Lower_CI", "Upper_CI", "P_Value", "Comparison")
-      return(tukey_df[, c("Comparison", "Estimate", "Lower_CI", "Upper_CI", "P_Value")])
-    }
-  }
-  return(data.frame(Comparison = NA, Estimate = NA, Lower_CI = NA, Upper_CI = NA, P_Value = NA))
-}
-# Extract Tukey results for the interaction term
-tukey_results_interaction_df <- extract_tukey_results(tukey_results, "Variable:Date")
-selected_rows <- c(3, 6, 11, 14, 18, 21, 24, 29, 33)
-selected_data <- data.frame()
-# Loop through the selected rows and add them to the data frame
-for (row in selected_rows) {
-  if (row <= nrow(tukey_results_interaction_df)) {
-    selected_data <- rbind(selected_data, tukey_results_interaction_df[row, ])
-  }
-}
-
-# Generate the kable table
-selected_data %>%
-  kable("html", caption = "Selected Rows from Tukey Test") %>%
-  kable_styling(full_width = FALSE) %>%
-  row_spec(which(selected_data$P_Value < 0.05), background = "lightgreen")
-
+ChildsVars <- read_csv("ChildsWellSurvey.csv")
+BRAPVars <- read_csv("BRAPWellSurvey.csv")
 
 ```
 
-
-
+BRAP Vars
 ```{r}
 # Target variable (change this to your actual target variable name)
-target_var <- WellSurvey$`% Change from original survey`
-column_names <- setdiff(names(WellSurvey), "target_var")
+target_var <- BRAPVars$`% Change from original survey`
+column_names <- setdiff(names(BRAPVars), "target_var")
 # Initialize an empty data frame to store results
 cor_results <- data.frame(Variable = character(), Correlation = numeric(), P_Value = numeric(), stringsAsFactors = FALSE)
 
 # Loop through the list of variables to test correlation with the target
 for (var_name in column_names) {
-  current_var <- WellSurvey[[var_name]]
+  current_var <- BRAPVars[[var_name]]
   if (is.numeric(current_var) && sum(complete.cases(current_var, target_var)) > 2) {
     # Perform Spearman correlation test
     cor_test <- tryCatch(
@@ -483,15 +412,61 @@ for (var_name in column_names) {
     }
   }
 }
-
-
 correlation_results <- data.frame(cor_results)
 rownames(correlation_results) <- NULL
 correlation_results <- correlation_results[-4,]
 
+print(correlation_results)
+
 correlation_results %>%
-  kable("html", caption = "Highlighted Rows Based on P-Value") %>%
+  kable("html", caption = "Variables vs % Change in density from original survey") %>%
   kable_styling(full_width = FALSE) %>%
-  row_spec(which(correlation_results$P_Value < 0.05), background = "lightgreen")
+  row_spec(which(correlation_results$P_Value < 0.05), background = "lightgreen")%>%
+ save_kable("my_table.html")
 
 ```
+
+
+
+
+Childs Vars
+```{r}
+# Target variable (change this to your actual target variable name)
+target_var <- ChildsVars$`%Change Density`
+column_names <- setdiff(names(ChildsVars), "target_var")
+# Initialize an empty data frame to store results
+cor_results <- data.frame(Variable = character(), Correlation = numeric(), P_Value = numeric(), stringsAsFactors = FALSE)
+
+# Loop through the list of variables to test correlation with the target
+for (var_name in column_names) {
+  current_var <- ChildsVars[[var_name]]
+  if (is.numeric(current_var) && sum(complete.cases(current_var, target_var)) > 2) {
+    # Perform Spearman correlation test
+    cor_test <- tryCatch(
+      cor.test(target_var, current_var, method = "spearman", use = "complete.obs"),
+      error = function(e) NULL
+    )
+        if (!is.null(cor_test)) {
+      cor_results <- rbind(cor_results, 
+                           data.frame(Variable = var_name, 
+                                      Correlation = cor_test$estimate, 
+                                      P_Value = cor_test$p.value))
+    }
+  }
+}
+correlation_results <- data.frame(cor_results)
+rownames(correlation_results) <- NULL
+#correlation_results <- correlation_results[-4,]
+
+correlation_results %>%
+  kable("html", caption = "Variables vs %Change in original density") %>%
+  kable_styling(full_width = FALSE) 
+%>%
+  #row_spec(which(correlation_results$P_Value < 0.05), background = "lightgreen")
+
+```
+
+
+
+
+
