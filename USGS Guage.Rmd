@@ -23,7 +23,7 @@ CampVerdeGuage <- readNWISdv(    #Daily
   "09506000",                  #Below camp verde guage
   "00060",                      #Discharge
   startDate = "1991-01-01",      #From first complete year
-  endDate = "",                 #Till now
+  endDate = "2006-01-01",                 #Till now
   statCd = "00003"
 )
 CampVerdeGuage <- CampVerdeGuage %>%     #Rename column to discharge
@@ -44,8 +44,8 @@ print(top_flows)
 ```
 
 
-AEP
 ```{r fig.height=8, fig.width=20}
+#All NAIP
 
 ggplot(data = CampVerdeGuage, mapping = aes(x = Date, y = Discharge)) + 
   geom_line()+
@@ -78,95 +78,7 @@ geom_hline(yintercept  = 42500, color = "blue", linetype = "dashed", size = 1)+
 
 
 
-```
-
-
-
-Water rights filing
-```{r}
-ggplot(data = CampVerdeGuage, mapping = aes(x = Date, y = Discharge)) + 
-  geom_line()+
-geom_hline(yintercept = 26200, color = "blue", linetype = "dashed", size = 1)+
-    annotate("text" , x = as.Date("1990-04-01"), y = 24800, label ="Late Spring flood"
-             , color ="black", vjust =-1, size = 3)+
-   annotate("text" , x = as.Date("2006-01-01"), y = 1240, label ="Spring and Fall flood pulse"
-             , color ="black", vjust =-1, size = 3)+
-geom_hline(yintercept  = 10500, color = "blue", linetype = "dashed", size = 1)+
-    annotate("text" ,x = as.Date("1990-04-01"), y = 42500, label ="Rejuvenating FLood"
-             , color ="black", vjust =-1, size = 3)+
-  annotate("text" , x = as.Date("2006-01-01"), y = 52700, label ="Restructuring flood"
-             , color ="black", vjust =-1, size = 3)+
-  geom_hline(yintercept = 108000, color = "blue", linetype = "dashed", size = 1)+
-  geom_point(aes(x=as.Date("1993-02-20") , y= 101000 ),shape= 18, size= 5, color = "black")+
-    geom_point(aes(x=as.Date("1995-03-6") , y= 75500 ),shape= 18, size= 5, color = "black")+
-    geom_point(aes(x=as.Date("2005-02-12") , y= 62000 ),shape= 18, size= 5, color = "black")+
-  theme_minimal()
-
-
-
-```
-
-both
-```{r}
-ggplot(data = CampVerdeGuage, mapping = aes(x = Date, y = Discharge)) + 
-  geom_line()+
-geom_hline(yintercept = 26200, color = "red", linetype = "dashed", size = 1)+
-    annotate("text" , x = as.Date("2024-04-01"), y = 24800, label ="Late Spring flood"
-             , color ="black", vjust =-1, size = 3)+
-  geom_hline(yintercept = 1240, color = "red", linetype = "dashed", size = 1)+
-   annotate("text" , x = as.Date("2024-01-01"), y = 1240, label ="Spring and Fall flood pulse"
-             , color ="black", vjust =-1, size = 3)+
-geom_hline(yintercept  = 42500, color = "red", linetype = "dashed", size = 1)+
-    annotate("text" ,x = as.Date("2024-04-01"), y = 42500, label ="Rejuvenating FLood"
-             , color ="black", vjust =-1, size = 3)+
-  geom_hline(yintercept  = 52700, color = "red", linetype = "dashed", size = 1)+
-    annotate("text" ,x = as.Date("2024-04-01"), y = 52700, label ="Restructuring"
-             , color ="black", vjust =-1, size = 3)+
-  #AEP
-geom_hline(yintercept = 24800, color = "blue", linetype = "dashed", size = 1)+
-    annotate("text" , x = as.Date("1990-04-01"), y = 24800, label ="20% AEP"
-             , color ="black", vjust =-1, size = 3)+
-geom_hline(yintercept  = 42500, color = "blue", linetype = "dashed", size = 1)+
-    annotate("text" ,x = as.Date("1990-04-01"), y = 42500, label ="10% AEP"
-             , color ="black", vjust =-1, size = 3)+
-  geom_hline(yintercept = 75100, color = "blue", linetype = "dashed", size = 1)+
-    annotate("text" ,x = as.Date("1990-04-01"), y = 75100, label ="4% AEP"
-             , color ="black", vjust =-1, size = 3)+
-  geom_hline(yintercept = 108000, color = "blue", linetype = "dashed", size = 1)+
-    annotate("text" ,x = as.Date("1990-04-01"), y = 108000, label ="2% AEP"
-             , color ="black", vjust =-1, size = 3)+
-  geom_point(aes(x=as.Date("1993-02-20") , y= 101000 ),shape= 18, size= 5, color = "black")+
-    geom_point(aes(x=as.Date("1995-03-6") , y= 75500 ),shape= 18, size= 5, color = "black")+
-    geom_point(aes(x=as.Date("2005-02-12") , y= 62000 ),shape= 18, size= 5, color = "black")+
-  theme_minimal()
-
-
-
-```
-
-
-
-Water rights filing
-```{r}
-ggplot(data = CampVerdeGuage, mapping = aes(x = Date, y = Discharge)) + 
-  geom_line()+
-geom_hline(yintercept = 26200, color = "blue", linetype = "dashed", size = 1)+
-    annotate("text" , x = as.Date("1990-04-01"), y = 24800, label ="Late Spring flood"
-             , color ="black", vjust =-1, size = 3)+
-   annotate("text" , x = as.Date("2006-01-01"), y = 1240, label ="Spring and Fall flood pulse"
-             , color ="black", vjust =-1, size = 3)+
-geom_hline(yintercept  = 10500, color = "blue", linetype = "dashed", size = 1)+
-    annotate("text" ,x = as.Date("1990-04-01"), y = 42500, label ="Rejuvenating FLood"
-             , color ="black", vjust =-1, size = 3)+
-  annotate("text" , x = as.Date("2006-01-01"), y = 52700, label ="Restructuring flood"
-             , color ="black", vjust =-1, size = 3)+
-  geom_hline(yintercept = 108000, color = "blue", linetype = "dashed", size = 1)+
-  geom_point(aes(x=as.Date("1993-02-20") , y= 101000 ),shape= 18, size= 5, color = "black")+
-    geom_point(aes(x=as.Date("1995-03-6") , y= 75500 ),shape= 18, size= 5, color = "black")+
-    geom_point(aes(x=as.Date("2005-02-12") , y= 62000 ),shape= 18, size= 5, color = "black")+
-  
-  theme_minimal()
-
+#75500 at
 
 
 ```
