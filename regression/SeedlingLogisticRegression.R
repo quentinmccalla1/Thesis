@@ -6,6 +6,10 @@ library(MASS)
 library(readxl)
 install.packages("pscl", repos = "http://cran.us.r-project.org")
 library(pscl)
+install.packages("caret", dependencies = TRUE)
+library(caret)
+library(pROC)
+library(pscl)
 #Look into cross validation
 #Hypothesis for survival, come up with patterns/combos for soil
 
@@ -40,21 +44,32 @@ BeasLogit1 <- glm(Fall2024 ~ LightBINOM + HerbaceausBINOM + FinesBinom, data = B
 #BeasLogit <- glm(TF ~ DistChan + DistChan2 + DGW + DGW2 + PercFines + PercFines2, data = BeasleyPopSurv, family = "binomial")
 summary(BeasLogit1)
 
-## Confidence Intervals using profiled log-likelihood
-confint(BeasLogit1)
 
-## Confidence Intervals using standard errors
-confint.default(BeasLogit1)
-wald.test(b = coef(BeasLogit1), Sigma = vcov(BeasLogit1), L = 1)
+#test for accuracy
+pred_probs <- predict(BeasLogit3, type = "response")
+# Convert probabilities to binary predictions (threshold = 0.5)
+pred_class <- ifelse(pred_probs > 0.3, 1, 0)
+# Compute accuracy
+accuracy <- mean(pred_class == BeasleyPopSurv$Fall2024)
+# Generate confusion matrix
+conf_matrix <- confusionMatrix(as.factor(pred_class), as.factor(BeasleyPopSurv$Fall2024))
+# Compute ROC and AUC
+roc_curve <- roc(BeasleyPopSurv$Fall2024, pred_probs)
+auc_value <- auc(roc_curve)
+# Compute McFadden's Pseudo R²
+pseudo_r2 <- pR2(model)["McFadden"]
+# Print results
+print(conf_matrix)  # Confusion matrix with precision, recall, etc.
+cat("Accuracy:", accuracy, "\n")
+cat("AUC:", auc_value, "\n")
+cat("McFadden's R²:", pseudo_r2, "\n")
 
-
-pR2(BeasLogit1)
-
+# Plot ROC curve
+plot(roc_curve, col = "blue", main = paste("ROC Curve (AUC =", round(auc_value, 3), ")"))
 
 BeasLogit3 <- glm(Fall2024 ~ poly(LightBINOM, 2) + HerbaceausBINOM + FinesBinom, data = BeasleyPopSurv, family = "binomial")
-anova(BeasLogit1, BeasLogit3, test = "Chisq")
 
-pR2(ChildsLogit1)
+
 
 
 
@@ -64,15 +79,58 @@ pR2(ChildsLogit1)
 
 
 #Childs
-ChildsLogit1 <- glm(Fall2024 ~ LightBINOM + HerbaceausBINOM + FinesBINOM, data = ChildsPopSurv, family = "binomial")
+# Adding polynomial features (e.g., squared terms)
+ChildsPopSurv$LightBINOM_squared <- ChildsPopSurv$LightBINOM^2
+ChildsPopSurv$FinesBINOM_squared <- ChildsPopSurv$FinesBINOM^2
+ChildsLogitPoly <- glm(Fall2024 ~ LightBINOM + FinesBINOM + LightBINOM_squared + FinesBINOM_squared, 
+                       data = ChildsPopSurv, family = "binomial")
+summary(ChildsLogitPoly)
+# Predict probabilities
+pred_probs <- predict(ChildsLogitPoly, type = "response")
+
+# Convert probabilities to binary predictions (threshold = 0.5)
+pred_class <- ifelse(pred_probs > 0.6, 1, 0)
+
+# Compute accuracy
+accuracy <- mean(pred_class == ChildsPopSurv$Fall2024)
+cat("Accuracy:", accuracy, "\n")
+
+# Generate confusion matrix
+conf_matrix <- confusionMatrix(as.factor(pred_class), as.factor(ChildsPopSurv$Fall2024))
+print(conf_matrix)
+
+# Compute AUC
+roc_curve <- roc(ChildsPopSurv$Fall2024, pred_probs)
+auc_value <- auc(roc_curve)
+cat("AUC:", auc_value, "\n")
+
+
+
+
+
+
+
+ChildsLogit1 <- glm(Fall2024 ~ LightBINOM * FinesBINOM, data = ChildsPopSurv, family = "binomial")
 summary(ChildsLogit1)
 
-## Confidence Intervals using profiled log-likelihood
-confint(ChildsLogit1)
-
-## Confidence Intervals using standard errors
-confint.default(ChildsLogit1)
-wald.test(b = coef(ChildsLogit1), Sigma = vcov(ChildsLogit1), L = 1)
+#test for accuracy
+pred_probs <- predict(ChildsLogit1, type = "response")
+# Convert probabilities to binary predictions (threshold = 0.5)
+pred_class <- ifelse(pred_probs > 0.4, 1, 0)
+# Compute accuracy
+accuracy <- mean(pred_class == ChildsPopSurv$Fall2024)
+# Generate confusion matrix
+conf_matrix <- confusionMatrix(as.factor(pred_class), as.factor(ChildsPopSurv$Fall2024))
+# Compute ROC and AUC
+roc_curve <- roc(ChildsPopSurv$Fall2024, pred_probs)
+auc_value <- auc(roc_curve)
+# Compute McFadden's Pseudo R²
+pseudo_r2 <- pR2(model)["McFadden"]
+# Print results
+print(conf_matrix)  # Confusion matrix with precision, recall, etc.
+cat("Accuracy:", accuracy, "\n")
+cat("AUC:", auc_value, "\n")
+cat("McFadden's R²:", pseudo_r2, "\n")
 
 
 
@@ -122,12 +180,8 @@ step_accuracy <- mean(step_predicted == observed)
 cat("Full model accuracy:", full_accuracy, "\n")
 cat("Stepwise model accuracy:", step_accuracy, "\n")
 
-
-
 # if polynomial is significant, include both
 #Test it: tell R to give me predicted values
-
-
 #Childs
 set.seed(123)  # For reproducibility
 train_indices <- sample(1:nrow(ChildsPopSurv), size = 0.7 * nrow(BeasleyPopSurv))
