@@ -42,13 +42,21 @@ ChildsPopSurv$FinesBINOM <- ChildsPopSurv$Fines^2
 #Brap#
 BeasLogit1 <- glm(Fall2024 ~ LightBINOM + HerbaceausBINOM + FinesBinom, data = BeasleyPopSurv, family = "binomial")
 #BeasLogit <- glm(TF ~ DistChan + DistChan2 + DGW + DGW2 + PercFines + PercFines2, data = BeasleyPopSurv, family = "binomial")
-summary(BeasLogit1)
 
+BeasLogit3 <- glm(Fall2024 ~ poly(LightBINOM, 2) + HerbaceausBINOM + FinesBinom, data = BeasleyPopSurv, family = "binomial")
+
+BeasleyPopSurv$LightBINOM_scaled <- scale(BeasleyPopSurv$LightBINOM)
+BeasLogit3 <- glm(Fall2024 ~ LightBINOM_scaled + I(LightBINOM_scaled^2) + HerbaceausBINOM + FinesBinom, 
+                  data = BeasleyPopSurv, family = "binomial")
+summary(BeasLogit3)
+
+optimal_threshold <- coords(roc_curve, "best", ret = "threshold")
+pred_class <- ifelse(pred_probs > optimal_threshold, 1, 0)
 
 #test for accuracy
 pred_probs <- predict(BeasLogit3, type = "response")
 # Convert probabilities to binary predictions (threshold = 0.5)
-pred_class <- ifelse(pred_probs > 0.3, 1, 0)
+pred_class <- ifelse(pred_probs > 0.59, 1, 0)
 # Compute accuracy
 accuracy <- mean(pred_class == BeasleyPopSurv$Fall2024)
 # Generate confusion matrix
@@ -57,7 +65,7 @@ conf_matrix <- confusionMatrix(as.factor(pred_class), as.factor(BeasleyPopSurv$F
 roc_curve <- roc(BeasleyPopSurv$Fall2024, pred_probs)
 auc_value <- auc(roc_curve)
 # Compute McFadden's Pseudo R²
-pseudo_r2 <- pR2(model)["McFadden"]
+pseudo_r2 <- pR2(BeasLogit3)["McFadden"]
 # Print results
 print(conf_matrix)  # Confusion matrix with precision, recall, etc.
 cat("Accuracy:", accuracy, "\n")
@@ -67,7 +75,6 @@ cat("McFadden's R²:", pseudo_r2, "\n")
 # Plot ROC curve
 plot(roc_curve, col = "blue", main = paste("ROC Curve (AUC =", round(auc_value, 3), ")"))
 
-BeasLogit3 <- glm(Fall2024 ~ poly(LightBINOM, 2) + HerbaceausBINOM + FinesBinom, data = BeasleyPopSurv, family = "binomial")
 
 
 
@@ -85,12 +92,12 @@ ChildsPopSurv$FinesBINOM_squared <- ChildsPopSurv$FinesBINOM^2
 ChildsLogitPoly <- glm(Fall2024 ~ LightBINOM + FinesBINOM + LightBINOM_squared + FinesBINOM_squared, 
                        data = ChildsPopSurv, family = "binomial")
 summary(ChildsLogitPoly)
+
+
 # Predict probabilities
 pred_probs <- predict(ChildsLogitPoly, type = "response")
-
 # Convert probabilities to binary predictions (threshold = 0.5)
-pred_class <- ifelse(pred_probs > 0.6, 1, 0)
-
+pred_class <- ifelse(pred_probs > 0.4, 1, 0)
 # Compute accuracy
 accuracy <- mean(pred_class == ChildsPopSurv$Fall2024)
 cat("Accuracy:", accuracy, "\n")
@@ -98,12 +105,17 @@ cat("Accuracy:", accuracy, "\n")
 # Generate confusion matrix
 conf_matrix <- confusionMatrix(as.factor(pred_class), as.factor(ChildsPopSurv$Fall2024))
 print(conf_matrix)
+# Compute McFadden's Pseudo R²
+pseudo_r2 <- pR2(ChildsLogitPoly)["McFadden"]
+cat("McFadden's R²:", pseudo_r2, "\n")
 
+# Print results
 # Compute AUC
 roc_curve <- roc(ChildsPopSurv$Fall2024, pred_probs)
 auc_value <- auc(roc_curve)
 cat("AUC:", auc_value, "\n")
-
+optimal_threshold <- coords(roc_curve, "best", ret = "threshold")
+pred_class <- ifelse(pred_probs > optimal_threshold, 1, 0)
 
 
 
@@ -116,7 +128,7 @@ summary(ChildsLogit1)
 #test for accuracy
 pred_probs <- predict(ChildsLogit1, type = "response")
 # Convert probabilities to binary predictions (threshold = 0.5)
-pred_class <- ifelse(pred_probs > 0.4, 1, 0)
+pred_class <- ifelse(pred_probs > 0.33, 1, 0)
 # Compute accuracy
 accuracy <- mean(pred_class == ChildsPopSurv$Fall2024)
 # Generate confusion matrix
@@ -125,13 +137,14 @@ conf_matrix <- confusionMatrix(as.factor(pred_class), as.factor(ChildsPopSurv$Fa
 roc_curve <- roc(ChildsPopSurv$Fall2024, pred_probs)
 auc_value <- auc(roc_curve)
 # Compute McFadden's Pseudo R²
-pseudo_r2 <- pR2(model)["McFadden"]
+pseudo_r2 <- pR2(ChildsLogit1)["McFadden"]
 # Print results
 print(conf_matrix)  # Confusion matrix with precision, recall, etc.
 cat("Accuracy:", accuracy, "\n")
 cat("AUC:", auc_value, "\n")
 cat("McFadden's R²:", pseudo_r2, "\n")
-
+optimal_threshold <- coords(roc_curve, "best", ret = "threshold")
+pred_class <- ifelse(pred_probs > optimal_threshold, 1, 0)
 
 
 
