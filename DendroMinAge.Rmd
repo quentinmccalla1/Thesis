@@ -7,12 +7,14 @@ date: "2024-09-12"
 library(dplR)
 library(dplyr)
 library(kableExtra)
+library(ggplot2)
+
 
 ```
 
 
 ```{r}
-DendroMerge <- read_csv("DendroMergeforR.csv")
+DendroMerge <- read.csv("DendroMergeforR.csv")
 
 DendroMerge <- DendroMerge[,-8]
 DendroMerge <- DendroMerge %>%
@@ -36,7 +38,7 @@ DendroMerge <- DendroMerge %>%
 
 Age vs size plot
 ```{r}
-ggplot(DendroMerge, aes(x = PithHand, y = `Diameter (CM)`)) +
+ggplot(DendroMerge, aes(x = PithHand, y = DendroMerge$Diameter..CM.)) +
   labs( x= "Pith Year", y = "Diameter (cm)", title = "Diameter vs Pith Date") +
   geom_point(shape=18, size= 3)+
   geom_smooth( method = "lm", se = FALSE, size = 1.5)+
@@ -65,7 +67,7 @@ for (site in site_ids) {
   site_data <- DendroMerge %>% filter(`Site ID` == site)
   
   # Create the plot
-  p <- ggplot(site_data, aes(x = PithHand, y = `Diameter (CM)`, color = `Site ID`)) +
+  p <- ggplot(site_data, aes(x = PithHand, y = DendroMerge$Diameter..CM., color = `Site ID`)) +
     labs(x = "Pith Year", y = "Diameter (cm)", title = paste("Diameter vs Pith Date - Site:", site)) +
     geom_point(shape = 18, size = 3) +
     geom_smooth(method = "lm", se = FALSE, size = 1.5) +

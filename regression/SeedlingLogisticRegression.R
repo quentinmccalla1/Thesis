@@ -71,7 +71,8 @@ BeasLogit3 <- glm(Fall2024 ~ poly(LightBINOM, 2) + HerbaceausBINOM + FinesBinom,
 
 
 
-
+deviance
+minus 2LL
 
 
 
