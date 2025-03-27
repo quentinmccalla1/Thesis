@@ -1,11 +1,13 @@
 library(dplR)
 library(ggplot2)
-library(kableExtra)
+library(dplyr)
 
 DendroMerge <- read.csv("DendroMergeforR.csv")
+head(DendroMerge)
 SalGOO <- DendroMerge %>%filter(Species == "Salgoo")
 Popfre <- DendroMerge %>%filter(Species == "Popfre")
 Correlated <- DendroMerge %>% filter(Correlated == "Yes")
+OLD <- DendroMerge%>% filter(Correlated == "OLD")
 
 DendroMerge <- DendroMerge %>%
   mutate(ID2 = recode(ID2,
@@ -25,10 +27,10 @@ ggplot(DendroMerge, aes(x = PithHand, y = DendroMerge$Diameter..CM.)) +
   geom_point(shape=18, size= 3)+
   geom_smooth( method = "lm", se = FALSE, size = 1.5)+
   scale_y_continuous(
-    limits = c(0,100)
+    limits = c(0,150)
   ) +
   scale_x_continuous(
-    limits = c(1985,2020)
+    limits = c(1900,2020)
   )+ theme_minimal()
 
 #Salgoo plot
