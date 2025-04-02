@@ -120,18 +120,30 @@ pred_class <- ifelse(pred_probs > optimal_threshold, 1, 0)
 
 
 
+glm(Fall2024 ~ LightBINOM * FinesBINOM, data = ChildsPopSurv, family = "binomial")
 
 
+ChildsLogit1 <- glm(Fall2024 ~ poly(LightBINOM, 2) + poly(FinesBINOM, 2) + LightBINOM:FinesBINOM, 
+                    family = "binomial", data = ChildsPopSurv)
 
-ChildsLogit1 <- glm(Fall2024 ~ LightBINOM * FinesBINOM, data = ChildsPopSurv, family = "binomial")
+
+ChildsPopSurv$LightScaled <- scale(ChildsPopSurv$LightBINOM)
+ChildsPopSurv$FinesScaled <- scale(ChildsPopSurv$FinesBINOM)
+
+ChildsLogit2 <- glm(Fall2024 ~ poly(LightScaled, 2) + poly(FinesScaled, 2) + 
+                      LightScaled:FinesScaled,
+                    family = "binomial", data = ChildsPopSurv)
 summary(ChildsLogit1)
 
+
 #test for accuracy
-pred_probs <- predict(ChildsLogit1, type = "response")
+pred_probs <- predict(ChildsLogit2, type = "response")
 # Convert probabilities to binary predictions (threshold = 0.5)
-pred_class <- ifelse(pred_probs > 0.33, 1, 0)
+pred_class <- ifelse(pred_probs > 0.396, 1, 0)
 # Compute accuracy
+
 accuracy <- mean(pred_class == ChildsPopSurv$Fall2024)
+
 # Generate confusion matrix
 conf_matrix <- confusionMatrix(as.factor(pred_class), as.factor(ChildsPopSurv$Fall2024))
 # Compute ROC and AUC
@@ -144,8 +156,11 @@ print(conf_matrix)  # Confusion matrix with precision, recall, etc.
 cat("Accuracy:", accuracy, "\n")
 cat("AUC:", auc_value, "\n")
 cat("McFadden's R²:", pseudo_r2, "\n")
+
+
 optimal_threshold <- coords(roc_curve, "best", ret = "threshold")
 pred_class <- ifelse(pred_probs > optimal_threshold, 1, 0)
+
 
 
 
