@@ -25,10 +25,10 @@ brap_data <- brap_data %>%
 childs_data <- childs_data %>%
   mutate(across(starts_with("HDR"), ~ as.numeric(.)))
 
-custom_order <- c("102023", "62024", "122024")  # Replace with your actual visit names or IDs
+Childs_custom_order <- c("102023", "62024", "122024", "52025")  # Replace with your actual visit names or IDs
+BRAP_custom_order <- c("102023", "62024", "102024", "52025")
 
-
-
+#Standard error#
 brap_data %>%
   group_by(Visit) %>%
   summarise(
@@ -57,9 +57,9 @@ childs_data %>%
 
 
 
-
+#Childs Means
 mean_value_by_visit <- childs_data %>%
-  mutate(Visit = factor(Visit, levels = custom_order)) %>%  # Set custom order
+  mutate(Visit = factor(Visit, levels = Childs_custom_order)) %>%  # Set custom order
   group_by(Visit) %>%  # Group by Visit
   summarise(
     mean_Height = mean(Height, na.rm = TRUE),      # Calculate mean Height
@@ -69,17 +69,24 @@ mean_value_by_visit <- childs_data %>%
   ) %>%
   arrange(Visit)  # Arrange based on custom order
 
-# Display the table
-kable(mean_value_by_visit, caption = "Childs Means by Visit") %>%
-  kable_styling(full_width = FALSE, position = "center", 
-                bootstrap_options = c("striped", "bordered"))
+#BRAP means
+mean_value_by_visit <- brap_data %>%
+  mutate(Visit = factor(Visit, levels = BRAP_custom_order)) %>%  # Set custom order
+  group_by(Visit) %>%  # Group by Visit
+  summarise(
+    mean_Height = mean(Height, na.rm = TRUE),      # Calculate mean Height
+    mean_Diameter = mean(Diameter, na.rm = TRUE),  # Calculate mean Diameter
+    mean_hdr = mean(HDR, na.rm = TRUE),            # Calculate mean HDR
+    .groups = "drop"  # Ungroup the data after summarization
+  ) %>%
+  arrange(Visit)  # Arrange based on custom order
 
 
-```
+
 
 
 BRAP plot level means all visits
-```{r}
+
 variables <- c("Diameter", "Height", "HDR")  # List of variables
 visits <- unique(brap_data$Visit)  # Get all unique Visit values
 results <- data.frame()  # Empty data frame to store the results
@@ -110,13 +117,13 @@ print(results)
 Childs plot level means all visits
 ```{r}
 variables <- c("Diameter", "Height", "HDR")  # List of variables
-visits <- unique(brap_data$Visit)  # Get all unique Visit values
+visits <- unique(childs_data$Visit)  # Get all unique Visit values
 Childsresults <- data.frame()  # Empty data frame to store the results
 
 for (var in variables) {
   for (visit in visits) {  # Loop through each visit
     # Calculate the mean for each plot and visit
-    mean_value <- brap_data %>%
+    mean_value <- childs_data %>%
       filter(Visit == visit) %>%  # Filter for the current visit
       group_by(Plot) %>%  # Group by Plot
       summarise(mean_value = mean(.data[[var]], na.rm = TRUE), .groups = "drop")  # Calculate mean, remove NA
@@ -133,7 +140,7 @@ for (var in variables) {
 # View the final results
 print(Childsresults)
 
-```
+
 
 
 BRAP Specific variable plot
@@ -163,15 +170,10 @@ for (visit in visits) {  # Loop through each visit
 Childsresults_wide <- Childsresults %>%
   pivot_wider(names_from = Visit, values_from = mean_value)
 
-# View the final results in a table format using kable
-Childsresults_wide %>%
-  kable("html", caption = "Mean HDR Values by Visit for Childs") %>%
-  kable_styling(full_width = FALSE)
 
-```
 
-Childs plot specific means
-```{r}
+
+#Childs plot specific means
 # Initialize an empty data frame to store the results
 Childsresults <- data.frame()
 
@@ -301,18 +303,10 @@ for (var in variables) {
 
 # Combine all results into one data frame
 final_results <- bind_rows(formatted_results)
-# Display as a styled table
-final_results %>%
-  kable("html", caption = "Tukey's HSD Results for BRAP") %>%
-  kable_styling(full_width = FALSE) %>%
-  # row_spec(which(final_results$P_Value < 0.05), background = "lightgreen")
-  
-  ```
 
 
-Childs ANOVA
 
-```{r}
+#Childs ANOVA
 # List of variables to analyze
 Childsvariables <- c("Diameter", "Height", "HDR") 
 
@@ -347,11 +341,7 @@ for (var in Childsvariables) {
   }
 }
 
-
-```
-
-Childs Anova Table
-```{r}
+#Childs Anova Table
 # Initialize an empty list to store formatted Tukey results for Childs site
 Childsformatted_results <- list()
 
@@ -383,99 +373,9 @@ Childsfinal_results %>%
   kable_styling(full_width = FALSE) %>%
   #row_spec(which(Childsfinal_results$P_Value < 0.05), background = "lightgreen")
   
-  
-  ```
 
 
 
-
-VARIABLE CORR
-
-
-```{r}
-ChildsVars <- read_csv("ChildsWellSurvey.csv")
-BRAPVars <- read_csv("BRAPWellSurvey.csv")
-
-```
-
-BRAP Vars
-```{r}
-# Target variable (change this to your actual target variable name)
-target_var <- BRAPVars$`% Change from original survey`
-column_names <- setdiff(names(BRAPVars), "target_var")
-# Initialize an empty data frame to store results
-cor_results <- data.frame(Variable = character(), Correlation = numeric(), P_Value = numeric(), stringsAsFactors = FALSE)
-
-# Loop through the list of variables to test correlation with the target
-for (var_name in column_names) {
-  current_var <- BRAPVars[[var_name]]
-  if (is.numeric(current_var) && sum(complete.cases(current_var, target_var)) > 2) {
-    # Perform Spearman correlation test
-    cor_test <- tryCatch(
-      cor.test(target_var, current_var, method = "spearman", use = "complete.obs"),
-      error = function(e) NULL
-    )
-    if (!is.null(cor_test)) {
-      cor_results <- rbind(cor_results, 
-                           data.frame(Variable = var_name, 
-                                      Correlation = cor_test$estimate, 
-                                      P_Value = cor_test$p.value))
-    }
-  }
-}
-correlation_results <- data.frame(cor_results)
-rownames(correlation_results) <- NULL
-correlation_results <- correlation_results[-4,]
-
-print(correlation_results)
-
-correlation_results %>%
-  kable("html", caption = "Variables vs % Change in density from original survey") %>%
-  kable_styling(full_width = FALSE) %>%
-  row_spec(which(correlation_results$P_Value < 0.05), background = "lightgreen")%>%
-  save_kable("my_table.html")
-
-```
-
-
-
-
-Childs Vars
-```{r}
-# Target variable (change this to your actual target variable name)
-target_var <- ChildsVars$`%Change Density`
-column_names <- setdiff(names(ChildsVars), "target_var")
-# Initialize an empty data frame to store results
-cor_results <- data.frame(Variable = character(), Correlation = numeric(), P_Value = numeric(), stringsAsFactors = FALSE)
-
-# Loop through the list of variables to test correlation with the target
-for (var_name in column_names) {
-  current_var <- ChildsVars[[var_name]]
-  if (is.numeric(current_var) && sum(complete.cases(current_var, target_var)) > 2) {
-    # Perform Spearman correlation test
-    cor_test <- tryCatch(
-      cor.test(target_var, current_var, method = "spearman", use = "complete.obs"),
-      error = function(e) NULL
-    )
-    if (!is.null(cor_test)) {
-      cor_results <- rbind(cor_results, 
-                           data.frame(Variable = var_name, 
-                                      Correlation = cor_test$estimate, 
-                                      P_Value = cor_test$p.value))
-    }
-  }
-}
-correlation_results <- data.frame(cor_results)
-rownames(correlation_results) <- NULL
-#correlation_results <- correlation_results[-4,]
-
-correlation_results %>%
-  kable("html", caption = "Variables vs %Change in original density") %>%
-  kable_styling(full_width = FALSE) 
-%>%
-  #row_spec(which(correlation_results$P_Value < 0.05), background = "lightgreen")
-  
-  ```
 
 
 
